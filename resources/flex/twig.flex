@@ -1,0 +1,200 @@
+package com.fisk.twig.parsing;
+
+import com.intellij.lexer.FlexLexer;
+import com.intellij.psi.tree.IElementType;
+import com.intellij.util.containers.Stack;
+
+// suppress various warnings/inspections for the generated class
+@SuppressWarnings ({"FieldCanBeLocal", "UnusedDeclaration", "UnusedAssignment", "AccessStaticViaInstance", "MismatchedReadAndWriteOfArray", "WeakerAccess", "SameParameterValue", "CanBeFinal", "SameReturnValue", "RedundantThrows", "ConstantConditions"})
+%%
+
+%class _TwigLexer
+%implements FlexLexer
+%final
+%unicode
+%function advance
+%type IElementType
+
+%{
+    private Stack<Integer> stack = new Stack<Integer>();
+
+    public void yypushState(int newState) {
+      stack.push(yystate());
+      yybegin(newState);
+    }
+
+    public void yypopState() {
+      yybegin(stack.pop());
+    }
+%}
+
+LineTerminator = \r|\n|\r\n
+WhiteSpace = {LineTerminator} | [ \t\f]
+
+ExpressionOpen = "{{"
+ExpressionClose = "}}"
+
+StatementOpen = "{%"
+StatementClose = "%}"
+
+CommentOpen = "{#"
+CommentClose = "#}"
+
+Label = [A-z_][A-z0-9_]*
+
+AnyChar = [.]
+DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
+
+%state expression
+%state statement
+%state statement_block_tag
+%state comment
+%%
+
+<YYINITIAL> (  ( [^{] | "{" [^?%s{] )+  ) |" {s" | "{" {
+	// raw content
+	return TwigTokenTypes.CONTENT;
+}
+
+<YYINITIAL> {
+    {ExpressionOpen} {
+        yybegin(expression);
+        return TwigTokenTypes.EXPRESSION_OPEN;
+    }
+
+    {StatementOpen} {
+        yybegin(statement_block_tag);
+        return TwigTokenTypes.STATEMENT_OPEN;
+    }
+
+    {CommentOpen} {
+        yybegin(comment);
+        return TwigTokenTypes.COMMENT_OPEN;
+    }
+
+    {WhiteSpace} {}
+}
+
+<statement_block_tag> {
+    {Label} {
+        yybegin(statement);
+        return TwigTokenTypes.TAG;
+    }
+    
+    {StatementClose} {
+        yybegin(YYINITIAL);
+        return TwigTokenTypes.STATEMENT_CLOSE;
+    }
+
+    "," { }
+
+    {WhiteSpace} {}
+}
+
+<statement> {
+    {StatementClose} {
+        yybegin(YYINITIAL);
+        return TwigTokenTypes.STATEMENT_CLOSE;
+    }
+
+    "starts with" |
+    "ends with" |
+    "matches" |
+    "b-or" |
+    "b-and" |
+    "b-xor" |
+    "and" |
+    "not" |
+    "in" |
+    "is" |
+    "if" |
+    "or" {
+        return TwigTokenTypes.OPERATOR;
+    }
+
+    "odd" |
+    "even" {
+        return TwigTokenTypes.TEST;
+    }
+
+    [\/.] { return TwigTokenTypes.SEP; }
+    [\t \n\x0B\f\r]* { return TwigTokenTypes.WHITE_SPACE; }
+    \-?[0-9]+(\.[0-9]+)?/[}\)\t \n\x0B\f\r]  { return TwigTokenTypes.NUMBER; }
+    "|" { return TwigTokenTypes.FILTER_SEP; }
+    "=" { return TwigTokenTypes.EQUALS; }
+}
+
+<expression> {
+    {ExpressionClose} {
+        yybegin(YYINITIAL);
+        return TwigTokenTypes.EXPRESSION_CLOSE;
+    }
+}
+
+<statement, expression> {
+    "(" {
+        return TwigTokenTypes.OPEN_SEXPR;
+    }
+
+    ")" {
+        return TwigTokenTypes.CLOSE_SEXPR;
+    }
+
+    "[" {
+        return TwigTokenTypes.OPEN_LIST;
+    }
+
+    "]" {
+        return TwigTokenTypes.CLOSE_LIST;
+    }
+
+    "{" {
+        return TwigTokenTypes.OPEN_DICT;
+    }
+
+    "}" {
+        return TwigTokenTypes.CLOSE_DICT;
+    }
+
+    "true"/[}\)\t \n\x0B\f\r] {
+        return TwigTokenTypes.BOOLEAN;
+    }
+
+    "false"/[}\)\t \n\x0B\f\r] {
+        return TwigTokenTypes.BOOLEAN;
+    }
+
+    {Label} {
+        return TwigTokenTypes.VARIABLE;
+    }
+
+    {WhiteSpace} {}
+}
+
+<statement, expression>(b?[\"]{DoubleQuotesChars}*[\"]) {
+    return TwigTokenTypes.STRING;
+}
+
+<statement, expression>(b?[']([^'\\]|("\\"{AnyChar}))*[']) {
+    return TwigTokenTypes.STRING;
+}
+
+<comment> {
+    {CommentClose} {
+        yybegin(YYINITIAL);
+        return TwigTokenTypes.COMMENT_CLOSE;
+    }
+
+    ~{CommentClose} {
+        return TwigTokenTypes.COMMENT_CONTENT;
+    }
+
+    {WhiteSpace} {}
+}
+
+<expression, statement, comment> {AnyChar} {
+	// do nothing
+}
+
+{WhiteSpace}+ { return TwigTokenTypes.WHITE_SPACE; }
+. { return TwigTokenTypes.INVALID; }

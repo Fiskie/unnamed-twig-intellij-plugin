@@ -1,0 +1,54 @@
+buildscript {
+    ext.kotlin_version = '1.1.2'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+plugins {
+    id 'org.jetbrains.intellij' version "0.2.13"
+    id "org.jetbrains.kotlin.jvm" version "1.1.2"
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.jetbrains.intellij'
+
+tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
+
+sourceSets {
+    main.java.srcDirs = ['gen']
+    main.resources.srcDir 'resources'
+
+//    test.java.srcDir 'test/src'
+//    test.resources.srcDir 'test/data'
+}
+
+intellij {
+    version = 'IU-2017.1.4'
+    plugins = []
+}
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+}
+
+//test {
+//    testLogging {
+//        exceptionFormat = 'full'
+//    }
+//}
+
+//idea {
+//    module {
+//        generatedSourceDirs += file('gen')
+//    }
+//}
