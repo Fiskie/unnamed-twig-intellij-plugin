@@ -1,4 +1,4 @@
-# Unnamed Twig Extension
+# Unnamed Twig Intellij Plugin
 
 Improved Twig support for IntelliJ IDEA. Not even close to done yet.
 
