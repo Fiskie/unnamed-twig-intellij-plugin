@@ -58,7 +58,10 @@ class TwigColorsPage : ColorSettingsPage {
             for (i in keys.indices) {
                 val key = keys[i]
                 val name = TwigHighlighter.DISPLAY_NAMES[key]?.getFirst()
-                attrs[i] = AttributesDescriptor(name, key)
+
+                name?.let {
+                    attrs[i] = AttributesDescriptor(name, key)
+                }
             }
 
             ATTRS = attrs as Array<AttributesDescriptor>

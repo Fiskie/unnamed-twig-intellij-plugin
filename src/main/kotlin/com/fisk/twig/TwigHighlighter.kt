@@ -66,8 +66,8 @@ class TwigHighlighter : SyntaxHighlighterBase() {
         )
 
         init {
-            keys1 = HashMap<IElementType, TextAttributesKey>()
-            keys2 = HashMap<IElementType, TextAttributesKey>()
+            keys1 = HashMap()
+            keys2 = HashMap()
 
             keys1.put(TwigTokenTypes.EXPRESSION_OPEN, BLOCKS)
             keys1.put(TwigTokenTypes.EXPRESSION_CLOSE, BLOCKS)

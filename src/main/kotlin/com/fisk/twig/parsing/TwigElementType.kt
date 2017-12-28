@@ -6,7 +6,7 @@ import com.intellij.psi.tree.IElementType
 import org.jetbrains.annotations.NonNls
 
 /**
- * @param parseExpectedMessageKey Key to the [TwigBundle] message to show the user when the parser
+ * @param parseExpectedMessageKey Key to the [TwigBundle] message to show the user when the parsing
  * *                                expected this token, but found something else.
  */
 data class TwigElementType(

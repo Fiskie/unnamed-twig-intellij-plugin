@@ -14,7 +14,7 @@ internal class PropertyAccessor(private val myPropertiesComponent: PropertiesCom
         return myPropertiesComponent.getOrInit(property.stringName, property.default)
     }
 
-    fun setPropertyValue(property: Property, propertyValue: String) {
+    fun setPropertyValue(property: Property, propertyValue: String?) {
         myPropertiesComponent.setValue(property.stringName,
                 propertyValue)
     }

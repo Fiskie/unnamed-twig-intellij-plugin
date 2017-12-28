@@ -1,8 +1,8 @@
 <idea-plugin>
   <id>com.fisk.twig</id>
   <name>Twig improved</name>
-  <version>1.0</version>
-  <vendor email="myself@fiskie.me" url="http://www.yourcompany.com">fisk</vendor>
+  <version>0.1</version>
+  <vendor email="myself@fiskie.me" url="http://fiskie.me">fisk</vendor>
 
   <depends>com.intellij.modules.lang</depends>
 
@@ -27,6 +27,7 @@
     <lang.substitutor language="HTML" implementationClass="com.fisk.twig.file.TwigLanguageSubstitutor"/>
     <liveTemplateContext implementation="com.fisk.twig.editor.templates.TwigTemplateContextType"/>
     <lang.syntaxHighlighterFactory language="Twig" implementationClass="com.fisk.twig.TwigHighlighterFactory"/>
+    <lang.parserDefinition language="Twig" implementationClass="com.fisk.twig.parsing.TwigParserDefinition" />
 
     <localInspection bundle="messages.TwigBundle"
                      key="twig.inspections.helpers.empty"

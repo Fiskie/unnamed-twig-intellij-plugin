@@ -51,12 +51,17 @@ DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
 %state comment
 %%
 
-<YYINITIAL> (  ( [^{] | "{" [^?%s{] )+  ) |" {s" | "{" {
+<YYINITIAL> [^{] | "{" {
 	// raw content
 	return TwigTokenTypes.CONTENT;
 }
 
 <YYINITIAL> {
+    {CommentOpen} {
+        yybegin(comment);
+        return TwigTokenTypes.COMMENT_OPEN;
+    }
+
     {ExpressionOpen} {
         yybegin(expression);
         return TwigTokenTypes.EXPRESSION_OPEN;
@@ -67,9 +72,17 @@ DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
         return TwigTokenTypes.STATEMENT_OPEN;
     }
 
-    {CommentOpen} {
-        yybegin(comment);
-        return TwigTokenTypes.COMMENT_OPEN;
+    {WhiteSpace} {}
+}
+
+<comment> {
+    {CommentClose} {
+        yybegin(YYINITIAL);
+        return TwigTokenTypes.COMMENT_CLOSE;
+    }
+
+    ~{CommentClose} {
+        return TwigTokenTypes.COMMENT_CONTENT;
     }
 
     {WhiteSpace} {}
@@ -118,7 +131,7 @@ DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
     }
 
     [\/.] { return TwigTokenTypes.SEP; }
-    [\t \n\x0B\f\r]* { return TwigTokenTypes.WHITE_SPACE; }
+//    [\t \n\x0B\f\r]* { return TwigTokenTypes.WHITE_SPACE; }
     \-?[0-9]+(\.[0-9]+)?/[}\)\t \n\x0B\f\r]  { return TwigTokenTypes.NUMBER; }
     "|" { return TwigTokenTypes.FILTER_SEP; }
     "=" { return TwigTokenTypes.EQUALS; }
@@ -177,19 +190,6 @@ DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
 
 <statement, expression>(b?[']([^'\\]|("\\"{AnyChar}))*[']) {
     return TwigTokenTypes.STRING;
-}
-
-<comment> {
-    {CommentClose} {
-        yybegin(YYINITIAL);
-        return TwigTokenTypes.COMMENT_CLOSE;
-    }
-
-    ~{CommentClose} {
-        return TwigTokenTypes.COMMENT_CONTENT;
-    }
-
-    {WhiteSpace} {}
 }
 
 <expression, statement, comment> {AnyChar} {
