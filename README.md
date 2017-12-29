@@ -1,8 +1,8 @@
 # Unnamed Twig Intellij Plugin
 
-Improved Twig support for IntelliJ IDEA. Not even close to done yet.
+The official IntelliJ Twig plugin is closed-source and lacks features which I'd like to see, so I wanted to do something about it.  
 
-Using the official Handlebars plugin as inspiration for project structure.
+Based on the official Handlebars plugin, since I'm completely new to IntelliJ plugin development and it's the closest thing I had, I suppose. 
 
 ## TODO
 
@@ -14,7 +14,7 @@ Using the official Handlebars plugin as inspiration for project structure.
         - From embed/include parents
     - Standard twig filters
     - Standard twig functions
-- Fix HTML compatiblity
+- HTML interop
 - Syntax highlighting
     - Support the whitespace control modifier ({{-, {%-, {#-)
     - Brace matching 
@@ -30,9 +30,4 @@ Using the official Handlebars plugin as inspiration for project structure.
 
 Contributing to this project will require an environment ready to develop IntelliJ plugins. [Read the guide](https://www.jetbrains.com/help/idea/configuring-intellij-platform-plugin-sdk.html)
 
-### Regenerating Flex
-
-You will want the idea-flex.skeleton supplied by IntelliJ and an installation of JFlex.
-
-The easiest way to do this is by just installing the Grammar Kit extension and running
-the generator by right-clicking the file. This will handle everything for you. 
+Make sure tests pass, then make a pull request. If Travis fails to build your PR, please make additional changes.

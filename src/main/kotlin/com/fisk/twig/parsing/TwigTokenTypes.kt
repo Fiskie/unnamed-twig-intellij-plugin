@@ -56,7 +56,13 @@ object TwigTokenTypes {
     @JvmField
     val FILTER_SEP = TwigElementType("FILTER_SEP", "twig.parsing.element.expected.filter_sep")
     @JvmField
-    val TEST = TwigElementType("FILTER_SEP", "twig.parsing.element.expected.test")
+    val TEST = TwigElementType("TEST", "twig.parsing.element.expected.test")
+
+    @JvmField
+    val STATEMENT = TwigCompositeElementType("STATEMENT")
+
+    @JvmField
+    val EXPRESSION = TwigCompositeElementType("EXPRESSION")
 
     val STRING_LITERALS = TokenSet.create(STRING)
     val COMMENTS = TokenSet.create(COMMENT_CONTENT, COMMENT_CLOSE, COMMENT_OPEN)

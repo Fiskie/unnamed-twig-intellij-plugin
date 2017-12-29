@@ -31,14 +31,15 @@ import com.intellij.util.containers.Stack;
 LineTerminator = \r|\n|\r\n
 WhiteSpace = {LineTerminator} | [ \t\f]
 
-ExpressionOpen = "{{"
-ExpressionClose = "}}"
+// these will match the usual syntax and the whitespace controller ({{ and {{-, etc)
+ExpressionOpen = \{\{-?
+ExpressionClose = -?\}\}
 
-StatementOpen = "{%"
-StatementClose = "%}"
+StatementOpen = \{%-?
+StatementClose = -?%\}
 
-CommentOpen = "{#"
-CommentClose = "#}"
+CommentOpen = \{#-?
+CommentClose = -?#\}
 
 Label = [A-z_][A-z0-9_]*
 
@@ -50,11 +51,6 @@ DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
 %state statement_block_tag
 %state comment
 %%
-
-<YYINITIAL> [^{] | "{" {
-	// raw content
-	return TwigTokenTypes.CONTENT;
-}
 
 <YYINITIAL> {
     {CommentOpen} {
@@ -72,7 +68,9 @@ DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
         return TwigTokenTypes.STATEMENT_OPEN;
     }
 
-    {WhiteSpace} {}
+    !([^]*"{"[^]*) {
+        return TwigTokenTypes.CONTENT;
+    }
 }
 
 <comment> {
@@ -82,6 +80,7 @@ DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
     }
 
     ~{CommentClose} {
+        yypushback(2);
         return TwigTokenTypes.COMMENT_CONTENT;
     }
 
@@ -101,7 +100,9 @@ DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
 
     "," { }
 
-    {WhiteSpace} {}
+    {WhiteSpace} {
+        return TwigTokenTypes.WHITE_SPACE;
+    }
 }
 
 <statement> {
@@ -181,7 +182,9 @@ DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
         return TwigTokenTypes.VARIABLE;
     }
 
-    {WhiteSpace} {}
+    {WhiteSpace} {
+        return TwigTokenTypes.WHITE_SPACE;
+    }
 }
 
 <statement, expression>(b?[\"]{DoubleQuotesChars}*[\"]) {
