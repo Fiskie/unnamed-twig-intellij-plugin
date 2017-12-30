@@ -45,6 +45,11 @@ class TwigHighlighter : SyntaxHighlighterBase() {
                 DefaultLanguageHighlighterColors.OPERATION_SIGN
         )
 
+        private val KEYWORDS = TextAttributesKey.createTextAttributesKey(
+                "TWIG.KEYWORDS",
+                DefaultLanguageHighlighterColors.KEYWORD
+        )
+
         private val VALUES = TextAttributesKey.createTextAttributesKey(
                 "TWIG.VALUES",
                 DefaultLanguageHighlighterColors.NUMBER
@@ -65,6 +70,11 @@ class TwigHighlighter : SyntaxHighlighterBase() {
                 DefaultLanguageHighlighterColors.BRACKETS
         )
 
+        private val VARIABLES = TextAttributesKey.createTextAttributesKey(
+                "TWIG.VARIABLES",
+                DefaultLanguageHighlighterColors.LOCAL_VARIABLE
+        )
+
         init {
             keys1 = HashMap()
             keys2 = HashMap()
@@ -77,8 +87,8 @@ class TwigHighlighter : SyntaxHighlighterBase() {
             keys1.put(TwigTokenTypes.CLOSE_SEXPR, PARENTHESES)
             keys1.put(TwigTokenTypes.OPEN_LIST, BRACKETS)
             keys1.put(TwigTokenTypes.CLOSE_LIST, BRACKETS)
-            keys1.put(TwigTokenTypes.OPEN_DICT, BRACKETS)
-            keys1.put(TwigTokenTypes.CLOSE_DICT, BRACKETS)
+            keys1.put(TwigTokenTypes.OPEN_HASH, BRACKETS)
+            keys1.put(TwigTokenTypes.CLOSE_HASH, BRACKETS)
             keys1.put(TwigTokenTypes.COMMENT_OPEN, COMMENTS)
             keys1.put(TwigTokenTypes.COMMENT_CLOSE, COMMENTS)
             keys1.put(TwigTokenTypes.COMMENT_CONTENT, COMMENTS)
@@ -90,6 +100,7 @@ class TwigHighlighter : SyntaxHighlighterBase() {
             keys1.put(TwigTokenTypes.OPERATOR, IDENTIFIERS)
             keys1.put(TwigTokenTypes.BOOLEAN, VALUES)
             keys1.put(TwigTokenTypes.STRING, STRINGS)
+            keys1.put(TwigTokenTypes.VARIABLE, VARIABLES)
         }
 
         val DISPLAY_NAMES: MutableMap<TextAttributesKey, Pair<String, HighlightSeverity>> = LinkedHashMap()
@@ -104,6 +115,8 @@ class TwigHighlighter : SyntaxHighlighterBase() {
             DISPLAY_NAMES.put(STRINGS, Pair<String, HighlightSeverity>(TwigBundle.message("twig.page.colors.descriptor.strings.key"), null))
             DISPLAY_NAMES.put(PARENTHESES, Pair<String, HighlightSeverity>(TwigBundle.message("twig.page.colors.descriptor.parentheses.key"), null))
             DISPLAY_NAMES.put(BRACKETS, Pair<String, HighlightSeverity>(TwigBundle.message("twig.page.colors.descriptor.brackets.key"), null))
+            DISPLAY_NAMES.put(VARIABLES, Pair<String, HighlightSeverity>(TwigBundle.message("twig.page.colors.descriptor.variables.key"), null))
+            DISPLAY_NAMES.put(KEYWORDS, Pair<String, HighlightSeverity>(TwigBundle.message("twig.page.colors.descriptor.keywords.key"), null))
 
         }
     }

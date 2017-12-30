@@ -4,4 +4,6 @@ import com.fisk.twig.TwigLanguage
 import com.intellij.psi.tree.IElementType
 import org.jetbrains.annotations.NonNls
 
-data class TwigCompositeElementType(@NonNls val debugName: String) : IElementType(debugName, TwigLanguage.INSTANCE)
+data class TwigCompositeElementType(@NonNls val debugName: String) : IElementType(debugName, TwigLanguage.INSTANCE) {
+    override fun toString() = "[Twig] " + super.toString()
+}

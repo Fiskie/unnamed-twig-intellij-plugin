@@ -36,7 +36,7 @@ class TwigFileType protected constructor(lang: Language) : LanguageFileType(lang
     override fun extractCharsetFromFileContent(project: Project?,
                                                file: VirtualFile?,
                                                content: CharSequence): Charset? {
-        val associatedFileType = getAssociatedFileType(file!!, project) ?: return null
+        val associatedFileType = getAssociatedFileType(file, project) ?: return null
 
         return CharsetUtil.extractCharsetFromFileContent(project, file, associatedFileType, content)
     }
@@ -47,7 +47,7 @@ class TwigFileType protected constructor(lang: Language) : LanguageFileType(lang
         @NonNls
         val DEFAULT_EXTENSION = "twig;html"
 
-        private fun getAssociatedFileType(file: VirtualFile, project: Project?): LanguageFileType? {
+        private fun getAssociatedFileType(file: VirtualFile?, project: Project?): LanguageFileType? {
             if (project == null) {
                 return null
             }

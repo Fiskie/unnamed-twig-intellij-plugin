@@ -7,7 +7,7 @@ import com.intellij.navigation.ItemPresentationProviders
 import com.intellij.psi.PsiReference
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 
-class TwigPsiElementImpl(astNode: ASTNode) : ASTWrapperPsiElement(astNode), TwigPsiElement {
+open class TwigPsiElementImpl(astNode: ASTNode) : ASTWrapperPsiElement(astNode), TwigPsiElement {
     override fun getPresentation() = ItemPresentationProviders.getItemPresentation(this)
 
     override fun getReferences(): Array<out PsiReference> = ReferenceProvidersRegistry.getReferencesFromProviders(this)

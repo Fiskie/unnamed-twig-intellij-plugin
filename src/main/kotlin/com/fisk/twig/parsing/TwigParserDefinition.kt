@@ -2,7 +2,8 @@ package com.fisk.twig.parsing
 
 import com.fisk.twig.TwigLanguage
 import com.fisk.twig.psi.TwigPsiFile
-import com.fisk.twig.psi.impl.TwigPsiElementImpl
+import com.fisk.twig.psi.TwigStatementClose
+import com.fisk.twig.psi.impl.*
 import com.intellij.lang.ASTNode
 import com.intellij.lang.ParserDefinition
 import com.intellij.lexer.Lexer
@@ -30,11 +31,29 @@ class TwigParserDefinition : ParserDefinition {
         return IStubFileElementType<PsiFileStub<TwigPsiFile>>("FILE", TwigLanguage.INSTANCE)
     }
 
-    override fun createLexer(project: Project?): Lexer {
-        return TwigRawLexer()
-    }
+    override fun createLexer(project: Project?) = TwigMergingLexer()
 
-    override fun createElement(node: ASTNode?): PsiElement {
+    override fun createElement(node: ASTNode?) : PsiElement {
+        node?.let {
+            val type = node.elementType
+
+            if (type == TwigTokenTypes.STATEMENT_OPEN) {
+                return TwigStatementOpenImpl(node)
+            }
+
+            if (type == TwigTokenTypes.STATEMENT_CLOSE) {
+                return TwigStatementCloseImpl(node)
+            }
+
+            if (type == TwigTokenTypes.STATEMENT) {
+                return TwigStatementImpl(node)
+            }
+
+            if (type == TwigTokenTypes.COMMENT) {
+                return TwigCommentImpl(node)
+            }
+        }
+
         return TwigPsiElementImpl(node!!)
     }
 }

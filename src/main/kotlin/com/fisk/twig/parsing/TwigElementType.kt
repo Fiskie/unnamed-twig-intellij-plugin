@@ -13,7 +13,7 @@ data class TwigElementType(
         @NonNls val debugName: String,
         @NonNls val parseExpectedMessageKey: String
 ) : IElementType(debugName, TwigLanguage.INSTANCE) {
-    fun parseExpectedMessage(): String {
-        return TwigBundle.message(parseExpectedMessageKey)
-    }
+    fun parseExpectedMessage() = TwigBundle.message(parseExpectedMessageKey)
+
+    override fun toString() = "[Twig] " + super.toString()
 }

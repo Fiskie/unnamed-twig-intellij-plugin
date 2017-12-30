@@ -50,7 +50,7 @@ class TwigBraceMatcher : BraceMatcher {
             PAIRS.add(Pair(TwigTokenTypes.STATEMENT_OPEN, TwigTokenTypes.STATEMENT_CLOSE))
             PAIRS.add(Pair(TwigTokenTypes.OPEN_SEXPR, TwigTokenTypes.CLOSE_SEXPR))
             PAIRS.add(Pair(TwigTokenTypes.OPEN_LIST, TwigTokenTypes.CLOSE_LIST))
-            PAIRS.add(Pair(TwigTokenTypes.OPEN_DICT, TwigTokenTypes.CLOSE_DICT))
+            PAIRS.add(Pair(TwigTokenTypes.OPEN_HASH, TwigTokenTypes.CLOSE_HASH))
         }
     }
 }

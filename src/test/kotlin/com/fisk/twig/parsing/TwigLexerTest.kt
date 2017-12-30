@@ -4,7 +4,7 @@ import com.intellij.lexer.Lexer
 import com.intellij.psi.tree.IElementType
 import com.intellij.testFramework.PlatformLiteFixture
 import junit.framework.Assert
-import java.util.ArrayList
+import java.util.*
 
 abstract class TwigLexerTest : PlatformLiteFixture() {
     private lateinit var lexer: Lexer

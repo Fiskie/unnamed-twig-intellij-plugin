@@ -34,15 +34,15 @@ object TwigTokenTypes {
     @JvmField
     val CLOSE_LIST = TwigElementType("CLOSE_LIST", "twig.parsing.element.expected.close_list")
     @JvmField
-    val OPEN_DICT = TwigElementType("OPEN_DICT", "twig.parsing.element.expected.open_list")
+    val OPEN_HASH = TwigElementType("OPEN_HASH", "twig.parsing.element.expected.open_hash")
     @JvmField
-    val CLOSE_DICT = TwigElementType("CLOSE_DICT", "twig.parsing.element.expected.close_dict")
+    val CLOSE_HASH = TwigElementType("CLOSE_HASH", "twig.parsing.element.expected.close_hash")
     @JvmField
     val EQUALS = TwigElementType("EQUALS", "twig.parsing.element.expected.equals")
     @JvmField
     val SEP = TwigElementType("SEP", "twig.parsing.element.expected.sep")
     @JvmField
-    val OPERATOR = TwigElementType("ELSE", "twig.parsing.element.expected.operator")
+    val OPERATOR = TwigElementType("OPERATOR", "twig.parsing.element.expected.operator")
     @JvmField
     val NUMBER = TwigElementType("NUMBER", "twig.parsing.element.expected.integer")
     @JvmField
@@ -57,6 +57,8 @@ object TwigTokenTypes {
     val FILTER_SEP = TwigElementType("FILTER_SEP", "twig.parsing.element.expected.filter_sep")
     @JvmField
     val TEST = TwigElementType("TEST", "twig.parsing.element.expected.test")
+    @JvmField
+    val FUNCTION_IDENT = TwigElementType("FUNCTION_IDENT", "twig.parsing.element.expected.function")
 
     @JvmField
     val STATEMENT = TwigCompositeElementType("STATEMENT")
@@ -64,6 +66,21 @@ object TwigTokenTypes {
     @JvmField
     val EXPRESSION = TwigCompositeElementType("EXPRESSION")
 
+    @JvmField
+    val COMMENT = TwigElementType("COMMENT", "twig.parsing.element.expected.comment")
+
+    @JvmField
+    val STATEMENT_BLOCK = TwigCompositeElementType("STATEMENT_BLOCK")
+
+    @JvmField
+    val STATEMENT_OPEN_BLOCK = TwigCompositeElementType("STATEMENT_OPEN_BLOCK")
+
+    @JvmField
+    val STATEMENT_CLOSE_BLOCK = TwigCompositeElementType("STATEMENT_CLOSE_BLOCK")
+
+    @JvmField
+    val TWIG_BLOCK = TwigCompositeElementType("TWIG_BLOCK")
+
     val STRING_LITERALS = TokenSet.create(STRING)
-    val COMMENTS = TokenSet.create(COMMENT_CONTENT, COMMENT_CLOSE, COMMENT_OPEN)
+    val COMMENTS = TokenSet.create(COMMENT_CONTENT, COMMENT, UNCLOSED_COMMENT)
 }

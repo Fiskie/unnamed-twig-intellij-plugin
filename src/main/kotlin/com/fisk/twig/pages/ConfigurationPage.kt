@@ -41,6 +41,6 @@ class ConfigurationPage(val project: Project) : SearchableConfigurable {
     }
 
     override fun getHelpTopic(): String? {
-        return "Big benis :-DD"
+        return "Twig"
     }
 }

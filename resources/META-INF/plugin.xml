@@ -28,6 +28,7 @@
     <liveTemplateContext implementation="com.fisk.twig.editor.templates.TwigTemplateContextType"/>
     <lang.syntaxHighlighterFactory language="Twig" implementationClass="com.fisk.twig.TwigHighlighterFactory"/>
     <lang.parserDefinition language="Twig" implementationClass="com.fisk.twig.parsing.TwigParserDefinition" />
+    <lang.formatter language="Twig" implementationClass="com.fisk.twig.format.TwigFormattingModelBuilder"/>
 
     <localInspection bundle="messages.TwigBundle"
                      key="twig.inspections.helpers.empty"

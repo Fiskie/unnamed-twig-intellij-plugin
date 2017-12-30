@@ -16,11 +16,11 @@ object TwigTestUtils {
     val BASE_TEST_DATA_PATH = findTestDataPath()
 
     private fun findTestDataPath(): String {
-        val f = File("test", "data")
+        val f = File("src/test", "resources")
         if (f.exists()) {
             return f.absolutePath
         }
-        return PathManager.getHomePath() + "/contrib/twig/test/data"
+        return PathManager.getHomePath() + "/contrib/twig/src/test/resources"
     }
 
     @TestOnly
