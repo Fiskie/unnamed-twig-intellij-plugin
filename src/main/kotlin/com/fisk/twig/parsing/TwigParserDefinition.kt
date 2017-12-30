@@ -13,6 +13,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.stubs.PsiFileStub
 import com.intellij.psi.tree.IFileElementType
 import com.intellij.psi.tree.IStubFileElementType
+import com.intellij.psi.tree.TokenSet
 
 class TwigParserDefinition : ParserDefinition {
     override fun createParser(project: Project?) = TwigParser()
@@ -26,6 +27,8 @@ class TwigParserDefinition : ParserDefinition {
     override fun getStringLiteralElements() = TwigTokenTypes.STRING_LITERALS
 
     override fun getCommentTokens() = TwigTokenTypes.COMMENTS
+
+    override fun getWhitespaceTokens() = TwigTokenTypes.WHITESPACES
 
     override fun getFileNodeType(): IFileElementType {
         return IStubFileElementType<PsiFileStub<TwigPsiFile>>("FILE", TwigLanguage.INSTANCE)

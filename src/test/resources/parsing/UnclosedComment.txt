@@ -1,2 +1,4 @@
-{# this is an unclosed comment
-{{ foo }}
+Twig: UnclosedComment.twig
+  PsiErrorElement:Unclosed comment
+    PsiComment([Twig] UNCLOSED_COMMENT)('{# this is an unclosed comment\n{{ foo }}')
+      // TODO: something else here

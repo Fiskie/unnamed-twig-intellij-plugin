@@ -13,21 +13,29 @@ import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_CLOSE_BLOCK
 import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_OPEN
 import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_OPEN_BLOCK
 import com.fisk.twig.parsing.TwigTokenTypes.TAG
-import com.fisk.twig.parsing.TwigTokenTypes.TWIG_BLOCK
+import com.fisk.twig.parsing.TwigTokenTypes.BLOCK
+import com.fisk.twig.parsing.TwigTokenTypes.COMMENT
+import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_NON_STACKING_BLOCK
 import com.fisk.twig.parsing.TwigTokenTypes.UNCLOSED_COMMENT
 import com.intellij.lang.PsiBuilder
 import com.intellij.psi.tree.IElementType
-import java.util.*
 
 // TODO: handle 'else', which will be used as an inverse tag for 'for' and 'if'
 class TwigParsing(val builder: PsiBuilder) {
     val nonStackingTags = setOf("extends", "do", "set")
-    val stack = Stack<String>()
 
     fun parse() {
-        do {
+        while (!builder.eof()) {
             parseRoot(builder)
-        } while (!builder.eof())
+
+            if (builder.eof()) {
+                break
+            }
+
+            println("Syntax error?")
+
+            // TODO: if we get here there must be a syntax error
+        }
     }
 
     fun parseRoot(builder: PsiBuilder) {
@@ -44,15 +52,13 @@ class TwigParsing(val builder: PsiBuilder) {
             }
         }
 
-        statementsMarker.done(TWIG_BLOCK)
+        statementsMarker.done(BLOCK)
     }
 
     fun parseBlock(builder: PsiBuilder) : Boolean {
-        if (parseExpression(builder)) {
-            return true
-        }
+        val tokenType = builder.tokenType
 
-        if (parseComment(builder)) {
+        if (parseExpression(builder)) {
             return true
         }
 
@@ -66,6 +72,18 @@ class TwigParsing(val builder: PsiBuilder) {
             return true
         }
 
+        if (builder.tokenType == UNCLOSED_COMMENT) {
+            val unclosedCommentMarker = builder.mark()
+            parseLeafToken(builder, UNCLOSED_COMMENT)
+            unclosedCommentMarker.error(TwigBundle.message("twig.parsing.comment.unclosed"))
+            return true
+        }
+
+        if (builder.tokenType == COMMENT) {
+            parseLeafToken(builder, COMMENT)
+            return true
+        }
+
         return false
     }
 
@@ -73,21 +91,54 @@ class TwigParsing(val builder: PsiBuilder) {
         if (builder.tokenType == STATEMENT_OPEN) {
             val statementMarker = builder.mark()
 
+            // If this is false, must be a non-stacking statement (do, extends, etc)
             if (parseOpenBlock(builder)) {
                 parseRoot(builder)
                 parseCloseBlock(builder)
                 statementMarker.done(STATEMENT_BLOCK)
                 return true
+            } else if (parseNonStackingBlock(builder)) {
+                statementMarker.done(STATEMENT_BLOCK)
+                return true
             }
-
-            statementMarker.drop()
         }
 
         return false
     }
 
+    // TODO: DRY this out
+    // we have a bunch of cases to try and determine whether we're parsing a non-stacking (need a better name for this)
+    // tag, an end tag, etc. This is so our statements are nesting correctly.
+
+    fun parseNonStackingBlock(builder: PsiBuilder) : Boolean {
+        val marker = builder.mark()
+        var tagName: String? = null
+
+        do {
+            builder.advanceLexer()
+
+            if (builder.tokenType == TAG) {
+                val tag = builder.tokenText
+
+                tag?.let {
+                    if (nonStackingTags.contains(tag)) {
+                        tagName = tag
+                    }
+                }
+            }
+        } while (!(builder.eof() || builder.rawLookup(-1) == STATEMENT_CLOSE))
+
+        if (tagName != null) {
+            marker.done(STATEMENT_NON_STACKING_BLOCK)
+            return true
+        } else {
+            marker.rollbackTo()
+            return false
+        }
+    }
+
     fun parseOpenBlock(builder: PsiBuilder) : Boolean {
-        val openMarker = builder.mark()
+        val marker = builder.mark()
         var tagName: String? = null
 
         do {
@@ -105,16 +156,16 @@ class TwigParsing(val builder: PsiBuilder) {
         } while (!(builder.eof() || builder.rawLookup(-1) == STATEMENT_CLOSE))
 
         if (tagName != null) {
-            openMarker.done(STATEMENT_OPEN_BLOCK)
+            marker.done(STATEMENT_OPEN_BLOCK)
             return true
         } else {
-            openMarker.drop()
+            marker.rollbackTo()
             return false
         }
     }
 
     fun parseCloseBlock(builder: PsiBuilder) : Boolean {
-        val openMarker = builder.mark()
+        val closeMarker = builder.mark()
         var tagName: String? = null
 
         do {
@@ -124,6 +175,7 @@ class TwigParsing(val builder: PsiBuilder) {
                 val tag = builder.tokenText
 
                 tag?.let {
+                    println(tag)
                     if (isEndTag(tag)) {
                         tagName = getStartTag(tag)
                     }
@@ -132,10 +184,10 @@ class TwigParsing(val builder: PsiBuilder) {
         } while (!(builder.eof() || builder.rawLookup(-1) == STATEMENT_CLOSE))
 
         if (tagName != null) {
-            openMarker.done(STATEMENT_CLOSE_BLOCK)
+            closeMarker.done(STATEMENT_CLOSE_BLOCK)
             return true
         } else {
-            openMarker.drop()
+            closeMarker.rollbackTo()
             return false
         }
     }
@@ -149,26 +201,6 @@ class TwigParsing(val builder: PsiBuilder) {
             } while (!(builder.eof() || builder.rawLookup(-1) == EXPRESSION_CLOSE))
 
             expressionMarker.done(TwigTokenTypes.EXPRESSION)
-            return true
-        }
-
-        return false
-    }
-
-    fun parseComment(builder: PsiBuilder) : Boolean {
-        if (builder.tokenType == COMMENT_OPEN) {
-            val commentMarker = builder.mark()
-
-            do {
-                builder.advanceLexer()
-
-                if (builder.tokenType === UNCLOSED_COMMENT) {
-                    val unclosedCommentMarker = builder.mark()
-                    unclosedCommentMarker.error(TwigBundle.message("twig.parsing.comment.unclosed"))
-                }
-            } while (!(builder.eof() || builder.rawLookup(-1) == COMMENT_CLOSE))
-
-            commentMarker.done(TwigTokenTypes.COMMENT)
             return true
         }
 
