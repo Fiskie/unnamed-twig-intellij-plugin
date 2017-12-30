@@ -32,9 +32,24 @@ class TwigParsing(val builder: PsiBuilder) {
                 break
             }
 
-            println("Syntax error?")
+            // jumped out of the parser prematurely... try and figure out what's tripping it up,
+            // then jump back in
 
-            // TODO: if we get here there must be a syntax error
+            // deal with some unexpected tokens
+            val tokenType = builder.tokenType
+            val problemOffset = builder.currentOffset
+
+            if (tokenType === STATEMENT_OPEN) {
+                parseCloseBlock(builder)
+            }
+
+            if (builder.currentOffset == problemOffset) {
+                // none of our error checks advanced the lexer, do it manually before we
+                // try and resume parsing to avoid an infinite loop
+                val problemMark = builder.mark()
+                builder.advanceLexer()
+                problemMark.error(TwigBundle.message("twig.parsing.invalid"))
+            }
         }
     }
 
@@ -175,7 +190,6 @@ class TwigParsing(val builder: PsiBuilder) {
                 val tag = builder.tokenText
 
                 tag?.let {
-                    println(tag)
                     if (isEndTag(tag)) {
                         tagName = getStartTag(tag)
                     }

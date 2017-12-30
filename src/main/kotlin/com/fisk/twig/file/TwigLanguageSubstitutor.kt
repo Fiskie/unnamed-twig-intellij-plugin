@@ -11,7 +11,7 @@ import com.intellij.testFramework.LightVirtualFile
 
 class TwigLanguageSubstitutor : LanguageSubstitutor() {
     override fun getLanguage(file: VirtualFile, project: Project): Language? {
-        if (TwigConfig.shouldOpenHtmlAsTwig(project) && file.fileType === HtmlFileType.INSTANCE) {
+        if (TwigConfig.shouldOpenHtmlAsTwig(project) && file.fileType == HtmlFileType.INSTANCE) {
             if (file is LightVirtualFile) {
                 return null
             }

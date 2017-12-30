@@ -2,7 +2,7 @@
 
 The official IntelliJ Twig plugin is closed-source and lacks features which I'd like to see, so I wanted to do something about it.  
 
-Based on the official Handlebars plugin, since I'm completely new to IntelliJ plugin development and it's the closest thing I had, I suppose. 
+This plugin **heavily** grafts from the official Handlebars plugin since it's the closest thing to Twig. 
 
 ## TODO
 

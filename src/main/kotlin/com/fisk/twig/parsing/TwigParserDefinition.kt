@@ -1,6 +1,7 @@
 package com.fisk.twig.parsing
 
 import com.fisk.twig.TwigLanguage
+import com.fisk.twig.psi.TwigBlock
 import com.fisk.twig.psi.TwigPsiFile
 import com.fisk.twig.psi.TwigStatementClose
 import com.fisk.twig.psi.impl.*
@@ -54,6 +55,10 @@ class TwigParserDefinition : ParserDefinition {
 
             if (type == TwigTokenTypes.COMMENT) {
                 return TwigCommentImpl(node)
+            }
+
+            if (type == TwigTokenTypes.BLOCK) {
+                return TwigBlockImpl(node)
             }
         }
 

@@ -29,23 +29,15 @@ object TwigConfig {
     }
 
     var commenterLanguage: Language?
-        get() {
-            val id = Language.findLanguageByID(getStringPropertyValue(COMMENTER_LANGUAGE_ID))
-            return id ?: HTMLLanguage.INSTANCE
-        }
-        set(language) = if (language == null) {
-            setStringPropertyValue(COMMENTER_LANGUAGE_ID, null)
-        } else {
-            setStringPropertyValue(COMMENTER_LANGUAGE_ID, language.id)
-        }
+        get() = Language.findLanguageByID(getStringPropertyValue(COMMENTER_LANGUAGE_ID)) ?: HTMLLanguage.INSTANCE
+        set(language) = setStringPropertyValue(COMMENTER_LANGUAGE_ID, language?.id)
 
     fun getRawOpenHtmlAsTwigValue(project: Project): String {
         return getStringPropertyValue(SHOULD_OPEN_HTML, project)
     }
 
     fun shouldOpenHtmlAsTwig(project: Project): Boolean {
-        val value = getRawOpenHtmlAsTwigValue(project)
-        return ENABLED == value
+        return ENABLED == getRawOpenHtmlAsTwigValue(project)
     }
 
     fun setShouldOpenHtmlAsTwig(value: Boolean, project: Project): Boolean {
