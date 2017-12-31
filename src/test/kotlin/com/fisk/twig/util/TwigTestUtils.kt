@@ -17,18 +17,26 @@ object TwigTestUtils {
 
     private fun findTestDataPath(): String {
         val f = File("src/test", "resources")
+
         if (f.exists()) {
             return f.absolutePath
         }
+
         return PathManager.getHomePath() + "/contrib/twig/src/test/resources"
     }
 
     @TestOnly
     fun setOpenHtmlAsTwig(value: Boolean, project: Project, parentDisposable: Disposable) {
         val oldValue = TwigConfig.shouldOpenHtmlAsTwig(project)
-        if (oldValue == value) return
+
+        if (oldValue == value) {
+            return
+        }
 
         TwigConfig.setShouldOpenHtmlAsTwig(value, project)
-        Disposer.register(parentDisposable, Disposable { TwigConfig.setShouldOpenHtmlAsTwig(oldValue, project) })
+
+        Disposer.register(parentDisposable, Disposable {
+            TwigConfig.setShouldOpenHtmlAsTwig(oldValue, project)
+        })
     }
 }

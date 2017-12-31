@@ -1,20 +1,16 @@
 package com.fisk.twig.parsing
 
 import com.fisk.twig.TwigLanguage
-import com.fisk.twig.psi.TwigBlock
 import com.fisk.twig.psi.TwigPsiFile
-import com.fisk.twig.psi.TwigStatementClose
 import com.fisk.twig.psi.impl.*
 import com.intellij.lang.ASTNode
 import com.intellij.lang.ParserDefinition
-import com.intellij.lexer.Lexer
 import com.intellij.openapi.project.Project
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
 import com.intellij.psi.stubs.PsiFileStub
 import com.intellij.psi.tree.IFileElementType
 import com.intellij.psi.tree.IStubFileElementType
-import com.intellij.psi.tree.TokenSet
 
 class TwigParserDefinition : ParserDefinition {
     override fun createParser(project: Project?) = TwigParser()
@@ -31,26 +27,22 @@ class TwigParserDefinition : ParserDefinition {
 
     override fun getWhitespaceTokens() = TwigTokenTypes.WHITESPACES
 
-    override fun getFileNodeType(): IFileElementType {
-        return IStubFileElementType<PsiFileStub<TwigPsiFile>>("FILE", TwigLanguage.INSTANCE)
+    override fun getFileNodeType(): IStubFileElementType<PsiFileStub<TwigPsiFile>> {
+        return IStubFileElementType("FILE", TwigLanguage.INSTANCE)
     }
 
     override fun createLexer(project: Project?) = TwigMergingLexer()
 
-    override fun createElement(node: ASTNode?) : PsiElement {
+    override fun createElement(node: ASTNode?): PsiElement {
         node?.let {
             val type = node.elementType
 
             if (type == TwigTokenTypes.STATEMENT_OPEN) {
-                return TwigStatementOpenImpl(node)
+                return TwigStatementOpenBracketsImpl(node)
             }
 
             if (type == TwigTokenTypes.STATEMENT_CLOSE) {
-                return TwigStatementCloseImpl(node)
-            }
-
-            if (type == TwigTokenTypes.STATEMENT) {
-                return TwigStatementImpl(node)
+                return TwigStatementCloseBracketsImpl(node)
             }
 
             if (type == TwigTokenTypes.COMMENT) {
@@ -63,6 +55,26 @@ class TwigParserDefinition : ParserDefinition {
 
             if (type == TwigTokenTypes.VARIABLE) {
                 return TwigVariableImpl(node)
+            }
+
+            if (type == TwigTokenTypes.TAG) {
+                return TwigTagImpl(node)
+            }
+
+            if (type == TwigTokenTypes.BLOCK_START_STATEMENT) {
+                return TwigBlockStartStatementImpl(node)
+            }
+
+            if (type == TwigTokenTypes.BLOCK_END_STATEMENT) {
+                return TwigBlockEndStatementImpl(node)
+            }
+
+            if (type == TwigTokenTypes.INVERSE_STATEMENT) {
+                return TwigBlockStartStatementImpl(node)
+            }
+
+            if (type == TwigTokenTypes.SIMPLE_STATEMENT) {
+                return TwigSimpleStatementImpl(node)
             }
         }
 

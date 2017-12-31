@@ -2,14 +2,12 @@ package com.fisk.twig.inspections
 
 
 import com.fisk.twig.file.TwigFileViewProvider
+import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_OPEN
 import com.intellij.codeInsight.highlighting.TemplateLanguageErrorFilter
 import com.intellij.psi.FileViewProvider
-import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.templateLanguages.TemplateLanguageFileViewProvider
 import com.intellij.psi.tree.TokenSet
-
-import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_OPEN
 
 class TwigErrorFilter protected constructor() : TemplateLanguageErrorFilter(START_TEMPLATE_TOKENS, TwigFileViewProvider::class.java, "HTML") {
     override fun shouldIgnoreErrorAt(viewProvider: FileViewProvider, offset: Int): Boolean {
@@ -23,7 +21,7 @@ class TwigErrorFilter protected constructor() : TemplateLanguageErrorFilter(STAR
         private fun hasWhitespacesInHtmlBetweenErrorAndOpenTokens(offset: Int, viewProvider: TemplateLanguageFileViewProvider): Boolean {
             val at = viewProvider.findElementAt(offset, viewProvider.templateDataLanguage) as? PsiWhiteSpace ?: return false
             val elementAt = viewProvider.findElementAt(at.textRange.endOffset + 1, viewProvider.baseLanguage)
-            return if (elementAt != null && START_TEMPLATE_TOKENS.contains(elementAt.node.elementType)) true else false
+            return elementAt != null && START_TEMPLATE_TOKENS.contains(elementAt.node.elementType)
 
         }
     }

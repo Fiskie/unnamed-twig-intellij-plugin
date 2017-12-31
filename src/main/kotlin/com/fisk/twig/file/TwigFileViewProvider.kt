@@ -47,13 +47,11 @@ class TwigFileViewProvider @JvmOverloads constructor(manager: PsiManager, file: 
     }
 
     private fun getDefinition(lang: Language): ParserDefinition? {
-        val parserDefinition: ParserDefinition
-        if (lang.isKindOf(baseLanguage)) {
-            parserDefinition = LanguageParserDefinitions.INSTANCE.forLanguage(if (lang.`is`(baseLanguage)) lang else baseLanguage)
+        return if (lang.isKindOf(baseLanguage)) {
+            LanguageParserDefinitions.INSTANCE.forLanguage(if (lang.`is`(baseLanguage)) lang else baseLanguage)
         } else {
-            parserDefinition = LanguageParserDefinitions.INSTANCE.forLanguage(lang)
+            LanguageParserDefinitions.INSTANCE.forLanguage(lang)
         }
-        return parserDefinition
     }
 
     companion object {

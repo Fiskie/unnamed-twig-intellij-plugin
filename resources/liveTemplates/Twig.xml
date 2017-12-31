@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templateSet group="Twig">
-  <template name="itar" value="{% for val in $HELPER$%}&#10;$END$&#10;{% endfor %}" description="Twig For Block" toReformat="true">
-    <variable name="HELPER" expression="" defaultValue="" alwaysStopAt="true"/>
+  <template name="for" value="{% for val in $END$ %}&#10;&#10;{% endfor %}" description="{% for val in ... %}" toReformat="true">
+    <context>
+      <option name="Twig" value="true"/>
+    </context>
+  </template>
+  <template name="embed" value="{% embed $END$ %}&#10;&#10;{% endembed %}" description="{% embed ... %}" toReformat="true">
     <context>
       <option name="Twig" value="true"/>
     </context>

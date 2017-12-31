@@ -8,12 +8,9 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighter
 import com.intellij.psi.PsiFile
 
 class TwigTemplateContextType protected constructor() : TemplateContextType("Twig", "Twig") {
-
     override fun isInContext(file: PsiFile, offset: Int): Boolean {
         return TwigLanguage.INSTANCE.`is`(file.language)
     }
 
-    override fun createHighlighter(): SyntaxHighlighter? {
-        return TwigHighlighter()
-    }
+    override fun createHighlighter() = TwigHighlighter()
 }

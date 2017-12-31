@@ -24,7 +24,9 @@ To me, this was my debut in plugin development, so this plugin **heavily** graft
 - Inspections
     - Syntax errors
     - Declared child blocks not found in the parent template
-- Extension support for popular third party Twig libraries (e.g. twig-cache-extension, html-compress-twig) 
+- Rename handler, names validator ([Rename refactoring](https://www.jetbrains.org/intellij/sdk/docs/reference_guide/custom_language_support/rename_refactoring.html))
+- Find usages ([Find usages](https://www.jetbrains.org/intellij/sdk/docs/reference_guide/custom_language_support/find_usages.html))
+
 - Long-term goal: PHP controller property reflection
     - Resolve the types of variables passed to a template
     

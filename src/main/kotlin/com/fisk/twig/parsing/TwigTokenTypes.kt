@@ -75,20 +75,21 @@ object TwigTokenTypes {
     val STATEMENT_BLOCK = TwigCompositeElementType("STATEMENT_BLOCK")
 
     @JvmField
-    val STATEMENT_OPEN_BLOCK = TwigCompositeElementType("STATEMENT_OPEN_BLOCK")
+    val BLOCK_START_STATEMENT = TwigCompositeElementType("BLOCK_START_STATEMENT")
 
     @JvmField
-    val STATEMENT_ELSE_BLOCK = TwigCompositeElementType("STATEMENT_ELSE_BLOCK")
+    val INVERSE_STATEMENT = TwigCompositeElementType("INVERSE_STATEMENT")
 
     @JvmField
-    val STATEMENT_CLOSE_BLOCK = TwigCompositeElementType("STATEMENT_CLOSE_BLOCK")
+    val BLOCK_END_STATEMENT = TwigCompositeElementType("BLOCK_END_STATEMENT")
 
     @JvmField
-    val STATEMENT_NON_STACKING_BLOCK = TwigCompositeElementType("STATEMENT_NON_STACKING_BLOCK")
+    val SIMPLE_STATEMENT = TwigCompositeElementType("SIMPLE_STATEMENT")
 
     @JvmField
     val BLOCK = TwigCompositeElementType("BLOCK")
 
+    val IDENTIFIERS = TokenSet.create(VARIABLE)
     val STRING_LITERALS = TokenSet.create(STRING)
     val COMMENTS = TokenSet.create(COMMENT_CONTENT, COMMENT, UNCLOSED_COMMENT)
     val WHITESPACES = TokenSet.create(WHITE_SPACE)

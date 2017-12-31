@@ -1,28 +1,29 @@
 package com.fisk.twig.parsing
 
 import com.fisk.twig.TwigBundle
+import com.fisk.twig.parsing.TwigTokenTypes.BLOCK
+import com.fisk.twig.parsing.TwigTokenTypes.COMMENT
 import com.fisk.twig.parsing.TwigTokenTypes.CONTENT
 import com.fisk.twig.parsing.TwigTokenTypes.EXPRESSION_CLOSE
 import com.fisk.twig.parsing.TwigTokenTypes.EXPRESSION_OPEN
 import com.fisk.twig.parsing.TwigTokenTypes.INVALID
 import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_BLOCK
 import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_CLOSE
-import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_CLOSE_BLOCK
+import com.fisk.twig.parsing.TwigTokenTypes.BLOCK_END_STATEMENT
+import com.fisk.twig.parsing.TwigTokenTypes.INVERSE_STATEMENT
+import com.fisk.twig.parsing.TwigTokenTypes.SIMPLE_STATEMENT
 import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_OPEN
-import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_OPEN_BLOCK
+import com.fisk.twig.parsing.TwigTokenTypes.BLOCK_START_STATEMENT
 import com.fisk.twig.parsing.TwigTokenTypes.TAG
-import com.fisk.twig.parsing.TwigTokenTypes.BLOCK
-import com.fisk.twig.parsing.TwigTokenTypes.COMMENT
-import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_ELSE_BLOCK
-import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_NON_STACKING_BLOCK
 import com.fisk.twig.parsing.TwigTokenTypes.UNCLOSED_COMMENT
 import com.intellij.lang.PsiBuilder
 import com.intellij.psi.tree.IElementType
-import com.sun.org.apache.xpath.internal.operations.Bool
 
 // TODO: handle 'else', which will be used as an inverse tag for 'for' and 'if'
 class TwigParsing(val builder: PsiBuilder) {
-    val nonStackingTags = setOf("extends", "do", "set", "include")
+    // TODO: remove, non-stacking tags will have to be determined if an end tag can be found during block parse
+    // if not found, the stack will have to be unwound and then we parse it as a solo statement
+    val nonStackingTags = setOf("extends", "do", "include", "use", "from", "flush")
     val elseTags = setOf("else", "elseif")
 
     fun parse() {
@@ -71,9 +72,7 @@ class TwigParsing(val builder: PsiBuilder) {
         statementsMarker.done(BLOCK)
     }
 
-    fun parseBlock(builder: PsiBuilder) : Boolean {
-        val tokenType = builder.tokenType
-
+    fun parseBlock(builder: PsiBuilder): Boolean {
         if (parseExpression(builder)) {
             return true
         }
@@ -103,7 +102,7 @@ class TwigParsing(val builder: PsiBuilder) {
         return false
     }
 
-    fun parseStatement(builder: PsiBuilder) : Boolean {
+    fun parseStatement(builder: PsiBuilder): Boolean {
         if (builder.tokenType == STATEMENT_OPEN) {
             val statementMarker = builder.mark()
 
@@ -128,24 +127,24 @@ class TwigParsing(val builder: PsiBuilder) {
         return false
     }
 
-    fun parseNonStackingBlock(builder: PsiBuilder) : Boolean {
-        return parseBlock(builder, STATEMENT_NON_STACKING_BLOCK, { tag -> nonStackingTags.contains(tag) })
+    fun parseNonStackingBlock(builder: PsiBuilder): Boolean {
+        return parseBlock(builder, SIMPLE_STATEMENT, { tag -> nonStackingTags.contains(tag) })
     }
 
-    fun parseOpenBlock(builder: PsiBuilder) : Boolean {
-        return parseBlock(builder, STATEMENT_OPEN_BLOCK, { tag -> !isEndTag(tag) && !nonStackingTags.contains(tag) })
+    fun parseOpenBlock(builder: PsiBuilder): Boolean {
+        return parseBlock(builder, BLOCK_START_STATEMENT, { tag -> !isEndTag(tag) && !nonStackingTags.contains(tag) })
     }
 
-    fun parseCloseBlock(builder: PsiBuilder) : Boolean {
-        return parseBlock(builder, STATEMENT_CLOSE_BLOCK, { tag -> isEndTag(tag) })
+    fun parseCloseBlock(builder: PsiBuilder): Boolean {
+        return parseBlock(builder, BLOCK_END_STATEMENT, { tag -> isEndTag(tag) })
     }
 
-    fun parseElseBlock(builder: PsiBuilder) : Boolean {
+    fun parseElseBlock(builder: PsiBuilder): Boolean {
         // needs to be set up better for inverse tag chaining really
-        return parseBlock(builder, STATEMENT_ELSE_BLOCK, { tag -> elseTags.contains(tag) })
+        return parseBlock(builder, INVERSE_STATEMENT, { tag -> elseTags.contains(tag) })
     }
 
-    fun parseBlock(builder: PsiBuilder, type: TwigCompositeElementType, strategy: (String) -> Boolean) : Boolean {
+    fun parseBlock(builder: PsiBuilder, type: TwigCompositeElementType, strategy: (String) -> Boolean): Boolean {
         val marker = builder.mark()
         var tagName: String? = null
 
@@ -161,7 +160,13 @@ class TwigParsing(val builder: PsiBuilder) {
                     }
                 }
             }
-        } while (!(builder.eof() || builder.rawLookup(-1) == STATEMENT_CLOSE))
+
+            if (builder.tokenType == STATEMENT_CLOSE) {
+                break
+            }
+        } while (!builder.eof())
+
+        builder.advanceLexer() // consume last STATEMENT_CLOSE
 
         if (tagName != null) {
             marker.done(type)
@@ -172,13 +177,19 @@ class TwigParsing(val builder: PsiBuilder) {
         }
     }
 
-    fun parseExpression(builder: PsiBuilder) : Boolean {
+    fun parseExpression(builder: PsiBuilder): Boolean {
         if (builder.tokenType == EXPRESSION_OPEN) {
             val expressionMarker = builder.mark()
 
             do {
                 builder.advanceLexer()
-            } while (!(builder.eof() || builder.rawLookup(-1) == EXPRESSION_CLOSE))
+
+                if (builder.tokenType == EXPRESSION_CLOSE) {
+                    break
+                }
+            } while (!builder.eof())
+
+            builder.advanceLexer() // consume last EXPRESSION_CLOSE
 
             expressionMarker.done(TwigTokenTypes.EXPRESSION)
             return true
@@ -224,7 +235,7 @@ class TwigParsing(val builder: PsiBuilder) {
     /**
      * Truncates the "end" of an end tag (e.g. endif) to return the start tag (e.g. if)
      */
-    private fun normaliseTag(tag: String) : String {
+    private fun normaliseTag(tag: String): String {
         return if (isEndTag(tag)) {
             tag.substring(3)
         } else {

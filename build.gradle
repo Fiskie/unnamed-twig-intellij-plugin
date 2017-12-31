@@ -31,7 +31,7 @@ sourceSets {
 
 intellij {
     version = 'IU-2017.3.2'
-    plugins = []
+    plugins = ['JavaScriptLanguage', 'CSS']
 }
 repositories {
     mavenCentral()

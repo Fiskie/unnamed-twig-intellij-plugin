@@ -1,7 +1,7 @@
 Twig: SimpleSetStatement.twig
   TwigBlockImpl([Twig] BLOCK)
     TwigPsiElementImpl([Twig] STATEMENT_BLOCK)
-      TwigPsiElementImpl([Twig] STATEMENT_NON_STACKING_BLOCK)
+      TwigSimpleStatementImpl([Twig] SIMPLE_STATEMENT)
         PsiElement([Twig] STATEMENT_OPEN)('{%')
         PsiWhiteSpace(' ')
         PsiElement([Twig] TAG)('set')
@@ -13,7 +13,7 @@ Twig: SimpleSetStatement.twig
         PsiElement([Twig] VARIABLE)('bar')
         PsiWhiteSpace(' ')
         PsiElement([Twig] STATEMENT_CLOSE)('%}')
-    PsiElement([Twig] CONTENT)('\n')
+    PsiWhiteSpace('\n')
     TwigPsiElementImpl([Twig] EXPRESSION)
       PsiElement([Twig] EXPRESSION_OPEN)('{{')
       PsiWhiteSpace(' ')

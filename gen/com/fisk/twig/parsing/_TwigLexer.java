@@ -611,7 +611,13 @@ final class _TwigLexer implements FlexLexer {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1: 
-            { return TwigTokenTypes.CONTENT;
+            { if (!yytext().toString().equals("")) {
+            if (yytext().toString().trim().length() == 0) {
+                return TwigTokenTypes.WHITE_SPACE;
+            } else {
+                return TwigTokenTypes.CONTENT;
+            }
+        }
             } 
             // fall through
           case 30: break;

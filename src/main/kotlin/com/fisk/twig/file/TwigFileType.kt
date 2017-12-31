@@ -19,25 +19,27 @@ class TwigFileType protected constructor(lang: Language) : LanguageFileType(lang
     private constructor() : this(TwigLanguage.INSTANCE)
 
     init {
-
-        FileTypeEditorHighlighterProviders.INSTANCE.addExplicitExtension(this) { project, fileType, virtualFile, editorColorsScheme -> TwigTemplateHighlighter(project, virtualFile, editorColorsScheme) }
+        FileTypeEditorHighlighterProviders.INSTANCE.addExplicitExtension(this) {
+            project,
+            fileType,
+            virtualFile,
+            editorColorsScheme -> TwigTemplateHighlighter(project, virtualFile, editorColorsScheme) }
     }
 
     override fun getName() = "Twig"
 
-    override fun getDescription(): String {
-        return TwigBundle.message("twig.files.file.type.description")
-    }
+    override fun getDescription() = TwigBundle.message("twig.files.file.type.description")
 
     override fun getDefaultExtension() = DEFAULT_EXTENSION
 
     override fun getIcon() = TwigIcons.file_icon
 
-    override fun extractCharsetFromFileContent(project: Project?,
-                                               file: VirtualFile?,
-                                               content: CharSequence): Charset? {
+    override fun extractCharsetFromFileContent(
+            project: Project?,
+            file: VirtualFile?,
+            content: CharSequence
+    ): Charset? {
         val associatedFileType = getAssociatedFileType(file, project) ?: return null
-
         return CharsetUtil.extractCharsetFromFileContent(project, file, associatedFileType, content)
     }
 

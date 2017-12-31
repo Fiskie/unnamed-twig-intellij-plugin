@@ -19,7 +19,7 @@ abstract class TwigParserTest : ParsingTestCase("parsing", "twig", TwigParserDef
     override fun setUp() {
         super.setUp()
 
-        val appContainer = PlatformLiteFixture.getApplication().getPicoContainer()
+        val appContainer = PlatformLiteFixture.getApplication().picoContainer
         appContainer.registerComponentInstance(PropertiesComponent::class.java.name,
                 PropertiesComponentImpl.create())
         appContainer.registerComponentInstance(TemplateDataLanguageMappings::class.java.name,

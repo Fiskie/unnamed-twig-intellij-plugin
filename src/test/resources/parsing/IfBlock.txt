@@ -1,7 +1,7 @@
 Twig: IfBlock.twig
   TwigBlockImpl([Twig] BLOCK)
     TwigPsiElementImpl([Twig] STATEMENT_BLOCK)
-      TwigPsiElementImpl([Twig] STATEMENT_OPEN_BLOCK)
+      TwigBlockStartStatementImpl([Twig] BLOCK_START_STATEMENT)
         PsiElement([Twig] STATEMENT_OPEN)('{%')
         PsiWhiteSpace(' ')
         PsiElement([Twig] TAG)('if')
@@ -11,7 +11,7 @@ Twig: IfBlock.twig
         PsiElement([Twig] STATEMENT_CLOSE)('%}')
       TwigBlockImpl([Twig] BLOCK)
         PsiElement([Twig] CONTENT)('\n    <p>content</p>\n')
-      TwigPsiElementImpl([Twig] STATEMENT_CLOSE_BLOCK)
+      TwigBlockEndStatementImpl([Twig] BLOCK_END_STATEMENT)
         PsiElement([Twig] STATEMENT_OPEN)('{%')
         PsiWhiteSpace(' ')
         PsiElement([Twig] TAG)('endif')

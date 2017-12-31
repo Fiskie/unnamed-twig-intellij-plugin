@@ -68,7 +68,15 @@ DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
         return TwigTokenTypes.STATEMENT_OPEN;
     }
 
-    !([^]*"{"[^]*) { return TwigTokenTypes.CONTENT; }
+    !([^]*"{"[^]*) {
+        if (!yytext().toString().equals("")) {
+            if (yytext().toString().trim().length() == 0) {
+                return TwigTokenTypes.WHITE_SPACE;
+            } else {
+                return TwigTokenTypes.CONTENT;
+            }
+        }
+    }
 }
 
 <comment> {
@@ -86,8 +94,9 @@ DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
         yypushback(2);
         return TwigTokenTypes.COMMENT_CONTENT;
     }
+
     // lex unclosed comments so that we can give better errors
-    !([^]*"#}"[^]*) {  return TwigTokenTypes.UNCLOSED_COMMENT; }
+    !([^]*"#}"[^]*) { return TwigTokenTypes.UNCLOSED_COMMENT; }
 }
 
 <statement_block_tag> {

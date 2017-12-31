@@ -1,0 +1,32 @@
+{% extends "parent.twig" %}
+
+{# this is a comment, html content isn't allowed in the root when extends is used #}
+{# TODO: stuff #}
+
+{% block body %}
+    <ul>
+        {% for val in arr %}
+            <li>{{ val }}</li>
+        {% endfor %}
+    </ul>
+    {% include "include.twig" with {foo: "bar", arr: [1, 2, 3]} only %}
+{% endblock %}
+
+{% block more %}
+    <footer>
+        <!-- TODO: stuff -->
+        <!-- what -->
+        {% if foo %}
+            {{ bar }}
+            {% if something %}
+                <div>what</div>
+                {{ hello }}
+            {% endif %}
+        {% endif %}
+    </footer>
+    <script>
+        {% if should_alert_with_foo %}
+            alert("foo");
+        {% endif %}
+    </script>
+{% endblock %}
