@@ -21,9 +21,6 @@ import com.intellij.psi.tree.IElementType
 
 // TODO: handle 'else', which will be used as an inverse tag for 'for' and 'if'
 class TwigParsing(val builder: PsiBuilder) {
-    // TODO: remove, non-stacking tags will have to be determined if an end tag can be found during block parse
-    // if not found, the stack will have to be unwound and then we parse it as a solo statement
-    val nonStackingTags = setOf("extends", "do", "include", "use", "from", "flush")
     val elseTags = setOf("else", "elseif")
 
     fun parse() {
@@ -42,7 +39,7 @@ class TwigParsing(val builder: PsiBuilder) {
             val problemOffset = builder.currentOffset
 
             if (tokenType === STATEMENT_OPEN) {
-                parseCloseBlock(builder)
+//                parseCloseBlock(builder)
             }
 
             if (builder.currentOffset == problemOffset) {
@@ -105,20 +102,24 @@ class TwigParsing(val builder: PsiBuilder) {
     fun parseStatement(builder: PsiBuilder): Boolean {
         if (builder.tokenType == STATEMENT_OPEN) {
             val statementMarker = builder.mark()
+            val nonStackingMarker = builder.mark()
 
-            // If this is false, must be a non-stacking statement (do, extends, etc)
-            if (parseOpenBlock(builder)) {
+            val openTag = parseOpenBlock(builder)
+
+            if (openTag != null) {
                 parseRoot(builder)
 
-                if (parseElseBlock(builder)) {
-                    parseRoot(builder)
-                } else {
-                    parseCloseBlock(builder)
+                if (parseCloseBlock(builder, openTag) != null) {
+                    nonStackingMarker.drop()
+                    statementMarker.done(STATEMENT_BLOCK)
+                    return true
                 }
 
-                statementMarker.done(STATEMENT_BLOCK)
-                return true
-            } else if (parseNonStackingBlock(builder)) {
+                // If we get here, it's either an inverse OR a non-blocking statement
+                // todo: support inverse
+
+                nonStackingMarker.rollbackTo()
+                parseNonStackingBlock(builder)
                 statementMarker.done(STATEMENT_BLOCK)
                 return true
             }
@@ -127,24 +128,24 @@ class TwigParsing(val builder: PsiBuilder) {
         return false
     }
 
-    fun parseNonStackingBlock(builder: PsiBuilder): Boolean {
-        return parseBlock(builder, SIMPLE_STATEMENT, { tag -> nonStackingTags.contains(tag) })
+    fun parseNonStackingBlock(builder: PsiBuilder): String? {
+        return parseBlock(builder, SIMPLE_STATEMENT, { tag -> true })
     }
 
-    fun parseOpenBlock(builder: PsiBuilder): Boolean {
-        return parseBlock(builder, BLOCK_START_STATEMENT, { tag -> !isEndTag(tag) && !nonStackingTags.contains(tag) })
+    fun parseOpenBlock(builder: PsiBuilder): String? {
+        return parseBlock(builder, BLOCK_START_STATEMENT, { tag -> !isEndTag(tag) })
     }
 
-    fun parseCloseBlock(builder: PsiBuilder): Boolean {
-        return parseBlock(builder, BLOCK_END_STATEMENT, { tag -> isEndTag(tag) })
+    fun parseCloseBlock(builder: PsiBuilder, openTag: String): String? {
+        return parseBlock(builder, BLOCK_END_STATEMENT, { tag -> normaliseTag(tag) == openTag })
     }
 
-    fun parseElseBlock(builder: PsiBuilder): Boolean {
+    fun parseElseBlock(builder: PsiBuilder): String? {
         // needs to be set up better for inverse tag chaining really
         return parseBlock(builder, INVERSE_STATEMENT, { tag -> elseTags.contains(tag) })
     }
 
-    fun parseBlock(builder: PsiBuilder, type: TwigCompositeElementType, strategy: (String) -> Boolean): Boolean {
+    fun parseBlock(builder: PsiBuilder, type: TwigCompositeElementType, strategy: (String) -> Boolean): String? {
         val marker = builder.mark()
         var tagName: String? = null
 
@@ -170,10 +171,10 @@ class TwigParsing(val builder: PsiBuilder) {
 
         if (tagName != null) {
             marker.done(type)
-            return true
+            return tagName
         } else {
             marker.rollbackTo()
-            return false
+            return null
         }
     }
 

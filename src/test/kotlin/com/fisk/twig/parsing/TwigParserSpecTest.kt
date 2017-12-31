@@ -41,4 +41,9 @@ class TwigParserSpecTest : TwigParserTest() {
         // This test will help make sure we are properly implementing lookahead on end tags
         doTest(true)
     }
+
+    fun testNestedSetStatement() {
+        // Ditto, check standalone statements aren't consuming the end tag of the current block
+        doTest(true)
+    }
 }
