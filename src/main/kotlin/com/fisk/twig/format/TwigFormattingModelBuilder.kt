@@ -98,10 +98,6 @@ class TwigFormattingModelBuilder : TemplateLanguageFormattingModelBuilder() {
                 return Indent.getNoneIndent()
             }
 
-            if (isExpression(myNode)) {
-                return null
-            }
-
             if (TwigPsiUtil.isNonRootBlockElement(myNode.psi)) {
                 // we're computing the indent for a non-root STATEMENTS:
                 //      if it's not contained in a foreign block, indent!

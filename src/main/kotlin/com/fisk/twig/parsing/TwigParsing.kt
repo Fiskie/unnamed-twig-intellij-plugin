@@ -22,7 +22,7 @@ import com.sun.org.apache.xpath.internal.operations.Bool
 
 // TODO: handle 'else', which will be used as an inverse tag for 'for' and 'if'
 class TwigParsing(val builder: PsiBuilder) {
-    val nonStackingTags = setOf("extends", "do", "set")
+    val nonStackingTags = setOf("extends", "do", "set", "include")
     val elseTags = setOf("else", "elseif")
 
     fun parse() {

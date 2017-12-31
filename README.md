@@ -1,8 +1,10 @@
-# Unnamed Twig Intellij Plugin
+# (WIP) intellij-twig2
 
-The official IntelliJ Twig plugin is closed-source and lacks features which I'd like to see, so I wanted to do something about it.  
+The official IntelliJ Twig plugin is closed-source and lacks features which I'd like to see, so I wanted to do something about it. 
 
-This plugin **heavily** grafts from the official Handlebars plugin since it's the closest thing to Twig. 
+This plugin is named intellij-twig2 to distinguish it from the official plugin.
+
+To me, this was my debut in plugin development, so this plugin **heavily** grafts from the official Handlebars plugin since it's the closest thing to Twig. I learned a lot about writing a parser @w@
 
 ## TODO
 

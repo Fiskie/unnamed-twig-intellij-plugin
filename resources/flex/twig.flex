@@ -29,7 +29,7 @@ import com.intellij.util.containers.Stack;
 %}
 
 LineTerminator = \r|\n|\r\n
-WhiteSpace = {LineTerminator} | [ \t\f]
+WhiteSpace = {LineTerminator} | [ \t\x0B\f]
 
 // these will match the usual syntax and the whitespace controller ({{ and {{-, etc)
 ExpressionOpen = \{\{-?
