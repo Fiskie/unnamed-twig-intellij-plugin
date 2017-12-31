@@ -60,6 +60,10 @@ class TwigParserDefinition : ParserDefinition {
             if (type == TwigTokenTypes.BLOCK) {
                 return TwigBlockImpl(node)
             }
+
+            if (type == TwigTokenTypes.VARIABLE) {
+                return TwigVariableImpl(node)
+            }
         }
 
         return TwigPsiElementImpl(node!!)

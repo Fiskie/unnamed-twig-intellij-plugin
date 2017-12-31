@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templateSet group="Twig">
+  <template name="itar" value="{% for val in $HELPER$%}&#10;$END$&#10;{% endfor %}" description="Twig For Block" toReformat="true">
+    <variable name="HELPER" expression="" defaultValue="" alwaysStopAt="true"/>
+    <context>
+      <option name="Twig" value="true"/>
+    </context>
+  </template>
+</templateSet>

@@ -6,6 +6,8 @@ object TwigTokenTypes {
     @JvmField
     val CONTENT = TwigElementType("CONTENT", "twig.parsing.element.expected.content")
     @JvmField
+    val OUTER_ELEMENT_TYPE = TwigElementType("TWIG_FRAGMENT", "twig.parsing.element.expected.outer_element_type")
+    @JvmField
     val BOOLEAN = TwigElementType("BOOLEAN", "twig.parsing.element.expected.boolean")
     @JvmField
     val WHITE_SPACE = TwigElementType("WHITE_SPACE", "twig.parsing.element.expected.white_space")
@@ -74,6 +76,9 @@ object TwigTokenTypes {
 
     @JvmField
     val STATEMENT_OPEN_BLOCK = TwigCompositeElementType("STATEMENT_OPEN_BLOCK")
+
+    @JvmField
+    val STATEMENT_ELSE_BLOCK = TwigCompositeElementType("STATEMENT_ELSE_BLOCK")
 
     @JvmField
     val STATEMENT_CLOSE_BLOCK = TwigCompositeElementType("STATEMENT_CLOSE_BLOCK")

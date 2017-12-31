@@ -14,9 +14,9 @@ This plugin **heavily** grafts from the official Handlebars plugin since it's th
         - From embed/include parents
     - Standard twig filters
     - Standard twig functions
-- HTML interop
+- ~~HTML interop~~
 - Syntax highlighting
-    - Support the whitespace control modifier ({{-, {%-, {#-)
+    - ~~Support the whitespace control modifier ({{-, {%-, {#-)~~
     - Brace matching 
     - Block matching (block and endblock, etc)
 - Inspections

@@ -1,16 +1,18 @@
 package com.fisk.twig.format
 
+import com.fisk.twig.config.TwigConfig
 import com.fisk.twig.parsing.TwigTokenTypes
 import com.fisk.twig.psi.TwigPsiUtil
-import com.intellij.formatting.Alignment
-import com.intellij.formatting.Indent
-import com.intellij.formatting.Wrap
+import com.intellij.formatting.*
 import com.intellij.formatting.templateLanguages.*
 import com.intellij.lang.ASTNode
+import com.intellij.psi.PsiElement
 import com.intellij.psi.codeStyle.CodeStyleSettings
+import com.intellij.psi.formatter.DocumentBasedFormattingModel
 import com.intellij.psi.formatter.FormattingDocumentModelImpl
 import com.intellij.psi.formatter.xml.HtmlPolicy
 import com.intellij.psi.formatter.xml.SyntheticBlock
+import com.intellij.psi.templateLanguages.SimpleTemplateLanguageFormattingModelBuilder
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.xml.XmlTag
 
@@ -19,6 +21,34 @@ class TwigFormattingModelBuilder : TemplateLanguageFormattingModelBuilder() {
         val model = FormattingDocumentModelImpl.createOn(node.psi.containingFile)
         val policy = HtmlPolicy(codeStyleSettings, model)
         return TwigBlock(node, wrap, alignment, this, codeStyleSettings, foreignChildren, policy)
+    }
+
+    /**
+     * We have to override [com.intellij.formatting.templateLanguages.TemplateLanguageFormattingModelBuilder.createModel]
+     * since after we delegate to some templated languages, those languages (xml/html for sure, potentially others)
+     * delegate right back to us to format the TwigTokenTypes.OUTER_ELEMENT_TYPE token we tell them to ignore,
+     * causing an stack-overflowing loop of polite format-delegation.
+     */
+    override fun createModel(element: PsiElement, settings: CodeStyleSettings): FormattingModel {
+        if (!TwigConfig.isFormattingEnabled) {
+            // formatting is disabled, return the no-op formatter (note that this still delegates formatting
+            // to the templated language, which lets the users manage that separately)
+            return SimpleTemplateLanguageFormattingModelBuilder().createModel(element, settings)
+        }
+
+        val file = element.containingFile
+        val node = element.node
+        val rootBlock: Block
+
+        if (node.elementType == TwigTokenTypes.OUTER_ELEMENT_TYPE) {
+            // If we're looking at a TwigTokenTypes.OUTER_ELEMENT_TYPE element, then we've been invoked by our templated
+            // language.  Make a dummy block to allow that formatter to continue
+            return SimpleTemplateLanguageFormattingModelBuilder().createModel(element, settings)
+        } else {
+            rootBlock = getRootBlock(file, file.viewProvider, settings)
+        }
+
+        return DocumentBasedFormattingModel(rootBlock, element.project, settings, file.fileType, file)
     }
 
     class TwigBlock(
@@ -32,8 +62,6 @@ class TwigFormattingModelBuilder : TemplateLanguageFormattingModelBuilder() {
     ) : TemplateLanguageBlock(
             node, wrap, alignment, blockFactory, settings, foreignChildren
     ) {
-
-
         /**
          * Returns this block's first "real" foreign block parent if it exists, and null otherwise.  (By "real" here, we mean that this method
          * skips SyntheticBlock blocks inserted by the template formatter)
@@ -57,10 +85,7 @@ class TwigFormattingModelBuilder : TemplateLanguageFormattingModelBuilder() {
             return foreignBlockParent
         }
 
-        override fun getTemplateTextElementType(): IElementType {
-            // we ignore CONTENT tokens since they get formatted by the templated language
-            return TwigTokenTypes.CONTENT
-        }
+        override fun getTemplateTextElementType() = TwigTokenTypes.CONTENT
 
         private fun isExpression(child: ASTNode): Boolean {
             val type = child.elementType
@@ -83,8 +108,8 @@ class TwigFormattingModelBuilder : TemplateLanguageFormattingModelBuilder() {
                 val foreignBlockParent = getForeignBlockParent(false) ?: return Indent.getNormalIndent()
 
                 // otherwise, only indent if our foreign parent isn't indenting us
-                if (foreignBlockParent.getNode() is XmlTag) {
-                    val xmlTag = foreignBlockParent.getNode() as XmlTag
+                if (foreignBlockParent.node is XmlTag) {
+                    val xmlTag = foreignBlockParent.node as XmlTag
                     if (!htmlPolicy.indentChildrenOf(xmlTag)) {
                         // no indent from xml parent, add our own
                         return Indent.getNormalIndent()
@@ -98,7 +123,7 @@ class TwigFormattingModelBuilder : TemplateLanguageFormattingModelBuilder() {
                 // we're computing the indent for a direct descendant of a non-root STATEMENTS:
                 //      if its Block parent (i.e. not HB AST Tree parent) is a Twig block
                 //      which has NOT been indented, then have the element provide the indent itself
-                if (parent is TwigBlock && (parent as TwigBlock).getIndent() === Indent.getNoneIndent()) {
+                if (parent is TwigBlock && (parent as TwigBlock).indent === Indent.getNoneIndent()) {
                     return Indent.getNormalIndent()
                 }
             }
@@ -107,7 +132,7 @@ class TwigFormattingModelBuilder : TemplateLanguageFormattingModelBuilder() {
             // (unless that foreign element has been configured to not indent its children)
             val foreignParent = getForeignBlockParent(true)
             return if (foreignParent != null) {
-                if (foreignParent.getNode() is XmlTag && !htmlPolicy.indentChildrenOf(foreignParent.getNode() as XmlTag)) {
+                if (foreignParent.node is XmlTag && !htmlPolicy.indentChildrenOf(foreignParent.node as XmlTag)) {
                     Indent.getNoneIndent()
                 } else Indent.getNormalIndent()
             } else Indent.getNoneIndent()

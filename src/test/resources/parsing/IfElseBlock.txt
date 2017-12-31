@@ -1,4 +1,4 @@
-Twig: EmptyIfBlock.twig
+Twig: IfElseBlock.twig
   TwigBlockImpl([Twig] BLOCK)
     TwigPsiElementImpl([Twig] STATEMENT_BLOCK)
       TwigPsiElementImpl([Twig] STATEMENT_OPEN_BLOCK)
@@ -10,7 +10,15 @@ Twig: EmptyIfBlock.twig
         PsiWhiteSpace(' ')
         PsiElement([Twig] STATEMENT_CLOSE)('%}')
       TwigBlockImpl([Twig] BLOCK)
-        <empty list>
+        PsiElement([Twig] CONTENT)('\n    <p>content</p>\n')
+      TwigPsiElementImpl([Twig] STATEMENT_ELSE_BLOCK)
+        PsiElement([Twig] STATEMENT_OPEN)('{%')
+        PsiWhiteSpace(' ')
+        PsiElement([Twig] TAG)('else')
+        PsiWhiteSpace(' ')
+        PsiElement([Twig] STATEMENT_CLOSE)('%}')
+      TwigBlockImpl([Twig] BLOCK)
+        PsiElement([Twig] CONTENT)('\n    <p>other content</p>\n')
       TwigPsiElementImpl([Twig] STATEMENT_CLOSE_BLOCK)
         PsiElement([Twig] STATEMENT_OPEN)('{%')
         PsiWhiteSpace(' ')

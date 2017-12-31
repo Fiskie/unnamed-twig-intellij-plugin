@@ -21,9 +21,7 @@ class TwigBraceMatcher : BraceMatcher {
         return PAIRS.map { it.second }.contains(iterator.tokenType)
     }
 
-    override fun getBraceTokenGroupId(tokenType: IElementType): Int {
-        return 1
-    }
+    override fun getBraceTokenGroupId(tokenType: IElementType) = 1
 
     override fun isStructuralBrace(iterator: HighlighterIterator, text: CharSequence, fileType: FileType): Boolean {
         return false

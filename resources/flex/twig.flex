@@ -141,8 +141,6 @@ DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
     "|" { return TwigTokenTypes.FILTER_SEP; }
     [\/.] { return TwigTokenTypes.SEP; }
 
-    {Label} { return TwigTokenTypes.VARIABLE; }
-
     // in the order of operator precedence (except for 'not', which is a negator)
     "not" |
     "b-and" | "b-xor" | "b-or" |
@@ -156,6 +154,8 @@ DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
     "??" | "?:" {
         return TwigTokenTypes.OPERATOR;
     }
+
+    {Label} { return TwigTokenTypes.VARIABLE; }
 
     {WhiteSpace} { return TwigTokenTypes.WHITE_SPACE; }
 }
