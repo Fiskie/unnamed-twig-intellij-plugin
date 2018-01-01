@@ -35,19 +35,17 @@ class TwigFormattingModelBuilder : TemplateLanguageFormattingModelBuilder() {
             return SimpleTemplateLanguageFormattingModelBuilder().createModel(element, settings)
         }
 
-        val file = element.containingFile
         val node = element.node
-        val rootBlock: Block
 
         if (node.elementType == TwigTokenTypes.OUTER_ELEMENT_TYPE) {
             // If we're looking at a TwigTokenTypes.OUTER_ELEMENT_TYPE element, then we've been invoked by our templated
             // language.  Make a dummy block to allow that formatter to continue
             return SimpleTemplateLanguageFormattingModelBuilder().createModel(element, settings)
         } else {
-            rootBlock = getRootBlock(file, file.viewProvider, settings)
+            val file = element.containingFile
+            val rootBlock = getRootBlock(file, file.viewProvider, settings)
+            return DocumentBasedFormattingModel(rootBlock, element.project, settings, file.fileType, file)
         }
-
-        return DocumentBasedFormattingModel(rootBlock, element.project, settings, file.fileType, file)
     }
 
     class TwigBlock(
