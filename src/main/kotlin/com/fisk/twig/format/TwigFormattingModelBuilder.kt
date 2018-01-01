@@ -111,7 +111,7 @@ class TwigFormattingModelBuilder : TemplateLanguageFormattingModelBuilder() {
 
             if (myNode.treeParent != null && TwigPsiUtil.isNonRootBlockElement(myNode.treeParent.psi)) {
                 // we're computing the indent for a direct descendant of a non-root block:
-                //      if its Block parent (i.e. not HB AST Tree parent) is a Twig block
+                //      if its Block parent (i.e. not Twig AST Tree parent) is a Twig block
                 //      which has NOT been indented, then have the element provide the indent itself
                 if (parent is TwigBlock && (parent as TwigBlock).indent === Indent.getNoneIndent()) {
                     return Indent.getNormalIndent()

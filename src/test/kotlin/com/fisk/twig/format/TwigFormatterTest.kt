@@ -58,10 +58,10 @@ abstract class TwigFormatterTest : LightPlatformCodeInsightFixtureTestCase(), Tw
      *
      *
      * The test will validate the results against a file of the same name with "_expected" appended.
-     * (i.e. for fileNameBefore "TestFile.hbs", the formatter will be run on [.TEST_DATA_PATH]/TestFile.hbs
-     * the test will look for [.TEST_DATA_PATH]/TestFile_expected.hbs to validate the results).
+     * (i.e. for fileNameBefore "TestFile.twig", the formatter will be run on [.TEST_DATA_PATH]/TestFile.twig
+     * the test will look for [.TEST_DATA_PATH]/TestFile_expected.twig to validate the results).
      *
-     * @param fileNameBefore The name of the file to test (must have the '.hbs' extension).
+     * @param fileNameBefore The name of the file to test (must have the '.twig' extension).
      * @throws Exception
      */
     @Throws(Exception::class)
@@ -71,7 +71,7 @@ abstract class TwigFormatterTest : LightPlatformCodeInsightFixtureTestCase(), Tw
 
     /**
      * Specialization of [.doFileBasedTest] which adds the option of specifying a templated language
-     * other than [com.dmarcotte.handlebars.TwigLanguage.getDefaultTemplateLang]
+     * other than [com.fisk.twig.TwigLanguage.defaultTemplateLang]
      *
      * @param fileNameBefore           The name of the file to test
      * @param templateDataLanguageType The LanguageFileType of the templated file

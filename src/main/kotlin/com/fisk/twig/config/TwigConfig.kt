@@ -13,9 +13,9 @@ object TwigConfig {
         get() = getBooleanPropertyValue(AUTO_GENERATE_CLOSE_TAG)
         set(enabled) = setBooleanPropertyValue(AUTO_GENERATE_CLOSE_TAG, enabled)
 
-    var isAutocompleteMustachesEnabled: Boolean
-        get() = getBooleanPropertyValue(AUTOCOMPLETE_MUSTACHES)
-        set(enabled) = setBooleanPropertyValue(AUTOCOMPLETE_MUSTACHES, enabled)
+    var isAutocompleteStatementsEnabled: Boolean
+        get() = getBooleanPropertyValue(AUTOCOMPLETE_STATEMENTS)
+        set(enabled) = setBooleanPropertyValue(AUTOCOMPLETE_STATEMENTS, enabled)
 
     var isFormattingEnabled: Boolean
         get() = getBooleanPropertyValue(FORMATTER)

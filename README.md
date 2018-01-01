@@ -2,7 +2,7 @@
 
 (WIP) A plugin to replace the official Twig plugin found in IntelliJ.
 
-This is not production ready yet!! A lot of code has been sampled from the Handlebars plugin, this will eventually be replaced as I learn more about how IntelliJ works. 
+This is not production ready yet!! A lot of code has been sampled from the Handlebars plugin; this will eventually be replaced to suit Twig as I learn more about how IntelliJ works. 
 
 ## Why this exists
 

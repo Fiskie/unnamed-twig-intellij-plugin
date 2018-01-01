@@ -14,9 +14,9 @@ internal enum class Property {
             get() = ENABLED
     },
 
-    AUTOCOMPLETE_MUSTACHES {
+    AUTOCOMPLETE_STATEMENTS {
         override val stringName: String
-            get() = "TwigAutocompleteMustaches"
+            get() = "TwigAutocompleteStatements"
 
         override val default: String
             get() = ENABLED
