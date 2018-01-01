@@ -7,10 +7,8 @@ import com.intellij.lang.html.HTMLLanguage
  */
 internal enum class Property {
     AUTO_GENERATE_CLOSE_TAG {
-        override // please excuse the "disabled" in this name.  This is an artifact from an earlier approach
-                //      to properties, which we keep for backwards compatibility
-        val stringName: String
-            get() = "TwigDisableAutoGenerateCloseTag"
+        override val stringName: String
+            get() = "TwigEnableAutoGenerateCloseTag"
 
         override val default: String
             get() = ENABLED

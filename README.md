@@ -1,10 +1,16 @@
-# (WIP) intellij-twig2
+# (WIP) intellij-community-twig
 
-The official IntelliJ Twig plugin is closed-source and lacks features which I'd like to see, so I wanted to do something about it. 
+(WIP) A plugin to replace the official Twig plugin found in IntelliJ.
 
-This plugin is named intellij-twig2 to distinguish it from the official plugin.
+This is not production ready yet!! A lot of code has been sampled from the Handlebars plugin, this will eventually be replaced as I learn more about how IntelliJ works. 
 
-To me, this was my debut in plugin development, so this plugin **heavily** grafts from the official Handlebars plugin since it's the closest thing to Twig. I learned a lot about writing a parser @w@
+## Why this exists
+
+The official IntelliJ Twig plugin is pretty barebones. There are also some weird bugs that cause indentation to go wonky. But it's closed source and we can't do anything about it.
+
+The Symfony plugin extends it with some nice features such as PHPDoc, but it's unable to add features like syntax validation without fully reimplementing the parser.
+
+I would love to bridge the gap -- make the official plugin obsolete, and incorporate the extra features from the Symfony plugin. 
 
 ## TODO
 
@@ -26,12 +32,18 @@ To me, this was my debut in plugin development, so this plugin **heavily** graft
     - Declared child blocks not found in the parent template
 - Rename handler, names validator ([Rename refactoring](https://www.jetbrains.org/intellij/sdk/docs/reference_guide/custom_language_support/rename_refactoring.html))
 - Find usages ([Find usages](https://www.jetbrains.org/intellij/sdk/docs/reference_guide/custom_language_support/find_usages.html))
-
-- Long-term goal: PHP controller property reflection
-    - Resolve the types of variables passed to a template
+- PHPDoc annotation (`{# @var thing \Core\Thing #}`)
+- Folding
+- Block parent goto
+- Template include resolution
+- Override/implement block generation
+- More tests for indenting (strange bug with two simple statements, second one not indenting at all?)
+ 
     
 ## Development
 
 Contributing to this project will require an environment ready to develop IntelliJ plugins. [Read the guide](https://www.jetbrains.com/help/idea/configuring-intellij-platform-plugin-sdk.html)
+
+This is a Gradle project, so import `gradle.build` and it should do everything for you without additional configuration. 
 
 Make sure tests pass, then make a pull request. If Travis fails to build your PR, please make additional changes.

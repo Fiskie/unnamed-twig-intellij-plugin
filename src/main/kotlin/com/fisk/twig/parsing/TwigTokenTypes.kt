@@ -63,32 +63,15 @@ object TwigTokenTypes {
     val PROPERTY = TwigElementType("PROPERTY", "twig.parsing.element.expected.property")
     @JvmField
     val COMMA = TwigElementType("COMMA", "twig.parsing.element.expected.comma")
-
-    @JvmField
-    val STATEMENT = TwigCompositeElementType("STATEMENT")
-
-    @JvmField
-    val EXPRESSION = TwigCompositeElementType("EXPRESSION")
-
     @JvmField
     val COMMENT = TwigElementType("COMMENT", "twig.parsing.element.expected.comment")
 
-    @JvmField
+    val EXPRESSION = TwigCompositeElementType("EXPRESSION")
     val BLOCK_WRAPPER = TwigCompositeElementType("BLOCK_WRAPPER")
-
-    @JvmField
     val BLOCK_START_STATEMENT = TwigCompositeElementType("BLOCK_START_STATEMENT")
-
-    @JvmField
     val INVERSE_STATEMENT = TwigCompositeElementType("INVERSE_STATEMENT")
-
-    @JvmField
     val BLOCK_END_STATEMENT = TwigCompositeElementType("BLOCK_END_STATEMENT")
-
-    @JvmField
     val SIMPLE_STATEMENT = TwigCompositeElementType("SIMPLE_STATEMENT")
-
-    @JvmField
     val BLOCK = TwigCompositeElementType("BLOCK")
 
     val IDENTIFIERS = TokenSet.create(VARIABLE)
