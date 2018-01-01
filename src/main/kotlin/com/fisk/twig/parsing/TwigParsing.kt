@@ -7,7 +7,7 @@ import com.fisk.twig.parsing.TwigTokenTypes.CONTENT
 import com.fisk.twig.parsing.TwigTokenTypes.EXPRESSION_CLOSE
 import com.fisk.twig.parsing.TwigTokenTypes.EXPRESSION_OPEN
 import com.fisk.twig.parsing.TwigTokenTypes.INVALID
-import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_BLOCK
+import com.fisk.twig.parsing.TwigTokenTypes.BLOCK_WRAPPER
 import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_CLOSE
 import com.fisk.twig.parsing.TwigTokenTypes.BLOCK_END_STATEMENT
 import com.fisk.twig.parsing.TwigTokenTypes.INVERSE_STATEMENT
@@ -19,11 +19,12 @@ import com.fisk.twig.parsing.TwigTokenTypes.UNCLOSED_COMMENT
 import com.intellij.lang.PsiBuilder
 import com.intellij.psi.tree.IElementType
 
-// TODO: handle 'else', which will be used as an inverse tag for 'for' and 'if'
 class TwigParsing(val builder: PsiBuilder) {
     val elseTags = setOf("else", "elseif")
 
     fun parse() {
+        builder.setDebugMode(true)
+
         while (!builder.eof()) {
             parseRoot(builder)
 
@@ -101,6 +102,16 @@ class TwigParsing(val builder: PsiBuilder) {
 
     fun parseStatement(builder: PsiBuilder): Boolean {
         if (builder.tokenType == STATEMENT_OPEN) {
+            // If an inverse marker is discovered in the block, we need to break out of the block
+            val prematureInverseMarker = builder.mark()
+
+            if (parseInverseBlock(builder) != null) {
+                prematureInverseMarker.rollbackTo()
+                return false
+            }
+
+            prematureInverseMarker.rollbackTo()
+
             val statementMarker = builder.mark()
             val nonStackingMarker = builder.mark()
 
@@ -109,18 +120,25 @@ class TwigParsing(val builder: PsiBuilder) {
             if (openTag != null) {
                 parseRoot(builder)
 
+                while (true) {
+                    // handle inverse chain
+                    if (parseInverseBlock(builder) != null) {
+                        parseRoot(builder)
+                    } else {
+                        break
+                    }
+                }
+
                 if (parseCloseBlock(builder, openTag) != null) {
                     nonStackingMarker.drop()
-                    statementMarker.done(STATEMENT_BLOCK)
+                    statementMarker.done(BLOCK_WRAPPER)
                     return true
                 }
 
-                // If we get here, it's either an inverse OR a non-blocking statement
-                // todo: support inverse
-
                 nonStackingMarker.rollbackTo()
                 parseNonStackingBlock(builder)
-                statementMarker.done(STATEMENT_BLOCK)
+                statementMarker.done(BLOCK_WRAPPER)
+
                 return true
             }
         }
@@ -140,7 +158,11 @@ class TwigParsing(val builder: PsiBuilder) {
         return parseBlock(builder, BLOCK_END_STATEMENT, { tag -> normaliseTag(tag) == openTag })
     }
 
-    fun parseElseBlock(builder: PsiBuilder): String? {
+    fun parseAnyCloseBlock(builder: PsiBuilder): String? {
+        return parseBlock(builder, BLOCK_END_STATEMENT, { tag -> isEndTag(tag) })
+    }
+
+    fun parseInverseBlock(builder: PsiBuilder): String? {
         // needs to be set up better for inverse tag chaining really
         return parseBlock(builder, INVERSE_STATEMENT, { tag -> elseTags.contains(tag) })
     }

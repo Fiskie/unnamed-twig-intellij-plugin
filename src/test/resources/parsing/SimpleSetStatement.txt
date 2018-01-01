@@ -1,6 +1,6 @@
 Twig: SimpleSetStatement.twig
   TwigBlockImpl([Twig] BLOCK)
-    TwigPsiElementImpl([Twig] STATEMENT_BLOCK)
+    TwigPsiElementImpl([Twig] BLOCK_WRAPPER)
       TwigSimpleStatementImpl([Twig] SIMPLE_STATEMENT)
         PsiElement([Twig] STATEMENT_OPEN)('{%')
         PsiWhiteSpace(' ')

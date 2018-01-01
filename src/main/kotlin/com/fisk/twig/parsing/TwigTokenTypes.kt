@@ -28,17 +28,17 @@ object TwigTokenTypes {
     @JvmField
     val EXPRESSION_CLOSE = TwigElementType("EXPRESSION_CLOSE", "twig.parsing.element.expected.expression_close")
     @JvmField
-    val OPEN_SEXPR = TwigElementType("OPEN_SEXPR", "twig.parsing.element.expected.open_sexpr")
+    val LPARENTH = TwigElementType("LPARENTH", "twig.parsing.element.expected.open_sexpr")
     @JvmField
-    val CLOSE_SEXPR = TwigElementType("CLOSE_SEXPR", "twig.parsing.element.expected.close_sexpr")
+    val RPARENTH = TwigElementType("RPARENTH", "twig.parsing.element.expected.close_sexpr")
     @JvmField
-    val OPEN_LIST = TwigElementType("OPEN_LIST", "twig.parsing.element.expected.open_list")
+    val LBRACKET = TwigElementType("LBRACKET", "twig.parsing.element.expected.open_list")
     @JvmField
-    val CLOSE_LIST = TwigElementType("CLOSE_LIST", "twig.parsing.element.expected.close_list")
+    val RBRACKET = TwigElementType("RBRACKET", "twig.parsing.element.expected.close_list")
     @JvmField
-    val OPEN_HASH = TwigElementType("OPEN_HASH", "twig.parsing.element.expected.open_hash")
+    val LBRACE = TwigElementType("LBRACE", "twig.parsing.element.expected.open_hash")
     @JvmField
-    val CLOSE_HASH = TwigElementType("CLOSE_HASH", "twig.parsing.element.expected.close_hash")
+    val RBRACE = TwigElementType("RBRACE", "twig.parsing.element.expected.close_hash")
     @JvmField
     val EQUALS = TwigElementType("EQUALS", "twig.parsing.element.expected.equals")
     @JvmField
@@ -60,7 +60,9 @@ object TwigTokenTypes {
     @JvmField
     val TEST = TwigElementType("TEST", "twig.parsing.element.expected.test")
     @JvmField
-    val FUNCTION_IDENT = TwigElementType("FUNCTION_IDENT", "twig.parsing.element.expected.function")
+    val PROPERTY = TwigElementType("PROPERTY", "twig.parsing.element.expected.property")
+    @JvmField
+    val COMMA = TwigElementType("COMMA", "twig.parsing.element.expected.comma")
 
     @JvmField
     val STATEMENT = TwigCompositeElementType("STATEMENT")
@@ -72,7 +74,7 @@ object TwigTokenTypes {
     val COMMENT = TwigElementType("COMMENT", "twig.parsing.element.expected.comment")
 
     @JvmField
-    val STATEMENT_BLOCK = TwigCompositeElementType("STATEMENT_BLOCK")
+    val BLOCK_WRAPPER = TwigCompositeElementType("BLOCK_WRAPPER")
 
     @JvmField
     val BLOCK_START_STATEMENT = TwigCompositeElementType("BLOCK_START_STATEMENT")

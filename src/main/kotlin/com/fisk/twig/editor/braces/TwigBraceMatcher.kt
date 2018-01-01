@@ -46,9 +46,9 @@ class TwigBraceMatcher : BraceMatcher {
             PAIRS.add(Pair(TwigTokenTypes.COMMENT_OPEN, TwigTokenTypes.COMMENT_CLOSE))
             PAIRS.add(Pair(TwigTokenTypes.EXPRESSION_OPEN, TwigTokenTypes.EXPRESSION_CLOSE))
             PAIRS.add(Pair(TwigTokenTypes.STATEMENT_OPEN, TwigTokenTypes.STATEMENT_CLOSE))
-            PAIRS.add(Pair(TwigTokenTypes.OPEN_SEXPR, TwigTokenTypes.CLOSE_SEXPR))
-            PAIRS.add(Pair(TwigTokenTypes.OPEN_LIST, TwigTokenTypes.CLOSE_LIST))
-            PAIRS.add(Pair(TwigTokenTypes.OPEN_HASH, TwigTokenTypes.CLOSE_HASH))
+            PAIRS.add(Pair(TwigTokenTypes.LPARENTH, TwigTokenTypes.RPARENTH))
+            PAIRS.add(Pair(TwigTokenTypes.LBRACKET, TwigTokenTypes.RBRACKET))
+            PAIRS.add(Pair(TwigTokenTypes.LBRACE, TwigTokenTypes.RBRACE))
         }
     }
 }

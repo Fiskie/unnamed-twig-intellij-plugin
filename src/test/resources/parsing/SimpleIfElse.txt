@@ -1,7 +1,7 @@
-Twig: IfElseBlock.twig
+Twig: SimpleIfElse.twig
   TwigBlockImpl([Twig] BLOCK)
-    TwigPsiElementImpl([Twig] STATEMENT_BLOCK)
-      TwigPsiElementImpl([Twig] BLOCK_START_STATEMENT)
+    TwigPsiElementImpl([Twig] BLOCK_WRAPPER)
+      TwigBlockStartStatementImpl([Twig] BLOCK_START_STATEMENT)
         PsiElement([Twig] STATEMENT_OPEN)('{%')
         PsiWhiteSpace(' ')
         PsiElement([Twig] TAG)('if')
@@ -11,7 +11,7 @@ Twig: IfElseBlock.twig
         PsiElement([Twig] STATEMENT_CLOSE)('%}')
       TwigBlockImpl([Twig] BLOCK)
         PsiElement([Twig] CONTENT)('\n    <p>content</p>\n')
-      TwigPsiElementImpl([Twig] INVERSE_STATEMENT)
+      TwigBlockStartStatementImpl([Twig] INVERSE_STATEMENT)
         PsiElement([Twig] STATEMENT_OPEN)('{%')
         PsiWhiteSpace(' ')
         PsiElement([Twig] TAG)('else')
@@ -19,7 +19,7 @@ Twig: IfElseBlock.twig
         PsiElement([Twig] STATEMENT_CLOSE)('%}')
       TwigBlockImpl([Twig] BLOCK)
         PsiElement([Twig] CONTENT)('\n    <p>other content</p>\n')
-      TwigPsiElementImpl([Twig] BLOCK_END_STATEMENT)
+      TwigBlockEndStatementImpl([Twig] BLOCK_END_STATEMENT)
         PsiElement([Twig] STATEMENT_OPEN)('{%')
         PsiWhiteSpace(' ')
         PsiElement([Twig] TAG)('endif')

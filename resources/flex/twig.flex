@@ -41,12 +41,12 @@ StatementClose = -?%\}
 CommentOpen = \{#-?
 CommentClose = -?#\}
 
-Label = [A-z_][A-z0-9_]*
+Label = [A-Za-z_]\w*
 
 AnyChar = [.]
 DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
 
-%state expression
+%state expression_block
 %state statement
 %state statement_block_tag
 %state comment
@@ -59,9 +59,9 @@ DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
     }
 
     {ExpressionOpen} {
-        yybegin(expression);
-        return TwigTokenTypes.EXPRESSION_OPEN;
-    }
+            yybegin(expression_block);
+            return TwigTokenTypes.EXPRESSION_OPEN;
+        }
 
     {StatementOpen} {
         yybegin(statement_block_tag);
@@ -110,8 +110,6 @@ DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
         return TwigTokenTypes.STATEMENT_CLOSE;
     }
 
-    "," { }
-
     {WhiteSpace} { return TwigTokenTypes.WHITE_SPACE; }
 }
 
@@ -130,20 +128,20 @@ DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
     "=" { return TwigTokenTypes.EQUALS; }
 }
 
-<expression> {
+<expression_block> {
     {ExpressionClose} {
         yybegin(YYINITIAL);
         return TwigTokenTypes.EXPRESSION_CLOSE;
     }
 }
 
-<statement, expression> {
-    "(" { return TwigTokenTypes.OPEN_SEXPR; }
-    ")" { return TwigTokenTypes.CLOSE_SEXPR; }
-    "[" { return TwigTokenTypes.OPEN_LIST; }
-    "]" { return TwigTokenTypes.CLOSE_LIST; }
-    "{" { return TwigTokenTypes.OPEN_HASH; }
-    "}" { return TwigTokenTypes.CLOSE_HASH; }
+<statement, expression_block> {
+    "(" { return TwigTokenTypes.LPARENTH; }
+    ")" { return TwigTokenTypes.RPARENTH; }
+    "[" { return TwigTokenTypes.LBRACKET; }
+    "]" { return TwigTokenTypes.RBRACKET; }
+    "{" { return TwigTokenTypes.LBRACE; }
+    "}" { return TwigTokenTypes.RBRACE; }
     "true"/[}\)\t \n\x0B\f\r] { return TwigTokenTypes.BOOLEAN; }
     "false"/[}\)\t \n\x0B\f\r] { return TwigTokenTypes.BOOLEAN; }
     \-?[0-9]+(\.[0-9]+)?/[}\)\t \n\x0B\f\r] { return TwigTokenTypes.NUMBER; }
@@ -164,20 +162,22 @@ DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
         return TwigTokenTypes.OPERATOR;
     }
 
+    "," { return TwigTokenTypes.COMMA; }
+
     {Label} { return TwigTokenTypes.VARIABLE; }
 
     {WhiteSpace} { return TwigTokenTypes.WHITE_SPACE; }
 }
 
-<statement, expression>(b?[\"]{DoubleQuotesChars}*[\"]) {
+<statement, expression_block>(b?[\"]{DoubleQuotesChars}*[\"]) {
     return TwigTokenTypes.STRING;
 }
 
-<statement, expression>(b?[']([^'\\]|("\\"{AnyChar}))*[']) {
+<statement, expression_block>(b?[']([^'\\]|("\\"{AnyChar}))*[']) {
     return TwigTokenTypes.STRING;
 }
 
-<expression, statement, comment> {AnyChar} {
+<expression_block, statement, comment> {AnyChar} {
 	// do nothing
 }
 
