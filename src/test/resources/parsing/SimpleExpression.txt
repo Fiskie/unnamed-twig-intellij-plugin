@@ -4,7 +4,7 @@ Twig: SimpleExpression.twig
       PsiElement([Twig] EXPRESSION_OPEN)('{{')
       PsiWhiteSpace(' ')
       TwigPsiElementImpl([Twig] EXPRESSION)
-        TwigVariableImpl([Twig] LABEL)
+        TwigLabelImpl([Twig] LABEL)
           PsiElement([Twig] LABEL)('foo')
       PsiWhiteSpace(' ')
       PsiElement([Twig] EXPRESSION_CLOSE)('}}')

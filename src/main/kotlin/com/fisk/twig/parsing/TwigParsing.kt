@@ -185,8 +185,6 @@ class TwigParsing(private val builder: PsiBuilder) {
         var tagName: String? = null
 
         do {
-            builder.advanceLexer()
-
             if (builder.tokenType == TAG) {
                 val tag = builder.tokenText
 
@@ -195,6 +193,8 @@ class TwigParsing(private val builder: PsiBuilder) {
                         tagName = normaliseTag(tag)
                     }
                 }
+
+                parseLeafToken(builder, TAG)
             } else {
                 val expressionMarker = builder.mark()
 
@@ -202,6 +202,7 @@ class TwigParsing(private val builder: PsiBuilder) {
                     expressionMarker.drop()
                 } else {
                     expressionMarker.rollbackTo()
+                    builder.advanceLexer()
                 }
             }
 
@@ -296,12 +297,14 @@ class TwigParsing(private val builder: PsiBuilder) {
     }
 
     /**
-     * helperName
-     * | variable.property|filter
-     * | STRING
-     * | NUMBER
-     * | BOOLEAN
-     * ;
+     * Parses an expression. An expression can be as simple as a single label (e.g. the foo in {{ foo }}),
+     * or as complex as "foo" ~ func(bar) ~ baz.val['arr']|default("str")
+     *
+     * TODO: operators
+     * TODO: array access
+     * TODO: filter pipe
+     * TODO: property access
+     * TODO: functions
      */
     private fun parseExpression(builder: PsiBuilder): Boolean {
         val expressionMarker = builder.mark()
@@ -311,6 +314,11 @@ class TwigParsing(private val builder: PsiBuilder) {
             variableMarker.drop()
 
             expressionMarker.done(EXPRESSION)
+
+//            val funMarker = builder.mark()
+//
+//            val sepMarker = builder.mark()
+
             return true
         } else {
             variableMarker.rollbackTo()
@@ -343,8 +351,7 @@ class TwigParsing(private val builder: PsiBuilder) {
             booleanMarker.rollbackTo()
         }
 
-//        expressionMarker.error(TwigBundle.message("twig.parsing.expected.path.or.data"))
-        expressionMarker.rollbackTo()
+        expressionMarker.error(TwigBundle.message("twig.parsing.expected.path.or.data"))
         return false
     }
 }
