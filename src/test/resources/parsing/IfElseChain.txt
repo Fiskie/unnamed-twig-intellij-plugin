@@ -40,7 +40,7 @@ Twig: IfElseChain.twig
         PsiElement([Twig] OPERATOR)('==')
         PsiWhiteSpace(' ')
         TwigPsiElementImpl([Twig] EXPRESSION)
-          TwigPsiElementImpl([Twig] STRING)
+          TwigStringImpl([Twig] STRING)
             PsiElement([Twig] STRING)('"feed"')
         PsiWhiteSpace(' ')
         PsiElement([Twig] STATEMENT_CLOSE)('%}')

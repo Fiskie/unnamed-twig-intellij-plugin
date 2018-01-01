@@ -56,6 +56,10 @@ class TwigParserDefinition : ParserDefinition {
                 return TwigLabelImpl(node)
             }
 
+            if (type == TwigTokenTypes.STRING) {
+                return TwigStringImpl(node)
+            }
+
             if (type == TwigTokenTypes.TAG) {
                 return TwigTagImpl(node)
             }
