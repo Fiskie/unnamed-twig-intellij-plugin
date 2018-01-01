@@ -9,7 +9,7 @@ import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.templateLanguages.TemplateLanguageFileViewProvider
 import com.intellij.psi.tree.TokenSet
 
-class TwigErrorFilter protected constructor() : TemplateLanguageErrorFilter(START_TEMPLATE_TOKENS, TwigFileViewProvider::class.java, "HTML") {
+class TwigErrorFilter private constructor() : TemplateLanguageErrorFilter(START_TEMPLATE_TOKENS, TwigFileViewProvider::class.java, "HTML") {
     override fun shouldIgnoreErrorAt(viewProvider: FileViewProvider, offset: Int): Boolean {
         return if (super.shouldIgnoreErrorAt(viewProvider, offset)) true else hasWhitespacesInHtmlBetweenErrorAndOpenTokens(offset, viewProvider as TemplateLanguageFileViewProvider)
 

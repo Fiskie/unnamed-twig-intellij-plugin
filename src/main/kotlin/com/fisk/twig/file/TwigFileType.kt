@@ -15,7 +15,7 @@ import com.intellij.psi.templateLanguages.TemplateDataLanguageMappings
 import org.jetbrains.annotations.NonNls
 import java.nio.charset.Charset
 
-class TwigFileType protected constructor(lang: Language) : LanguageFileType(lang), TemplateLanguageFileType {
+class TwigFileType private constructor(lang: Language) : LanguageFileType(lang), TemplateLanguageFileType {
     private constructor() : this(TwigLanguage.INSTANCE)
 
     init {

@@ -19,7 +19,7 @@ class TwigTodoIndexTest : LightPlatformCodeInsightTestCase() {
         checkTodoCount(1)
     }
 
-    fun checkTodoCount(expectedTodoCount: Int) {
+    private fun checkTodoCount(expectedTodoCount: Int) {
         configureByFile(getTestName(true) + ".twig")
         val items = PsiTodoSearchHelper.SERVICE.getInstance(getProject()).findTodoItems(getFile())
         assertEquals(expectedTodoCount, items.size)

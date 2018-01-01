@@ -1,6 +1,6 @@
 Twig: IfElseBlock.twig
   TwigBlockImpl([Twig] BLOCK)
-    TwigPsiElementImpl([Twig] BLOCK_WRAPPER)
+    TwigBlockWrapperImpl([Twig] BLOCK_WRAPPER)
       TwigPsiElementImpl([Twig] BLOCK_START_STATEMENT)
         PsiElement([Twig] STATEMENT_OPEN)('{%')
         PsiWhiteSpace(' ')

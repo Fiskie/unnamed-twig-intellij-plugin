@@ -6,7 +6,7 @@ import com.intellij.lang.ASTNode
 import com.intellij.psi.util.PsiTreeUtil
 
 abstract class TwigStatementImpl(node: ASTNode) : TwigPsiElementImpl(node), TwigStatement {
-    fun getTagName(): TwigTag? {
+    private fun getTagName(): TwigTag? {
         return PsiTreeUtil.findChildOfType(this, TwigTag::class.java)
     }
 

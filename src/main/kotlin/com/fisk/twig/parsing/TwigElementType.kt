@@ -10,8 +10,8 @@ import org.jetbrains.annotations.NonNls
  * *                                expected this token, but found something else.
  */
 data class TwigElementType(
-        @NonNls val debugName: String,
-        @NonNls val parseExpectedMessageKey: String
+        @NonNls private val debugName: String,
+        @NonNls private val parseExpectedMessageKey: String
 ) : IElementType(debugName, TwigLanguage.INSTANCE) {
     fun parseExpectedMessage() = TwigBundle.message(parseExpectedMessageKey)
 

@@ -28,7 +28,7 @@
     <fileTypeFactory implementation="com.fisk.twig.file.TwigFileTypeFactory"/>
     <highlightErrorFilter implementation="com.fisk.twig.inspections.TwigErrorFilter"/>
     <html.scriptContentProvider language="Twig" implementationClass="com.fisk.twig.TwigScriptContentProvider"/>
-    <lang.commenter language="Twig" implementationClass="com.fisk.twig.editor.comments.TwigCommenter"/>
+    <lang.commenter language="Twig" implementationClass="com.fisk.twig.editor.comments.TwigCommenterManager"/>
     <lang.fileViewProviderFactory language="Twig" implementationClass="com.fisk.twig.file.TwigFileViewProviderFactory"/>
     <lang.findUsagesProvider language="Twig" implementationClass="com.fisk.twig.ide.TwigFindUsagesProvider"/>
     <lang.formatter language="Twig" implementationClass="com.fisk.twig.format.TwigFormattingModelBuilder"/>

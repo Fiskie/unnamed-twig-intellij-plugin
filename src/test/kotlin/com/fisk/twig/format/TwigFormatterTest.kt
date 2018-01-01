@@ -23,7 +23,7 @@ import java.io.File
 abstract class TwigFormatterTest : LightPlatformCodeInsightFixtureTestCase(), TwigFormattingModelBuilderTest {
     private val TEST_DATA_PATH = File(TwigTestUtils.BASE_TEST_DATA_PATH, "formatter").absolutePath
 
-    lateinit var formatterTestSettings: FormatterTestSettings
+    private lateinit var formatterTestSettings: FormatterTestSettings
 
     @Throws(Exception::class)
     override fun setUp() {
@@ -64,8 +64,7 @@ abstract class TwigFormatterTest : LightPlatformCodeInsightFixtureTestCase(), Tw
      * @param fileNameBefore The name of the file to test (must have the '.twig' extension).
      * @throws Exception
      */
-    @Throws(Exception::class)
-    internal fun doFileBasedTest(@NonNls fileNameBefore: String) {
+    @Throws(Exception::class) private fun doFileBasedTest(@NonNls fileNameBefore: String) {
         doFileBasedTest(fileNameBefore, TwigLanguage.defaultTemplateLang)
     }
 
@@ -101,8 +100,7 @@ abstract class TwigFormatterTest : LightPlatformCodeInsightFixtureTestCase(), Tw
      * @param templateDataLanguageType The templated language of the file
      * @throws IncorrectOperationException
      */
-    @Throws(IncorrectOperationException::class)
-    internal fun doTextTest(beforeText: String, textAfter: String, templateDataLanguageType: LanguageFileType) {
+    @Throws(IncorrectOperationException::class) private fun doTextTest(beforeText: String, textAfter: String, templateDataLanguageType: LanguageFileType) {
         // define action to run "Reformat Code" on the whole "file" defined by beforeText
         val fullFormatRunnableFactory = object : FormatRunnableFactory() {
             override fun createFormatRunnable(file: PsiFile?): Runnable {

@@ -1,6 +1,6 @@
 Twig: NestedPrematureEndTag.twig
   TwigBlockImpl([Twig] BLOCK)
-    TwigPsiElementImpl([Twig] BLOCK_WRAPPER)
+    TwigBlockWrapperImpl([Twig] BLOCK_WRAPPER)
       TwigSimpleStatementImpl([Twig] SIMPLE_STATEMENT)
         PsiElement([Twig] STATEMENT_OPEN)('{%')
         PsiWhiteSpace(' ')
@@ -10,7 +10,7 @@ Twig: NestedPrematureEndTag.twig
         PsiWhiteSpace(' ')
         PsiElement([Twig] STATEMENT_CLOSE)('%}')
     PsiWhiteSpace('\n    ')
-    TwigPsiElementImpl([Twig] BLOCK_WRAPPER)
+    TwigBlockWrapperImpl([Twig] BLOCK_WRAPPER)
       TwigSimpleStatementImpl([Twig] SIMPLE_STATEMENT)
         PsiElement([Twig] STATEMENT_OPEN)('{%')
         PsiWhiteSpace(' ')

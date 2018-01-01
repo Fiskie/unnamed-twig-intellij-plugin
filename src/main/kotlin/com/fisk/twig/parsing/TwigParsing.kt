@@ -256,19 +256,24 @@ class TwigParsing(private val builder: PsiBuilder) {
      */
     private fun parseLeafToken(builder: PsiBuilder, leafTokenType: IElementType): Boolean {
         val leafTokenMark = builder.mark()
-        if (builder.tokenType === leafTokenType) {
-            builder.advanceLexer()
-            leafTokenMark.done(leafTokenType)
-            return true
-        } else if (builder.tokenType === INVALID) {
-            while (!builder.eof() && builder.tokenType === INVALID) {
+
+        when {
+            builder.tokenType === leafTokenType -> {
                 builder.advanceLexer()
+                leafTokenMark.done(leafTokenType)
+                return true
             }
-            recordLeafTokenError(INVALID, leafTokenMark)
-            return false
-        } else {
-            recordLeafTokenError(leafTokenType, leafTokenMark)
-            return false
+            builder.tokenType === INVALID -> {
+                while (!builder.eof() && builder.tokenType === INVALID) {
+                    builder.advanceLexer()
+                }
+                recordLeafTokenError(INVALID, leafTokenMark)
+                return false
+            }
+            else -> {
+                recordLeafTokenError(leafTokenType, leafTokenMark)
+                return false
+            }
         }
     }
 

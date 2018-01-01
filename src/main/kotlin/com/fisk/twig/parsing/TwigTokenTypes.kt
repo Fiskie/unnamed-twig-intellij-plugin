@@ -60,8 +60,6 @@ object TwigTokenTypes {
     @JvmField
     val TEST = TwigElementType("TEST", "twig.parsing.element.expected.test")
     @JvmField
-    val PROPERTY = TwigElementType("PROPERTY", "twig.parsing.element.expected.property")
-    @JvmField
     val COMMA = TwigElementType("COMMA", "twig.parsing.element.expected.comma")
     @JvmField
     val COMMENT = TwigElementType("COMMENT", "twig.parsing.element.expected.comment")

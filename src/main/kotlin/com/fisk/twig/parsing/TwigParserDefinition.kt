@@ -44,12 +44,20 @@ class TwigParserDefinition : ParserDefinition {
                 return TwigStatementCloseBracketsImpl(node)
             }
 
+            if (type == TwigTokenTypes.EXPRESSION) {
+                return TwigExpressionImpl(node)
+            }
+
             if (type == TwigTokenTypes.COMMENT) {
                 return TwigCommentImpl(node)
             }
 
             if (type == TwigTokenTypes.BLOCK) {
                 return TwigBlockImpl(node)
+            }
+
+            if (type == TwigTokenTypes.BLOCK_WRAPPER) {
+                return TwigBlockWrapperImpl(node)
             }
 
             if (type == TwigTokenTypes.LABEL) {

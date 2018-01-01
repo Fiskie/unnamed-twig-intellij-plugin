@@ -32,7 +32,7 @@ object TwigConfig {
         get() = Language.findLanguageByID(getStringPropertyValue(COMMENTER_LANGUAGE_ID)) ?: HTMLLanguage.INSTANCE
         set(language) = setStringPropertyValue(COMMENTER_LANGUAGE_ID, language?.id)
 
-    fun getRawOpenHtmlAsTwigValue(project: Project): String {
+    private fun getRawOpenHtmlAsTwigValue(project: Project): String {
         return getStringPropertyValue(SHOULD_OPEN_HTML, project)
     }
 

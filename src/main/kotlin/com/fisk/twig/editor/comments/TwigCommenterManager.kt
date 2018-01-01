@@ -7,32 +7,27 @@ import com.intellij.lang.LanguageCommenters
 
 class TwigCommenterManager : Commenter {
     override fun getLineCommentPrefix(): String? {
-        val commenter = commenter
         return commenter?.lineCommentPrefix
     }
 
     override fun getBlockCommentPrefix(): String? {
-        val commenter = commenter
         return commenter?.blockCommentPrefix
     }
 
     override fun getBlockCommentSuffix(): String? {
-        val commenter = commenter
         return commenter?.blockCommentSuffix
     }
 
     override fun getCommentedBlockCommentPrefix(): String? {
-        val commenter = commenter
         return commenter?.commentedBlockCommentPrefix
     }
 
     override fun getCommentedBlockCommentSuffix(): String? {
-        val commenter = commenter
         return commenter?.commentedBlockCommentSuffix
     }
 
     companion object {
-        private val ourTwigCommenter = TwigCommenter()
+        private val twigCommenter = TwigCommenter()
 
         private val commenter: Commenter?
             get() {
@@ -40,7 +35,7 @@ class TwigCommenterManager : Commenter {
                 if (commenterLanguage == null) {
                     commenterLanguage = TwigLanguage.defaultTemplateLang.language
                 } else if (commenterLanguage.isKindOf(TwigLanguage.INSTANCE)) {
-                    return ourTwigCommenter
+                    return twigCommenter
                 }
 
                 return LanguageCommenters.INSTANCE.forLanguage(commenterLanguage)

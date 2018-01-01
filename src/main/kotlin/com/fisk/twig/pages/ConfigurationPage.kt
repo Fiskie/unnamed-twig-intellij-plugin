@@ -6,7 +6,7 @@ import javax.swing.JComponent
 import javax.swing.JPanel
 
 class ConfigurationPage(val project: Project) : SearchableConfigurable {
-    lateinit var basePanel: JPanel
+    private lateinit var basePanel: JPanel
 
     override fun isModified(): Boolean {
         return false

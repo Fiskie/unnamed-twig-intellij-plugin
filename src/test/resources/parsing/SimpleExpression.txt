@@ -3,7 +3,7 @@ Twig: SimpleExpression.twig
     TwigPsiElementImpl([Twig] EXPRESSION_BLOCK)
       PsiElement([Twig] EXPRESSION_OPEN)('{{')
       PsiWhiteSpace(' ')
-      TwigPsiElementImpl([Twig] EXPRESSION)
+      TwigExpressionImpl([Twig] EXPRESSION)
         TwigLabelImpl([Twig] LABEL)
           PsiElement([Twig] LABEL)('foo')
       PsiWhiteSpace(' ')

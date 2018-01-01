@@ -19,7 +19,7 @@ class TwigFormattingModelBuilder : TemplateLanguageFormattingModelBuilder() {
     override fun createTemplateLanguageBlock(node: ASTNode, wrap: Wrap?, alignment: Alignment?, foreignChildren: MutableList<DataLanguageBlockWrapper>?, codeStyleSettings: CodeStyleSettings): TemplateLanguageBlock {
         val model = FormattingDocumentModelImpl.createOn(node.psi.containingFile)
         val policy = HtmlPolicy(codeStyleSettings, model)
-        return TwigBlock(node, wrap, alignment, this, codeStyleSettings, foreignChildren, policy)
+        return TwigIndentBlock(node, wrap, alignment, this, codeStyleSettings, foreignChildren, policy)
     }
 
     /**
@@ -48,14 +48,14 @@ class TwigFormattingModelBuilder : TemplateLanguageFormattingModelBuilder() {
         }
     }
 
-    class TwigBlock(
+    class TwigIndentBlock(
             node: ASTNode,
             wrap: Wrap?,
             alignment: Alignment?,
             blockFactory: TemplateLanguageBlockFactory,
             settings: CodeStyleSettings,
             foreignChildren: MutableList<DataLanguageBlockWrapper>?,
-            val htmlPolicy: HtmlPolicy
+            private val htmlPolicy: HtmlPolicy
     ) : TemplateLanguageBlock(
             node, wrap, alignment, blockFactory, settings, foreignChildren
     ) {
@@ -75,7 +75,7 @@ class TwigFormattingModelBuilder : TemplateLanguageFormattingModelBuilder() {
                 if (parent is DataLanguageBlockWrapper && parent.original !is SyntheticBlock) {
                     foreignBlockParent = parent
                     break
-                } else if (immediate && parent is TwigBlock) {
+                } else if (immediate && parent is TwigIndentBlock) {
                     break
                 }
                 parent = parent.parent
@@ -111,7 +111,7 @@ class TwigFormattingModelBuilder : TemplateLanguageFormattingModelBuilder() {
                 // we're computing the indent for a direct descendant of a non-root block:
                 //      if its Block parent (i.e. not Twig AST Tree parent) is a Twig block
                 //      which has NOT been indented, then have the element provide the indent itself
-                if (parent is TwigBlock && (parent as TwigBlock).indent === Indent.getNoneIndent()) {
+                if (parent is TwigIndentBlock && (parent as TwigIndentBlock).indent === Indent.getNoneIndent()) {
                     return Indent.getNormalIndent()
                 }
             }

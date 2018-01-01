@@ -13,5 +13,5 @@ class TwigParser : PsiParser {
         return builder.treeBuilt
     }
 
-    fun getParsing(builder: PsiBuilder) = TwigParsing(builder)
+    private fun getParsing(builder: PsiBuilder) = TwigParsing(builder)
 }
