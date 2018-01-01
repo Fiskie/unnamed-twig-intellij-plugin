@@ -26,6 +26,14 @@ import com.intellij.util.containers.Stack;
     public void yypopState() {
       yybegin(stack.pop());
     }
+
+    public IElementType handleContent() {
+        if (yytext().toString().trim().length() == 0) {
+            return TwigTokenTypes.WHITE_SPACE;
+        } else {
+            return TwigTokenTypes.CONTENT;
+        }
+    }
 %}
 
 LineTerminator = \r|\n|\r\n
@@ -68,14 +76,21 @@ DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
         return TwigTokenTypes.STATEMENT_OPEN;
     }
 
-    !([^]*"{"[^]*) {
-        if (!yytext().toString().equals("")) {
-            if (yytext().toString().trim().length() == 0) {
-                return TwigTokenTypes.WHITE_SPACE;
-            } else {
-                return TwigTokenTypes.CONTENT;
-            }
-        }
+    // FIXME: fix content lexer to consume content properly
+    // Right now it's splitting CONTENT on certain delimiters (#, %, {). External fragments will work,
+    // however they are being tokenized oddly.
+
+    [^\{]+?(\{\{|\{#|\{%) {
+        yypushback(2);
+        return handleContent();
+    }
+
+    \{[^\{#%]+ {
+        return handleContent();
+    }
+
+    [^\{]+ {
+        return handleContent();
     }
 }
 
@@ -175,10 +190,6 @@ DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
 
 <statement, expression_block>(b?[']([^'\\]|("\\"{AnyChar}))*[']) {
     return TwigTokenTypes.STRING;
-}
-
-<expression_block, statement, comment> {AnyChar} {
-	// do nothing
 }
 
 {WhiteSpace}+ { return TwigTokenTypes.WHITE_SPACE; }

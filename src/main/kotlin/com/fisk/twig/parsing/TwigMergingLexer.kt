@@ -6,7 +6,7 @@ import com.intellij.lexer.MergingLexerAdapterBase
 class TwigMergingLexer : MergingLexerAdapterBase(TwigRawLexer()) {
     override fun getMergeFunction(): MergeFunction {
         return MergeFunction { type, originalLexer ->
-            if (TwigTokenTypes.COMMENT_OPEN !== type) {
+            if (type !== TwigTokenTypes.COMMENT_OPEN) {
                 return@MergeFunction type
             }
 

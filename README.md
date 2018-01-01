@@ -20,7 +20,7 @@ To me, this was my debut in plugin development, so this plugin **heavily** graft
 - Syntax highlighting
     - ~~Support the whitespace control modifier ({{-, {%-, {#-)~~
     - Brace matching 
-    - Block matching (block and endblock, etc)
+    - ~~Block matching (block and endblock, etc)~~ -- kind of there
 - Inspections
     - Syntax errors
     - Declared child blocks not found in the parent template
