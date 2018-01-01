@@ -755,7 +755,7 @@ final class _TwigLexer implements FlexLexer {
             // fall through
           case 37: break;
           case 8: 
-            { return TwigTokenTypes.VARIABLE;
+            { return TwigTokenTypes.LABEL;
             } 
             // fall through
           case 38: break;

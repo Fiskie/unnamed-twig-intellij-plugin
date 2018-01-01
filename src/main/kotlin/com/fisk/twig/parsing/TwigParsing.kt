@@ -14,13 +14,18 @@ import com.fisk.twig.parsing.TwigTokenTypes.INVERSE_STATEMENT
 import com.fisk.twig.parsing.TwigTokenTypes.SIMPLE_STATEMENT
 import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_OPEN
 import com.fisk.twig.parsing.TwigTokenTypes.BLOCK_START_STATEMENT
+import com.fisk.twig.parsing.TwigTokenTypes.BOOLEAN
+import com.fisk.twig.parsing.TwigTokenTypes.NUMBER
+import com.fisk.twig.parsing.TwigTokenTypes.STRING
 import com.fisk.twig.parsing.TwigTokenTypes.TAG
 import com.fisk.twig.parsing.TwigTokenTypes.UNCLOSED_COMMENT
+import com.fisk.twig.parsing.TwigTokenTypes.EXPRESSION
+import com.fisk.twig.parsing.TwigTokenTypes.LABEL
 import com.intellij.lang.PsiBuilder
 import com.intellij.psi.tree.IElementType
 
-class TwigParsing(val builder: PsiBuilder) {
-    val elseTags = setOf("else", "elseif")
+class TwigParsing(private val builder: PsiBuilder) {
+    private val elseTags = setOf("else", "elseif")
 
     fun parse() {
         builder.setDebugMode(true)
@@ -39,8 +44,16 @@ class TwigParsing(val builder: PsiBuilder) {
             val tokenType = builder.tokenType
             val problemOffset = builder.currentOffset
 
+            // TODO mark this error when looking for a matching close tag, so the error does not propagate down the tree
             if (tokenType === STATEMENT_OPEN) {
-//                parseCloseBlock(builder)
+                val problemMark = builder.mark()
+
+                if (parseAnyCloseStatement(builder) != null) {
+                    problemMark.error(TwigBundle.message("twig.parsing.close_block_mismatch"))
+                } else {
+                    // not sure what this is yet
+                    problemMark.drop()
+                }
             }
 
             if (builder.currentOffset == problemOffset) {
@@ -53,13 +66,13 @@ class TwigParsing(val builder: PsiBuilder) {
         }
     }
 
-    fun parseRoot(builder: PsiBuilder) {
+    private fun parseRoot(builder: PsiBuilder) {
         val statementsMarker = builder.mark()
 
         // parse zero or more statements (empty statements are acceptable)
         while (true) {
             val optionalStatementMarker = builder.mark()
-            if (parseBlock(builder)) {
+            if (parseStatement(builder)) {
                 optionalStatementMarker.drop()
             } else {
                 optionalStatementMarker.rollbackTo()
@@ -70,12 +83,12 @@ class TwigParsing(val builder: PsiBuilder) {
         statementsMarker.done(BLOCK)
     }
 
-    fun parseBlock(builder: PsiBuilder): Boolean {
-        if (parseExpression(builder)) {
+    private fun parseStatement(builder: PsiBuilder): Boolean {
+        if (parseExpressionBlock(builder)) {
             return true
         }
 
-        if (parseStatement(builder)) {
+        if (parseStatementChain(builder)) {
             return true
         }
 
@@ -88,6 +101,7 @@ class TwigParsing(val builder: PsiBuilder) {
         if (builder.tokenType == UNCLOSED_COMMENT) {
             val unclosedCommentMarker = builder.mark()
             parseLeafToken(builder, UNCLOSED_COMMENT)
+            // todo: not being marked at all? merge seems to not pass this token
             unclosedCommentMarker.error(TwigBundle.message("twig.parsing.comment.unclosed"))
             return true
         }
@@ -100,12 +114,12 @@ class TwigParsing(val builder: PsiBuilder) {
         return false
     }
 
-    fun parseStatement(builder: PsiBuilder): Boolean {
+    private fun parseStatementChain(builder: PsiBuilder): Boolean {
         if (builder.tokenType == STATEMENT_OPEN) {
             // If an inverse marker is discovered in the block, we need to break out of the block
             val prematureInverseMarker = builder.mark()
 
-            if (parseInverseBlock(builder) != null) {
+            if (parseInverseStatement(builder) != null) {
                 prematureInverseMarker.rollbackTo()
                 return false
             }
@@ -115,28 +129,28 @@ class TwigParsing(val builder: PsiBuilder) {
             val statementMarker = builder.mark()
             val nonStackingMarker = builder.mark()
 
-            val openTag = parseOpenBlock(builder)
+            val openTag = parseOpenStatement(builder)
 
             if (openTag != null) {
                 parseRoot(builder)
 
                 while (true) {
                     // handle inverse chain
-                    if (parseInverseBlock(builder) != null) {
+                    if (parseInverseStatement(builder) != null) {
                         parseRoot(builder)
                     } else {
                         break
                     }
                 }
 
-                if (parseCloseBlock(builder, openTag) != null) {
+                if (parseCloseStatement(builder, openTag) != null) {
                     nonStackingMarker.drop()
                     statementMarker.done(BLOCK_WRAPPER)
                     return true
                 }
 
                 nonStackingMarker.rollbackTo()
-                parseNonStackingBlock(builder)
+                parseSingleStatement(builder)
                 statementMarker.done(BLOCK_WRAPPER)
 
                 return true
@@ -146,28 +160,27 @@ class TwigParsing(val builder: PsiBuilder) {
         return false
     }
 
-    fun parseNonStackingBlock(builder: PsiBuilder): String? {
-        return parseBlock(builder, SIMPLE_STATEMENT, { tag -> true })
+    private fun parseSingleStatement(builder: PsiBuilder): String? {
+        return parseStatement(builder, SIMPLE_STATEMENT, { _ -> true })
     }
 
-    fun parseOpenBlock(builder: PsiBuilder): String? {
-        return parseBlock(builder, BLOCK_START_STATEMENT, { tag -> !isEndTag(tag) })
+    private fun parseOpenStatement(builder: PsiBuilder): String? {
+        return parseStatement(builder, BLOCK_START_STATEMENT, { tag -> !isEndTag(tag) })
     }
 
-    fun parseCloseBlock(builder: PsiBuilder, openTag: String): String? {
-        return parseBlock(builder, BLOCK_END_STATEMENT, { tag -> normaliseTag(tag) == openTag })
+    private fun parseCloseStatement(builder: PsiBuilder, openTag: String): String? {
+        return parseStatement(builder, BLOCK_END_STATEMENT, { tag -> normaliseTag(tag) == openTag })
     }
 
-    fun parseAnyCloseBlock(builder: PsiBuilder): String? {
-        return parseBlock(builder, BLOCK_END_STATEMENT, { tag -> isEndTag(tag) })
+    private fun parseAnyCloseStatement(builder: PsiBuilder): String? {
+        return parseStatement(builder, BLOCK_END_STATEMENT, { tag -> isEndTag(tag) })
     }
 
-    fun parseInverseBlock(builder: PsiBuilder): String? {
-        // needs to be set up better for inverse tag chaining really
-        return parseBlock(builder, INVERSE_STATEMENT, { tag -> elseTags.contains(tag) })
+    private fun parseInverseStatement(builder: PsiBuilder): String? {
+        return parseStatement(builder, INVERSE_STATEMENT, { tag -> elseTags.contains(tag) })
     }
 
-    fun parseBlock(builder: PsiBuilder, type: TwigCompositeElementType, strategy: (String) -> Boolean): String? {
+    private fun parseStatement(builder: PsiBuilder, type: TwigCompositeElementType, strategy: (String) -> Boolean): String? {
         val marker = builder.mark()
         var tagName: String? = null
 
@@ -181,6 +194,14 @@ class TwigParsing(val builder: PsiBuilder) {
                     if (strategy(tag)) {
                         tagName = normaliseTag(tag)
                     }
+                }
+            } else {
+                val expressionMarker = builder.mark()
+
+                if (parseExpression(builder)) {
+                    expressionMarker.drop()
+                } else {
+                    expressionMarker.rollbackTo()
                 }
             }
 
@@ -200,12 +221,20 @@ class TwigParsing(val builder: PsiBuilder) {
         }
     }
 
-    fun parseExpression(builder: PsiBuilder): Boolean {
+    private fun parseExpressionBlock(builder: PsiBuilder): Boolean {
         if (builder.tokenType == EXPRESSION_OPEN) {
-            val expressionMarker = builder.mark()
+            val blockMarker = builder.mark()
 
             do {
                 builder.advanceLexer()
+
+                val expressionMarker = builder.mark()
+
+                if (parseExpression(builder)) {
+                    expressionMarker.drop()
+                } else {
+                    expressionMarker.rollbackTo()
+                }
 
                 if (builder.tokenType == EXPRESSION_CLOSE) {
                     break
@@ -214,7 +243,7 @@ class TwigParsing(val builder: PsiBuilder) {
 
             builder.advanceLexer() // consume last EXPRESSION_CLOSE
 
-            expressionMarker.done(TwigTokenTypes.EXPRESSION)
+            blockMarker.done(TwigTokenTypes.EXPRESSION_BLOCK)
             return true
         }
 
@@ -224,7 +253,7 @@ class TwigParsing(val builder: PsiBuilder) {
     /**
      * Tries to parse the given token, marking an error if any other token is found
      */
-    protected fun parseLeafToken(builder: PsiBuilder, leafTokenType: IElementType): Boolean {
+    private fun parseLeafToken(builder: PsiBuilder, leafTokenType: IElementType): Boolean {
         val leafTokenMark = builder.mark()
         if (builder.tokenType === leafTokenType) {
             builder.advanceLexer()
@@ -264,5 +293,58 @@ class TwigParsing(val builder: PsiBuilder) {
         } else {
             tag
         }
+    }
+
+    /**
+     * helperName
+     * | variable.property|filter
+     * | STRING
+     * | NUMBER
+     * | BOOLEAN
+     * ;
+     */
+    private fun parseExpression(builder: PsiBuilder): Boolean {
+        val expressionMarker = builder.mark()
+
+        val variableMarker = builder.mark()
+        if (parseLeafToken(builder, LABEL)) {
+            variableMarker.drop()
+
+            expressionMarker.done(EXPRESSION)
+            return true
+        } else {
+            variableMarker.rollbackTo()
+        }
+
+        val stringMarker = builder.mark()
+        if (parseLeafToken(builder, STRING)) {
+            stringMarker.drop()
+            expressionMarker.done(EXPRESSION)
+            return true
+        } else {
+            stringMarker.rollbackTo()
+        }
+
+        val integerMarker = builder.mark()
+        if (parseLeafToken(builder, NUMBER)) {
+            integerMarker.drop()
+            expressionMarker.done(EXPRESSION)
+            return true
+        } else {
+            integerMarker.rollbackTo()
+        }
+
+        val booleanMarker = builder.mark()
+        if (parseLeafToken(builder, BOOLEAN)) {
+            booleanMarker.drop()
+            expressionMarker.done(EXPRESSION)
+            return true
+        } else {
+            booleanMarker.rollbackTo()
+        }
+
+//        expressionMarker.error(TwigBundle.message("twig.parsing.expected.path.or.data"))
+        expressionMarker.rollbackTo()
+        return false
     }
 }

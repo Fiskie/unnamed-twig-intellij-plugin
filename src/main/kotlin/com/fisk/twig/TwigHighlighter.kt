@@ -100,7 +100,7 @@ class TwigHighlighter : SyntaxHighlighterBase() {
             keys1.put(TwigTokenTypes.OPERATOR, IDENTIFIERS)
             keys1.put(TwigTokenTypes.BOOLEAN, VALUES)
             keys1.put(TwigTokenTypes.STRING, STRINGS)
-            keys1.put(TwigTokenTypes.VARIABLE, VARIABLES)
+            keys1.put(TwigTokenTypes.LABEL, VARIABLES)
         }
 
         val DISPLAY_NAMES: MutableMap<TextAttributesKey, Pair<String, HighlightSeverity>> = LinkedHashMap()

@@ -1,7 +1,7 @@
-Twig: EmptyIfBlock.twig
+Twig: PrematureEndTag.twig
   TwigBlockImpl([Twig] BLOCK)
     TwigPsiElementImpl([Twig] BLOCK_WRAPPER)
-      TwigBlockStartStatementImpl([Twig] BLOCK_START_STATEMENT)
+      TwigSimpleStatementImpl([Twig] SIMPLE_STATEMENT)
         PsiElement([Twig] STATEMENT_OPEN)('{%')
         PsiWhiteSpace(' ')
         PsiElement([Twig] TAG)('if')
@@ -11,11 +11,11 @@ Twig: EmptyIfBlock.twig
             PsiElement([Twig] LABEL)('foo')
         PsiWhiteSpace(' ')
         PsiElement([Twig] STATEMENT_CLOSE)('%}')
-      TwigBlockImpl([Twig] BLOCK)
-        <empty list>
-      TwigBlockEndStatementImpl([Twig] BLOCK_END_STATEMENT)
-        PsiElement([Twig] STATEMENT_OPEN)('{%')
-        PsiWhiteSpace(' ')
-        PsiElement([Twig] TAG)('endif')
-        PsiWhiteSpace(' ')
-        PsiElement([Twig] STATEMENT_CLOSE)('%}')
+  PsiWhiteSpace('\n')
+  PsiErrorElement:Mismatched close block
+    TwigBlockEndStatementImpl([Twig] BLOCK_END_STATEMENT)
+      PsiElement([Twig] STATEMENT_OPEN)('{%')
+      PsiWhiteSpace(' ')
+      PsiElement([Twig] TAG)('endfor')
+      PsiWhiteSpace(' ')
+      PsiElement([Twig] STATEMENT_CLOSE)('%}')

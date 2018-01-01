@@ -21,7 +21,7 @@ class ConfigurationPage(val project: Project) : SearchableConfigurable {
     }
 
     override fun getDisplayName(): String {
-        return "Twig Improved"
+        return "Twig"
     }
 
     override fun apply() {

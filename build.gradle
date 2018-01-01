@@ -11,7 +11,7 @@ buildscript {
 }
 
 plugins {
-    id 'org.jetbrains.intellij' version "0.2.13"
+    id 'org.jetbrains.intellij' version "0.2.17"
     id "org.jetbrains.kotlin.jvm" version "1.2.10"
 }
 
@@ -30,8 +30,9 @@ sourceSets {
 }
 
 intellij {
+    pluginName = 'intellij-community-twig'
     version = 'IU-2017.3.2'
-    plugins = ['JavaScriptLanguage', 'CSS']
+    plugins = ['PsiViewer:3.28.93', 'JavaScriptLanguage', 'CSS']
 }
 repositories {
     mavenCentral()
@@ -40,15 +41,3 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
 }
-
-//test {
-//    testLogging {
-//        exceptionFormat = 'full'
-//    }
-//}
-
-//idea {
-//    module {
-//        generatedSourceDirs += file('gen')
-//    }
-//}

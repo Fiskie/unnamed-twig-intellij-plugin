@@ -11,32 +11,32 @@ import com.fisk.twig.parsing.TwigTokenTypes.LPARENTH
 import com.fisk.twig.parsing.TwigTokenTypes.OPERATOR
 import com.fisk.twig.parsing.TwigTokenTypes.SEP
 import com.fisk.twig.parsing.TwigTokenTypes.STRING
-import com.fisk.twig.parsing.TwigTokenTypes.VARIABLE
+import com.fisk.twig.parsing.TwigTokenTypes.LABEL
 import com.fisk.twig.parsing.TwigTokenTypes.WHITE_SPACE
 
 class TwigExpressionLexerTest : TwigLexerTest() {
     fun testVariableExpression() {
         val result = tokenize("{{ foo }}")
-        result.shouldMatchTokenTypes(EXPRESSION_OPEN, WHITE_SPACE, VARIABLE, WHITE_SPACE, EXPRESSION_CLOSE)
+        result.shouldMatchTokenTypes(EXPRESSION_OPEN, WHITE_SPACE, LABEL, WHITE_SPACE, EXPRESSION_CLOSE)
         result.shouldMatchTokenContent("{{", " ", "foo", " ", "}}")
     }
 
     fun testConcatExpression() {
         val result = tokenize("{{ foo ~ bar }}")
-        result.shouldMatchTokenTypes(EXPRESSION_OPEN, WHITE_SPACE, VARIABLE, WHITE_SPACE, OPERATOR, WHITE_SPACE, VARIABLE, WHITE_SPACE, EXPRESSION_CLOSE)
+        result.shouldMatchTokenTypes(EXPRESSION_OPEN, WHITE_SPACE, LABEL, WHITE_SPACE, OPERATOR, WHITE_SPACE, LABEL, WHITE_SPACE, EXPRESSION_CLOSE)
         result.shouldMatchTokenContent("{{", " ", "foo", " ", "~", " ", "bar", " ", "}}")
     }
 
     fun testVariableFilterExpression() {
         val result = tokenize("{{ foo|default(123) }}")
         result.shouldMatchTokenContent("{{", " ", "foo", "|", "default", "(", "123", ")", " ", "}}")
-        result.shouldMatchTokenTypes(EXPRESSION_OPEN, WHITE_SPACE, VARIABLE, FILTER_SEP, VARIABLE, LPARENTH, NUMBER, RPARENTH, WHITE_SPACE, EXPRESSION_CLOSE)
+        result.shouldMatchTokenTypes(EXPRESSION_OPEN, WHITE_SPACE, LABEL, FILTER_SEP, LABEL, LPARENTH, NUMBER, RPARENTH, WHITE_SPACE, EXPRESSION_CLOSE)
     }
 
     fun testFunctionExpression() {
         val result = tokenize("{{ default(123) }}")
         result.shouldMatchTokenContent("{{", " ", "default", "(", "123", ")", " ", "}}")
-        result.shouldMatchTokenTypes(EXPRESSION_OPEN, WHITE_SPACE, VARIABLE, LPARENTH, NUMBER, RPARENTH, WHITE_SPACE, EXPRESSION_CLOSE)
+        result.shouldMatchTokenTypes(EXPRESSION_OPEN, WHITE_SPACE, LABEL, LPARENTH, NUMBER, RPARENTH, WHITE_SPACE, EXPRESSION_CLOSE)
     }
 
     fun testStringLiteralExpression() {
@@ -47,19 +47,19 @@ class TwigExpressionLexerTest : TwigLexerTest() {
 
     fun testPropertyExpression() {
         val result = tokenize("{{ foo.bar }}")
-        result.shouldMatchTokenTypes(EXPRESSION_OPEN, WHITE_SPACE, VARIABLE, SEP, VARIABLE, WHITE_SPACE, EXPRESSION_CLOSE)
+        result.shouldMatchTokenTypes(EXPRESSION_OPEN, WHITE_SPACE, LABEL, SEP, LABEL, WHITE_SPACE, EXPRESSION_CLOSE)
         result.shouldMatchTokenContent("{{", " ", "foo", ".", "bar", " ", "}}")
     }
 
     fun testArrayExpression() {
         val result = tokenize("{{ foo['bar'] }}")
-        result.shouldMatchTokenTypes(EXPRESSION_OPEN, WHITE_SPACE, VARIABLE, LBRACKET, STRING, RBRACKET, WHITE_SPACE, EXPRESSION_CLOSE)
+        result.shouldMatchTokenTypes(EXPRESSION_OPEN, WHITE_SPACE, LABEL, LBRACKET, STRING, RBRACKET, WHITE_SPACE, EXPRESSION_CLOSE)
         result.shouldMatchTokenContent("{{", " ", "foo", "[", "'bar'", "]",  " ", "}}")
     }
 
     fun testMixedPropertyArrayExpression() {
         val result = tokenize("{{ foo.bar['baz'] }}")
-        result.shouldMatchTokenTypes(EXPRESSION_OPEN, WHITE_SPACE, VARIABLE, SEP, VARIABLE, LBRACKET, STRING, RBRACKET, WHITE_SPACE, EXPRESSION_CLOSE)
+        result.shouldMatchTokenTypes(EXPRESSION_OPEN, WHITE_SPACE, LABEL, SEP, LABEL, LBRACKET, STRING, RBRACKET, WHITE_SPACE, EXPRESSION_CLOSE)
         result.shouldMatchTokenContent("{{", " ", "foo", ".", "bar", "[", "'baz'", "]", " ", "}}")
     }
 
@@ -71,19 +71,19 @@ class TwigExpressionLexerTest : TwigLexerTest() {
 
     fun testUnformattedVariableExpression() {
         val result = tokenize("{{foo}}")
-        result.shouldMatchTokenTypes(EXPRESSION_OPEN, VARIABLE, EXPRESSION_CLOSE)
+        result.shouldMatchTokenTypes(EXPRESSION_OPEN, LABEL, EXPRESSION_CLOSE)
         result.shouldMatchTokenContent("{{", "foo", "}}")
     }
 
     fun testVariableExpressionWithWhitespaceControl() {
         val result = tokenize("{{- foo -}}")
-        result.shouldMatchTokenTypes(EXPRESSION_OPEN, WHITE_SPACE, VARIABLE, WHITE_SPACE, EXPRESSION_CLOSE)
+        result.shouldMatchTokenTypes(EXPRESSION_OPEN, WHITE_SPACE, LABEL, WHITE_SPACE, EXPRESSION_CLOSE)
         result.shouldMatchTokenContent("{{-", " ", "foo", " ", "-}}")
     }
 
     fun testUnformattedVariableExpressionWithWhitespaceControl() {
         val result = tokenize("{{-foo-}}")
-        result.shouldMatchTokenTypes(EXPRESSION_OPEN, VARIABLE, EXPRESSION_CLOSE)
+        result.shouldMatchTokenTypes(EXPRESSION_OPEN, LABEL, EXPRESSION_CLOSE)
         result.shouldMatchTokenContent("{{-", "foo", "-}}")
     }
 }

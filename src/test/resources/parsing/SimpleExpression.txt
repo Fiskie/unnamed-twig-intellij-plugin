@@ -1,8 +1,10 @@
 Twig: SimpleExpression.twig
   TwigBlockImpl([Twig] BLOCK)
-    TwigPsiElementImpl([Twig] EXPRESSION)
+    TwigPsiElementImpl([Twig] EXPRESSION_BLOCK)
       PsiElement([Twig] EXPRESSION_OPEN)('{{')
       PsiWhiteSpace(' ')
-      PsiElement([Twig] VARIABLE)('foo')
+      TwigPsiElementImpl([Twig] EXPRESSION)
+        TwigVariableImpl([Twig] LABEL)
+          PsiElement([Twig] LABEL)('foo')
       PsiWhiteSpace(' ')
       PsiElement([Twig] EXPRESSION_CLOSE)('}}')

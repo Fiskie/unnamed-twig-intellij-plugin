@@ -37,6 +37,15 @@ class TwigParserSpecTest : TwigParserTest() {
         doTest(true)
     }
 
+    fun testPrematureEndTag() {
+        doTest(true)
+    }
+
+    // TODO: fix test
+//    fun testNestedPrematureEndTag() {
+//        doTest(true)
+//    }
+
     fun testSimpleSetBlock() {
         // This test will help make sure we are properly implementing lookahead on end tags
         doTest(true)

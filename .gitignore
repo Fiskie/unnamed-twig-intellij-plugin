@@ -7,3 +7,4 @@ gradlew.bat
 jflex-1.7.0.jar
 idea-flex.skeleton
 .idea
+gradle.properties

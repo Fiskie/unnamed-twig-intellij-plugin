@@ -9,7 +9,6 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
 import com.intellij.psi.stubs.PsiFileStub
-import com.intellij.psi.tree.IFileElementType
 import com.intellij.psi.tree.IStubFileElementType
 
 class TwigParserDefinition : ParserDefinition {
@@ -53,8 +52,8 @@ class TwigParserDefinition : ParserDefinition {
                 return TwigBlockImpl(node)
             }
 
-            if (type == TwigTokenTypes.VARIABLE) {
-                return TwigVariableImpl(node)
+            if (type == TwigTokenTypes.LABEL) {
+                return TwigLabelImpl(node)
             }
 
             if (type == TwigTokenTypes.TAG) {

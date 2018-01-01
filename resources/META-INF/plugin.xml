@@ -1,10 +1,11 @@
 <idea-plugin>
   <id>com.fisk.twig</id>
-  <name>Twig improved</name>
+  <name>Twig</name>
   <version>0.1</version>
   <vendor email="myself@fiskie.me" url="http://fiskie.me">fisk</vendor>
 
   <depends>com.intellij.modules.lang</depends>
+  <depends optional="true">PHP</depends>
 
   <description><![CDATA[
       Improved and open-source Twig support for IntelliJ IDEA.
@@ -19,7 +20,7 @@
   <idea-version since-build="145.0"/>
 
   <extensions defaultExtensionNs="com.intellij">
-    <!--<braceMatcher filetype="Twig" implementationClass="com.fisk.twig.editor.braces.TwigBraceMatcher"/>-->
+    <braceMatcher filetype="Twig" implementationClass="com.fisk.twig.editor.braces.TwigBraceMatcher"/>
     <colorSettingsPage implementation="com.fisk.twig.pages.TwigColorsPage"/>
     <completion.contributor language="Twig" implementationClass="com.fisk.twig.completion.TwigCompletionContributor"/>
     <defaultLiveTemplatesProvider implementation="com.fisk.twig.editor.templates.TwigLiveTemplatesProvider"/>

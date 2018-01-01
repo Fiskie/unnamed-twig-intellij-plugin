@@ -37,7 +37,8 @@ I would love to bridge the gap -- make the official plugin obsolete, and incorpo
 - Block parent goto
 - Template include resolution
 - Override/implement block generation
-- More tests for indenting (strange bug with two simple statements, second one not indenting at all?)
+- More tests for indenting (strange bug with two simple statements; second one not indenting at all?)
+- Deploy ([Deployment](https://www.jetbrains.org/intellij/sdk/docs/tutorials/build_system/deployment.html))
  
     
 ## Development

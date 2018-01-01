@@ -11,7 +11,6 @@ abstract class TwigStatementImpl(node: ASTNode) : TwigPsiElementImpl(node), Twig
     }
 
     override fun getName(): String? {
-        val mainPath = getTagName()
-        return if (mainPath == null) null else mainPath.getName()
+        return getTagName()?.getName()
     }
 }

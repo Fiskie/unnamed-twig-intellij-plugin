@@ -50,7 +50,7 @@ object TwigTokenTypes {
     @JvmField
     val STRING = TwigElementType("STRING", "twig.parsing.element.expected.string")
     @JvmField
-    val VARIABLE = TwigElementType("VARIABLE", "twig.parsing.element.expected.variable")
+    val LABEL = TwigElementType("LABEL", "twig.parsing.element.expected.label")
     @JvmField
     val TAG = TwigElementType("TAG", "twig.parsing.element.expected.tag")
     @JvmField
@@ -66,15 +66,16 @@ object TwigTokenTypes {
     @JvmField
     val COMMENT = TwigElementType("COMMENT", "twig.parsing.element.expected.comment")
 
-    val EXPRESSION = TwigCompositeElementType("EXPRESSION")
+    val EXPRESSION_BLOCK = TwigCompositeElementType("EXPRESSION_BLOCK")
     val BLOCK_WRAPPER = TwigCompositeElementType("BLOCK_WRAPPER")
     val BLOCK_START_STATEMENT = TwigCompositeElementType("BLOCK_START_STATEMENT")
     val INVERSE_STATEMENT = TwigCompositeElementType("INVERSE_STATEMENT")
     val BLOCK_END_STATEMENT = TwigCompositeElementType("BLOCK_END_STATEMENT")
     val SIMPLE_STATEMENT = TwigCompositeElementType("SIMPLE_STATEMENT")
     val BLOCK = TwigCompositeElementType("BLOCK")
+    val EXPRESSION = TwigCompositeElementType("EXPRESSION")
 
-    val IDENTIFIERS = TokenSet.create(VARIABLE)
+    val IDENTIFIERS = TokenSet.create(LABEL)
     val STRING_LITERALS = TokenSet.create(STRING)
     val COMMENTS = TokenSet.create(COMMENT_CONTENT, COMMENT, UNCLOSED_COMMENT)
     val WHITESPACES = TokenSet.create(WHITE_SPACE)
