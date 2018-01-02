@@ -5,7 +5,7 @@ import com.intellij.lang.html.HTMLLanguage
 /**
  * Formalizes the properties which we will persist using [com.intellij.ide.util.PropertiesComponent]
  */
-internal enum class Property {
+enum class Property {
     AUTO_GENERATE_CLOSE_TAG {
         override val stringName: String
             get() = "TwigEnableAutoGenerateCloseTag"

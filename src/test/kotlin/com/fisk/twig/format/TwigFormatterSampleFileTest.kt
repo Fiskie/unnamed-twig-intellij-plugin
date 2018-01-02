@@ -3,11 +3,10 @@ package com.fisk.twig.format
 import com.intellij.lang.javascript.JavaScriptFileType
 
 class TwigFormatterSampleFileTest : TwigFormatterTest() {
-    // todo: restore this test
-//    @Throws(Exception::class)
-//    fun testMixedContent() {
-//        doFileBasedTest()
-//    }
+    @Throws(Exception::class)
+    fun testMixedContent() {
+        doFileBasedTest()
+    }
 
     @Throws(Exception::class)
     fun testHTMLContent() {

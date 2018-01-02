@@ -9,10 +9,9 @@ class TwigContentLexerTest : TwigLexerTest() {
         result.shouldMatchTokenContent("<div>etc</div>")
     }
 
-    // todo: restore this test when the CONTENT lexer is fixed to merge tokens correctly
-//    fun testJavascriptSnippet() {
-//        val result = tokenize("var foo = function() { console.log(bar) }")
-//        result.shouldMatchTokenTypes(CONTENT)
-//        result.shouldMatchTokenContent("var foo = function() { console.log(bar) }")
-//    }
+    fun testJavascriptSnippet() {
+        val result = tokenize("var foo = function() { console.log(bar) }")
+        result.shouldMatchTokenTypes(CONTENT)
+        result.shouldMatchTokenContent("var foo = function() { console.log(bar) }")
+    }
 }
