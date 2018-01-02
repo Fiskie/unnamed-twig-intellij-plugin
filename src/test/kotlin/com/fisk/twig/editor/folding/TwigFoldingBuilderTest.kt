@@ -14,6 +14,14 @@ class TwigFoldingBuilderTest : LightPlatformCodeInsightFixtureTestCase() {
         doTest()
     }
 
+    fun testInverseBlockCodeFolds() {
+        doTest()
+    }
+
+    fun testMultipleFolds() {
+        doTest()
+    }
+
     /**
      * Test folding based by validating against a the file in [.TEST_DATA_PATH] who
      * names matches the test.<br></br>

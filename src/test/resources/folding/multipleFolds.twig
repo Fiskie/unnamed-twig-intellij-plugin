@@ -1,0 +1,10 @@
+{% if foo <fold text='...'>%}
+    {{ bar }}
+    <ul<fold text='...'>>
+        <li<fold text='...'>>
+            {% if baz <fold text='...'>%}
+                {{ bam }}
+            {% endif</fold>%}
+        </li</fold>>
+    </ul</fold>>
+{% endif </fold>%}

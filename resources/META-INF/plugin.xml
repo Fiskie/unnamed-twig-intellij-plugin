@@ -21,6 +21,7 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <braceMatcher filetype="Twig" implementationClass="com.fisk.twig.editor.braces.TwigBraceMatcher"/>
+    <codeFoldingOptionsProvider instance="com.fisk.twig.config.TwigFoldingOptionsProvider"/>
     <colorSettingsPage implementation="com.fisk.twig.pages.TwigColorsPage"/>
     <completion.contributor language="Twig" implementationClass="com.fisk.twig.completion.TwigCompletionContributor"/>
     <defaultLiveTemplatesProvider implementation="com.fisk.twig.editor.templates.TwigLiveTemplatesProvider"/>
@@ -31,6 +32,7 @@
     <lang.commenter language="Twig" implementationClass="com.fisk.twig.editor.comments.TwigCommenterManager"/>
     <lang.fileViewProviderFactory language="Twig" implementationClass="com.fisk.twig.file.TwigFileViewProviderFactory"/>
     <lang.findUsagesProvider language="Twig" implementationClass="com.fisk.twig.ide.TwigFindUsagesProvider"/>
+    <lang.foldingBuilder language="Twig" implementationClass="com.fisk.twig.editor.folding.TwigFoldingBuilder"/>
     <lang.formatter language="Twig" implementationClass="com.fisk.twig.format.TwigFormattingModelBuilder"/>
     <lang.parserDefinition language="Twig" implementationClass="com.fisk.twig.parsing.TwigParserDefinition" />
     <lang.substitutor language="HTML" implementationClass="com.fisk.twig.file.TwigLanguageSubstitutor"/>
