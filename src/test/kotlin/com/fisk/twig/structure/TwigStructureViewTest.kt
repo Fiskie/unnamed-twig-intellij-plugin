@@ -76,8 +76,8 @@ class TwigStructureViewTest : LightPlatformCodeInsightFixtureTestCase() {
                         "{% endif %}\n",
 
                 "-" + ourTestFileName + "\n" +
-                        " if foo\n" +
-                        " -expr\n"
+                        " -if foo\n" +
+                        "  expr\n"
         )
     }
 

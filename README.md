@@ -37,12 +37,12 @@ I would love to bridge the gap -- make the official plugin obsolete, and incorpo
 
 - [x] Structure
 - [ ] Inspections
-    - [x] Expected end block tag
-    - [ ] Missing parent block
+    - [ ] Expected end block tag -- needs protection against coalescence
     - [ ] Declared child blocks not found in the parent template
 - [ ] Find usages
 - [ ] Variable refactor
 - [ ] Mixin refactor
+- [ ] Configurable block tag options
 
 ## Development
 

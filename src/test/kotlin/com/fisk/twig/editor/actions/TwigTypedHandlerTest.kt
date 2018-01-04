@@ -68,45 +68,14 @@ class TwigTypedHandlerTest : TwigActionHandlerTest() {
         doCharTest('-', "foo {{<caret> bar }}", "foo {{-<caret> bar -}}")
     }
 
-    fun testInsertCloseTagForOpenBlockStache() {
+    fun testInsertCloseTag() {
         TwigConfig.isAutoGenerateCloseTagEnabled = true
-        doCharTest('}', "{{#foo}<caret>", "{% if foo %}<caret>{% endif %}")
-        doCharTest('}', "{{#foo bar baz}<caret>", "{{#foo bar baz}}<caret>{% endif %}")
-        doCharTest('}', "{{#foo bar baz bat=\"bam\"}<caret>", "{{#foo bar baz bat=\"bam\"}}<caret>{% endif %}")
-
-        // test when caret is not at file boundary
-        doCharTest('}', "{{#foo}<caret>some\nother content", "{% if foo %}<caret>{% endif %}some\nother content")
-        doCharTest('}', "{{#foo bar baz}<caret>some\nother content", "{{#foo bar baz}}<caret>{% endif %}some\nother content")
-        doCharTest('}', "{{#foo bar baz bat=\"bam\"}<caret>some\nother content",
-                "{{#foo bar baz bat=\"bam\"}}<caret>{% endif %}some\nother content")
-
-        TwigConfig.isAutoGenerateCloseTagEnabled = false
-        doCharTest('}', "{{#foo}<caret>", "{% if foo %}<caret>")
-        doCharTest('}', "{{#foo bar baz}<caret>", "{{#foo bar baz}}<caret>")
-        doCharTest('}', "{{#foo bar baz bat=\"bam\"}<caret>", "{{#foo bar baz bat=\"bam\"}}<caret>")
+        doCharTest('}', "{% if bar %<caret>", "{% if bar %}<caret>{% endif %}")
     }
 
     fun testInsertCloseTagForNestedBlocks() {
         TwigConfig.isAutoGenerateCloseTagEnabled = true
         doCharTest('}', "{% if foo %}{% if bar %<caret>{% endif %}", "{% if foo %}{% if bar %}<caret>{% endif %}{% endif %}")
-    }
-
-    fun testInsertCloseTagForOpenInverseStache() {
-        TwigConfig.isAutoGenerateCloseTagEnabled = true
-        doCharTest('}', "{{^foo}<caret>", "{{^foo}}<caret>{% endif %}")
-        doCharTest('}', "{{^foo bar baz}<caret>", "{{^foo bar baz}}<caret>{% endif %}")
-        doCharTest('}', "{{^foo bar baz bat=\"bam\"}<caret>", "{{^foo bar baz bat=\"bam\"}}<caret>{% endif %}")
-
-        // test when caret is not at file boundary
-        doCharTest('}', "{{^foo}<caret>some\nother content", "{{^foo}}<caret>{% endif %}some\nother content")
-        doCharTest('}', "{{^foo bar baz}<caret>some\nother content", "{{^foo bar baz}}<caret>{% endif %}some\nother content")
-        doCharTest('}', "{{^foo bar baz bat=\"bam\"}<caret>some\nother content",
-                "{{^foo bar baz bat=\"bam\"}}<caret>{% endif %}some\nother content")
-
-        TwigConfig.isAutoGenerateCloseTagEnabled = false
-        doCharTest('}', "{{^foo}<caret>", "{{^foo}}<caret>")
-        doCharTest('}', "{{^foo bar baz}<caret>", "{{^foo bar baz}}<caret>")
-        doCharTest('}', "{{^foo bar baz bat=\"bam\"}<caret>", "{{^foo bar baz bat=\"bam\"}}<caret>")
     }
 
     fun testInsertCloseTagWithWhitespace() {

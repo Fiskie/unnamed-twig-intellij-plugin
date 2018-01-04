@@ -62,4 +62,8 @@ class TwigParserFreeFormTest : TwigParserTest() {
     fun testStringOperations() {
         doTest(true)
     }
+
+    fun testUnclosedIfElse() {
+        doTest(true)
+    }
 }

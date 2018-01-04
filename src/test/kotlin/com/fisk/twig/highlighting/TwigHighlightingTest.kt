@@ -32,10 +32,6 @@ class TwigHighlightingTest : LightPlatformCodeInsightFixtureTestCase() {
         doTest("twig")
     }
 
-    fun testInvalidElementStackOverflow() {
-        myFixture.configureByFile(getTestName(true) + ".twig")
-    }
-
     private fun enableInspections() {
         myFixture.enableInspections(HtmlUnknownTagInspection::class.java)
     }

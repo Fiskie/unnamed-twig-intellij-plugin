@@ -658,20 +658,20 @@ class TwigFormatOnEnterTest : TwigActionHandlerTest(), TwigFormattingModelBuilde
     fun testEmptyLinesAfterOpenBlock2() {
         doEnterTest(
 
-                "{{#if}}\n" +
+                "{% if foo %}\n" +
                         "    \n" +
                         "    \n" +
-                        "{{else}}\n" +
+                        "{% else %}\n" +
                         "    \n" +
                         "    \n" +
                         "    <caret>\n" +
                         "    \n" +
                         "    \n",
 
-                "{{#if}}\n" +
+                "{% if foo %}\n" +
                         "    \n" +
                         "    \n" +
-                        "{{else}}\n" +
+                        "{% else %}\n" +
                         "    \n" +
                         "    \n" +
                         "    \n" +
@@ -681,7 +681,7 @@ class TwigFormatOnEnterTest : TwigActionHandlerTest(), TwigFormattingModelBuilde
         )
     }
 
-    fun testSimpleStacheInNestedDiv1() {
+    fun testSimpleExpressionInNestedDiv1() {
         doEnterTest(
 
                 "{% if foo %}\n" +
@@ -699,7 +699,7 @@ class TwigFormatOnEnterTest : TwigActionHandlerTest(), TwigFormattingModelBuilde
         )
     }
 
-    fun testSimpleStacheInNestedDiv2() {
+    fun testSimpleExpressionInNestedDiv2() {
         doEnterTest(
 
                 "{% if foo %}\n" +
@@ -717,7 +717,7 @@ class TwigFormatOnEnterTest : TwigActionHandlerTest(), TwigFormattingModelBuilde
         )
     }
 
-    fun testBlockStacheInNestedDiv1() {
+    fun testBlockStatementInNestedDiv1() {
         doEnterTest(
 
                 "{% if foo %}\n" +
@@ -739,7 +739,7 @@ class TwigFormatOnEnterTest : TwigActionHandlerTest(), TwigFormattingModelBuilde
         )
     }
 
-    fun testBlockStacheInNestedDiv2() {
+    fun testBlockStatementInNestedDiv2() {
         doEnterTest(
 
                 "{% if foo %}\n" +
@@ -761,7 +761,7 @@ class TwigFormatOnEnterTest : TwigActionHandlerTest(), TwigFormattingModelBuilde
         )
     }
 
-    fun testBlockStacheInNestedDiv3() {
+    fun testBlockStatementInNestedDiv3() {
         doEnterTest(
 
                 "{% if foo %}\n" +
@@ -783,7 +783,7 @@ class TwigFormatOnEnterTest : TwigActionHandlerTest(), TwigFormattingModelBuilde
         )
     }
 
-    fun testBlockStacheInNestedDiv4() {
+    fun testBlockStatementInNestedDiv4() {
         doEnterTest(
 
                 "{% if foo %}\n" +

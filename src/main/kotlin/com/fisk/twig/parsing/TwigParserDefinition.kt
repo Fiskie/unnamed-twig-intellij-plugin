@@ -81,7 +81,7 @@ class TwigParserDefinition : ParserDefinition {
             }
 
             if (type == TwigTokenTypes.INVERSE_STATEMENT) {
-                return TwigBlockStartStatementImpl(node)
+                return TwigInverseStatementImpl(node)
             }
 
             if (type == TwigTokenTypes.SIMPLE_STATEMENT) {

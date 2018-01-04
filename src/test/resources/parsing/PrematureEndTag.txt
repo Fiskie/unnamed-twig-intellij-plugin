@@ -1,7 +1,7 @@
 Twig: PrematureEndTag.twig
   TwigBlockImpl(Twig:BLOCK)
     TwigBlockWrapperImpl(Twig:BLOCK_WRAPPER)
-      TwigSimpleStatementImpl(Twig:SIMPLE_STATEMENT)
+      TwigBlockStartStatementImpl(Twig:BLOCK_START_STATEMENT)
         PsiElement(Twig:STATEMENT_OPEN)('{%')
         PsiWhiteSpace(' ')
         TwigTagImpl(Twig:TAG)
@@ -12,7 +12,9 @@ Twig: PrematureEndTag.twig
             PsiElement(Twig:LABEL)('foo')
         PsiWhiteSpace(' ')
         PsiElement(Twig:STATEMENT_CLOSE)('%}')
-  PsiWhiteSpace('\n')
+      PsiWhiteSpace('\n')
+      TwigBlockImpl(Twig:BLOCK)
+        <empty list>
   PsiErrorElement:Mismatched close block
     TwigBlockEndStatementImpl(Twig:BLOCK_END_STATEMENT)
       PsiElement(Twig:STATEMENT_OPEN)('{%')

@@ -3,8 +3,7 @@ package com.fisk.twig.editor.actions
 import com.fisk.twig.TwigLanguage
 import com.fisk.twig.config.TwigConfig
 import com.fisk.twig.parsing.TwigTokenTypes
-import com.fisk.twig.psi.TwigPsiUtil
-import com.fisk.twig.psi.TwigTag
+import com.fisk.twig.psi.*
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.fileTypes.FileType
@@ -14,6 +13,7 @@ import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
+import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.util.PsiTreeUtil
 
 class TwigTypedHandler : TypedHandlerDelegate() {
@@ -87,11 +87,13 @@ class TwigTypedHandler : TypedHandlerDelegate() {
         }
 
         autoInsertCloseTag(project, offset, editor, provider)
+        adjustStatementFormatting(project, offset, editor, file, provider)
         return TypedHandlerDelegate.Result.CONTINUE
     }
 
     private fun getOpenTagForBlock(psi: PsiElement): PsiElement? {
-        val openTag = TwigPsiUtil.findParentOpenTagElement(psi)
+        // todo: this ain't gonna work. the open statement won't be a parent, but a sibling of the block
+        val openTag = psi.parent
 
         if (openTag != null && openTag.children.size > 1) {
             return PsiTreeUtil.findChildOfType(openTag, TwigTag::class.java)
@@ -149,5 +151,29 @@ class TwigTypedHandler : TypedHandlerDelegate() {
         }
 
         return false
+    }
+
+    /**
+     * Adjust formatting for else and end tags
+     */
+    private fun adjustStatementFormatting(project: Project, offset: Int, editor: Editor, file: PsiFile, provider: FileViewProvider) {
+        if (!TwigConfig.isFormattingEnabled) {
+            // formatting disabled; nothing to do
+            return
+        }
+
+        val elementAtCaret = provider.findElementAt(offset - 1, TwigLanguage::class.java)
+        val closeOrSimpleInverseParent = PsiTreeUtil.findFirstParent(elementAtCaret, true) { element -> element != null && (element is TwigInverseStatement || element is TwigBlockEndStatement) }
+
+        val parent = elementAtCaret?.parent
+
+        // run the formatter if the user just completed typing a SIMPLE_INVERSE or a CLOSE_BLOCK_STACHE
+        if (closeOrSimpleInverseParent != null) {
+            // grab the current caret position (AutoIndentLinesHandler is about to mess with it)
+            PsiDocumentManager.getInstance(project).commitDocument(editor.document)
+            val caretModel = editor.caretModel
+            val codeStyleManager = CodeStyleManager.getInstance(project)
+            codeStyleManager.adjustLineIndent(file, editor.document.getLineStartOffset(caretModel.logicalPosition.line))
+        }
     }
 }

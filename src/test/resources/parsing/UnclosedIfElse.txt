@@ -1,4 +1,4 @@
-Twig: SimpleIfElse.twig
+Twig: UnclosedIfElse.twig
   TwigBlockImpl(Twig:BLOCK)
     TwigBlockWrapperImpl(Twig:BLOCK_WRAPPER)
       TwigBlockStartStatementImpl(Twig:BLOCK_START_STATEMENT)
@@ -22,11 +22,4 @@ Twig: SimpleIfElse.twig
         PsiWhiteSpace(' ')
         PsiElement(Twig:STATEMENT_CLOSE)('%}')
       TwigBlockImpl(Twig:BLOCK)
-        PsiElement(Twig:CONTENT)('\n    <p>other content</p>\n')
-      TwigBlockEndStatementImpl(Twig:BLOCK_END_STATEMENT)
-        PsiElement(Twig:STATEMENT_OPEN)('{%')
-        PsiWhiteSpace(' ')
-        TwigTagImpl(Twig:TAG)
-          PsiElement(Twig:TAG)('endif')
-        PsiWhiteSpace(' ')
-        PsiElement(Twig:STATEMENT_CLOSE)('%}')
+        PsiElement(Twig:CONTENT)('\n    <p>other content</p>')
