@@ -7,6 +7,7 @@ import com.intellij.formatting.*
 import com.intellij.formatting.templateLanguages.*
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.formatter.DocumentBasedFormattingModel
 import com.intellij.psi.formatter.FormattingDocumentModelImpl
@@ -37,14 +38,14 @@ class TwigFormattingModelBuilder : TemplateLanguageFormattingModelBuilder() {
 
         val node = element.node
 
-        if (node.elementType == TwigTokenTypes.OUTER_ELEMENT_TYPE) {
+        return if (node.elementType == TwigTokenTypes.OUTER_ELEMENT_TYPE) {
             // If we're looking at a TwigTokenTypes.OUTER_ELEMENT_TYPE element, then we've been invoked by our templated
             // language.  Make a dummy block to allow that formatter to continue
-            return SimpleTemplateLanguageFormattingModelBuilder().createModel(element, settings)
+            SimpleTemplateLanguageFormattingModelBuilder().createModel(element, settings)
         } else {
             val file = element.containingFile
             val rootBlock = getRootBlock(file, file.viewProvider, settings)
-            return DocumentBasedFormattingModel(rootBlock, element.project, settings, file.fileType, file)
+            DocumentBasedFormattingModel(rootBlock, element.project, settings, file.fileType, file)
         }
     }
 
@@ -93,7 +94,11 @@ class TwigFormattingModelBuilder : TemplateLanguageFormattingModelBuilder() {
             if (TwigPsiUtil.isNonRootBlockElement(myNode.psi)) {
                 // we're computing the indent for a non-root block:
                 //      if it's not contained in a foreign block, indent!
-                val foreignBlockParent = getForeignBlockParent(false) ?: return Indent.getNormalIndent()
+                val foreignBlockParent = getForeignBlockParent(false)
+
+                if (foreignBlockParent == null) {
+                    return Indent.getNormalIndent()
+                }
 
                 // otherwise, only indent if our foreign parent isn't indenting us
                 if (foreignBlockParent.node is XmlTag) {
@@ -119,11 +124,24 @@ class TwigFormattingModelBuilder : TemplateLanguageFormattingModelBuilder() {
             // any element that is the direct descendant of a foreign block gets an indent
             // (unless that foreign element has been configured to not indent its children)
             val foreignParent = getForeignBlockParent(true)
-            return if (foreignParent != null) {
+
+            if (foreignParent != null) {
                 if (foreignParent.node is XmlTag && !htmlPolicy.indentChildrenOf(foreignParent.node as XmlTag)) {
-                    Indent.getNoneIndent()
-                } else Indent.getNormalIndent()
-            } else Indent.getNoneIndent()
+                    return Indent.getNoneIndent()
+                } else {
+                    return Indent.getNormalIndent()
+                }
+            } else {
+                return Indent.getNoneIndent()
+            }
+        }
+
+        override fun getChildAttributes(newChildIndex: Int): ChildAttributes {
+            return if (myNode.elementType === TwigTokenTypes.BLOCK_WRAPPER || parent is DataLanguageBlockWrapper) {
+                ChildAttributes(Indent.getNormalIndent(), null)
+            } else {
+                ChildAttributes(Indent.getNoneIndent(), null)
+            }
         }
     }
 }

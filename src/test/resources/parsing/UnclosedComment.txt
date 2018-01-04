@@ -1,2 +1,2 @@
 Twig: UnclosedComment.twig
-  PsiComment([Twig] UNCLOSED_COMMENT)('{# this is an unclosed comment\n{{ foo }}')
+  PsiComment(Twig:UNCLOSED_COMMENT)('{# this is an unclosed comment\n{{ foo }}')

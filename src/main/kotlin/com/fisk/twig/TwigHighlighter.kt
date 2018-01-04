@@ -13,9 +13,7 @@ import java.util.*
 
 class TwigHighlighter : SyntaxHighlighterBase() {
 
-    override fun getHighlightingLexer(): Lexer {
-        return TwigRawLexer()
-    }
+    override fun getHighlightingLexer() = TwigRawLexer()
 
     override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> {
         return SyntaxHighlighterBase.pack(keys1[tokenType], keys2[tokenType])

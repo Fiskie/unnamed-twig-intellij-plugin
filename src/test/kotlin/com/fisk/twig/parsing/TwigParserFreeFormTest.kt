@@ -1,6 +1,6 @@
 package com.fisk.twig.parsing
 
-class TwigParserSpecTest : TwigParserTest() {
+class TwigParserFreeFormTest : TwigParserTest() {
     fun testSimpleExpression() {
         doTest(true)
     }
@@ -52,6 +52,14 @@ class TwigParserSpecTest : TwigParserTest() {
 
     fun testNestedSetStatement() {
         // Ditto, check standalone statements aren't consuming the end tag of the current block
+        doTest(true)
+    }
+
+    fun testFilterChains() {
+        doTest(true)
+    }
+
+    fun testStringOperations() {
         doTest(true)
     }
 }

@@ -15,5 +15,5 @@ data class TwigElementType(
 ) : IElementType(debugName, TwigLanguage.INSTANCE) {
     fun parseExpectedMessage() = TwigBundle.message(parseExpectedMessageKey)
 
-    override fun toString() = "[Twig] " + super.toString()
+    override fun toString() = "Twig:" + super.toString()
 }

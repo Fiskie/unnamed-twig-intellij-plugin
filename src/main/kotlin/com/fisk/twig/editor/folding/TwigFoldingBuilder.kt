@@ -20,7 +20,6 @@ class TwigFoldingBuilder : FoldingBuilder, DumbAware {
     override fun buildFoldRegions(node: ASTNode, document: Document): Array<FoldingDescriptor> {
         val descriptors = ArrayList<FoldingDescriptor>()
         addDescriptors(node.psi, document, descriptors)
-        println("${descriptors.size} descriptors for el ${node.psi}")
         return descriptors.toTypedArray()
     }
 
@@ -58,10 +57,7 @@ class TwigFoldingBuilder : FoldingBuilder, DumbAware {
         val startCloseToken = getBlockStartCloseToken(psi.firstChild)
         val endCloseToken = getBlockEndCloseToken(psi.lastChild)
 
-        println("Adding descriptors for block...")
-
         if (startCloseToken == null || endCloseToken == null) {
-            println("Can't fold because missing start/close token(s)")
             return
         }
 
@@ -105,7 +101,5 @@ class TwigFoldingBuilder : FoldingBuilder, DumbAware {
         return document.getLineNumber(range.startOffset) == document.getLineNumber(range.endOffset)
     }
 
-    override fun isCollapsedByDefault(node: ASTNode): Boolean {
-        return TwigConfig.isAutoCollapseBlocksEnabled
-    }
+    override fun isCollapsedByDefault(node: ASTNode) = TwigConfig.isAutoCollapseBlocksEnabled
 }

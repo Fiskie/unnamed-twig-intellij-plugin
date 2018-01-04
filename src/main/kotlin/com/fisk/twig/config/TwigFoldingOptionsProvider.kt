@@ -1,6 +1,5 @@
 package com.fisk.twig.config
 
-import com.fisk.twig.TwigBundle
 import com.intellij.application.options.editor.CodeFoldingOptionsProvider
 import com.intellij.openapi.options.BeanConfigurable
 

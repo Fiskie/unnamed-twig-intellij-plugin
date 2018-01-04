@@ -2,9 +2,7 @@ package com.fisk.twig.config
 
 import org.junit.Assert
 import org.junit.Test
-
-import java.util.EnumSet
-import java.util.HashSet
+import java.util.*
 
 class PropertyTest {
 

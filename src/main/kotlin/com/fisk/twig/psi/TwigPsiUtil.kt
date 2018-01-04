@@ -4,12 +4,24 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 
 object TwigPsiUtil {
-    fun findParentOpenTagElement(element: PsiElement): TwigStatementOpenBrackets {
-        return PsiTreeUtil.findFirstParent(element, true) { element1 -> element1 != null && element1 is TwigStatementOpenBrackets } as TwigStatementOpenBrackets
+    fun findParentOpenTagElement(element: PsiElement?): TwigStatementOpenBrackets? {
+        val el = PsiTreeUtil.findFirstParent(element, true) { element1 -> element1 != null && element1 is TwigStatementOpenBrackets }
+
+        el?.let {
+            return el as TwigStatementOpenBrackets
+        }
+
+        return null
     }
 
-    fun findParentCloseTagElement(element: PsiElement): TwigStatementCloseBrackets {
-        return PsiTreeUtil.findFirstParent(element, true) { element1 -> element1 != null && element1 is TwigStatementCloseBrackets } as TwigStatementCloseBrackets
+    fun findParentCloseTagElement(element: PsiElement?): TwigStatementCloseBrackets? {
+        val el = PsiTreeUtil.findFirstParent(element, true) { element1 -> element1 != null && element1 is TwigStatementCloseBrackets }
+
+        el?.let {
+            return el as TwigStatementCloseBrackets
+        }
+
+        return null
     }
 
     /**

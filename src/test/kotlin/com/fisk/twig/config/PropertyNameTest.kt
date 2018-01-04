@@ -4,9 +4,7 @@ import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-
-import java.util.ArrayList
-import java.util.Arrays
+import java.util.*
 
 @RunWith(value = Parameterized::class)
 class PropertyNameTest(val propertyTestDefinition: PropertyTestDefinition) {
@@ -35,6 +33,7 @@ class PropertyNameTest(val propertyTestDefinition: PropertyTestDefinition) {
                 PropertyTestDefinition(Property.SHOULD_OPEN_HTML, "TwigShouldOpenHtmlAsTwig"))
 
         @Parameterized.Parameters
+        @JvmStatic
         fun parameters(): List<Array<Any>> {
             val testParameters = ArrayList<Array<Any>>()
             for (propertyTestDefinition in PROPERTY_TEST_DEFINITIONS) {

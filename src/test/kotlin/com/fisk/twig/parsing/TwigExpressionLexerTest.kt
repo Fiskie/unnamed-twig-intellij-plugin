@@ -1,17 +1,17 @@
 package com.fisk.twig.parsing
 
-import com.fisk.twig.parsing.TwigTokenTypes.RBRACKET
-import com.fisk.twig.parsing.TwigTokenTypes.RPARENTH
 import com.fisk.twig.parsing.TwigTokenTypes.EXPRESSION_CLOSE
 import com.fisk.twig.parsing.TwigTokenTypes.EXPRESSION_OPEN
 import com.fisk.twig.parsing.TwigTokenTypes.FILTER_SEP
-import com.fisk.twig.parsing.TwigTokenTypes.NUMBER
+import com.fisk.twig.parsing.TwigTokenTypes.LABEL
 import com.fisk.twig.parsing.TwigTokenTypes.LBRACKET
 import com.fisk.twig.parsing.TwigTokenTypes.LPARENTH
+import com.fisk.twig.parsing.TwigTokenTypes.NUMBER
 import com.fisk.twig.parsing.TwigTokenTypes.OPERATOR
+import com.fisk.twig.parsing.TwigTokenTypes.RBRACKET
+import com.fisk.twig.parsing.TwigTokenTypes.RPARENTH
 import com.fisk.twig.parsing.TwigTokenTypes.SEP
 import com.fisk.twig.parsing.TwigTokenTypes.STRING
-import com.fisk.twig.parsing.TwigTokenTypes.LABEL
 import com.fisk.twig.parsing.TwigTokenTypes.WHITE_SPACE
 
 class TwigExpressionLexerTest : TwigLexerTest() {
@@ -54,7 +54,7 @@ class TwigExpressionLexerTest : TwigLexerTest() {
     fun testArrayExpression() {
         val result = tokenize("{{ foo['bar'] }}")
         result.shouldMatchTokenTypes(EXPRESSION_OPEN, WHITE_SPACE, LABEL, LBRACKET, STRING, RBRACKET, WHITE_SPACE, EXPRESSION_CLOSE)
-        result.shouldMatchTokenContent("{{", " ", "foo", "[", "'bar'", "]",  " ", "}}")
+        result.shouldMatchTokenContent("{{", " ", "foo", "[", "'bar'", "]", " ", "}}")
     }
 
     fun testMixedPropertyArrayExpression() {

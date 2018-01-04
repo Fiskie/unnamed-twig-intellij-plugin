@@ -9,7 +9,7 @@ import com.intellij.psi.util.PsiTreeUtil
 class TwigLabelImpl(node: ASTNode) : TwigPsiElementImpl(node), TwigLabel {
     override fun getName(): String = text
 
-    override fun setName(name: String) : PsiElement {
+    override fun setName(name: String): PsiElement {
         val current = PsiTreeUtil.getChildOfType(this, LeafPsiElement::class.java)
         // todo
 //        node.replaceChild(content, )

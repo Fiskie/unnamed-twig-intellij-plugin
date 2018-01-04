@@ -7,7 +7,5 @@ import com.intellij.openapi.vfs.VirtualFile
 
 
 class TwigHighlighterFactory : SyntaxHighlighterFactory() {
-    override fun getSyntaxHighlighter(project: Project?, virtualFile: VirtualFile?): SyntaxHighlighter {
-        return TwigHighlighter()
-    }
+    override fun getSyntaxHighlighter(project: Project?, virtualFile: VirtualFile?) = TwigHighlighter()
 }

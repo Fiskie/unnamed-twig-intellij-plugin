@@ -22,6 +22,14 @@ class TwigFoldingBuilderTest : LightPlatformCodeInsightFixtureTestCase() {
         doTest()
     }
 
+    fun testSloppyEndBlockFold() { // TODO
+        doTest()
+    }
+
+    fun testUnclosedOpenStatement() { // TODO
+        doTest()
+    }
+
     /**
      * Test folding based by validating against a the file in [.TEST_DATA_PATH] who
      * names matches the test.<br></br>

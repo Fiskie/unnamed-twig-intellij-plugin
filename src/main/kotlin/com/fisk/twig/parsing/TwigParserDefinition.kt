@@ -87,6 +87,10 @@ class TwigParserDefinition : ParserDefinition {
             if (type == TwigTokenTypes.SIMPLE_STATEMENT) {
                 return TwigSimpleStatementImpl(node)
             }
+
+            if (type == TwigTokenTypes.EXPRESSION_BLOCK) {
+                return TwigExpressionBlockImpl(node)
+            }
         }
 
         return TwigPsiElementImpl(node!!)

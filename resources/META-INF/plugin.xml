@@ -25,6 +25,7 @@
     <colorSettingsPage implementation="com.fisk.twig.pages.TwigColorsPage"/>
     <completion.contributor language="Twig" implementationClass="com.fisk.twig.completion.TwigCompletionContributor"/>
     <defaultLiveTemplatesProvider implementation="com.fisk.twig.editor.templates.TwigLiveTemplatesProvider"/>
+    <enterHandlerDelegate implementation="com.fisk.twig.editor.actions.TwigEnterHandler"/>
     <fileIndentOptionsProvider implementation="com.fisk.twig.format.TwigFileIndentOptionsProvider"/>
     <fileTypeFactory implementation="com.fisk.twig.file.TwigFileTypeFactory"/>
     <highlightErrorFilter implementation="com.fisk.twig.inspections.TwigErrorFilter"/>
@@ -37,8 +38,10 @@
     <lang.parserDefinition language="Twig" implementationClass="com.fisk.twig.parsing.TwigParserDefinition" />
     <lang.substitutor language="HTML" implementationClass="com.fisk.twig.file.TwigLanguageSubstitutor"/>
     <lang.syntaxHighlighterFactory language="Twig" implementationClass="com.fisk.twig.TwigHighlighterFactory"/>
+    <lang.psiStructureViewFactory language="Twig" implementationClass="com.fisk.twig.structure.TwigStructureViewFactory" />
     <liveTemplateContext implementation="com.fisk.twig.editor.templates.TwigTemplateContextType"/>
     <projectConfigurable provider="com.fisk.twig.pages.TwigConfigurationProvider" />
+    <typedHandler implementation="com.fisk.twig.editor.actions.TwigTypedHandler" order="before xmlSlash"/>
   </extensions>
 
   <actions>

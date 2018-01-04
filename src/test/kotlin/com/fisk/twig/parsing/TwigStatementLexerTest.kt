@@ -2,12 +2,12 @@ package com.fisk.twig.parsing
 
 import com.fisk.twig.parsing.TwigTokenTypes.BOOLEAN
 import com.fisk.twig.parsing.TwigTokenTypes.EQUALS
+import com.fisk.twig.parsing.TwigTokenTypes.LABEL
 import com.fisk.twig.parsing.TwigTokenTypes.NUMBER
 import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_CLOSE
 import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_OPEN
 import com.fisk.twig.parsing.TwigTokenTypes.STRING
 import com.fisk.twig.parsing.TwigTokenTypes.TAG
-import com.fisk.twig.parsing.TwigTokenTypes.LABEL
 import com.fisk.twig.parsing.TwigTokenTypes.WHITE_SPACE
 
 class TwigStatementLexerTest : TwigLexerTest() {

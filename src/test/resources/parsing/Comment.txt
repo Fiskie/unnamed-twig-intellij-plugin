@@ -1,2 +1,2 @@
 Twig: Comment.twig
-  PsiComment([Twig] COMMENT)('{# this is a comment #}')
+  PsiComment(Twig:COMMENT)('{# this is a comment #}')
