@@ -47,8 +47,44 @@ class TwigTypedHandler : TypedHandlerDelegate() {
     }
 
     override fun charTyped(c: Char, project: Project, editor: Editor, file: PsiFile): TypedHandlerDelegate.Result {
-        val offset = editor.caretModel.offset
+        var offset = editor.caretModel.offset
         val provider = file.viewProvider
+        var closeBraceCompleted = false
+
+        if (file.language is TwigLanguage) {
+            if (TwigConfig.isAutocompleteEndBracesEnabled) {
+                PsiDocumentManager.getInstance(project).commitDocument(editor.document)
+
+                val el = provider.findElementAt(offset - 1, provider.baseLanguage)
+
+                el?.let {
+                    var braceCompleter: String? = null
+                    var shouldPad = false
+
+                    if (shouldAddMatchingStatementBrace(el)) {
+                        braceCompleter = "%}"
+                        shouldPad = true
+                    } else if (shouldAddMatchingExpressionBrace(el)) {1
+                        braceCompleter = "}}"
+                        shouldPad = true
+                    } else if (shouldAddMatchingCommentBrace(el)) {
+                        braceCompleter = "#}"
+                    }
+
+                    braceCompleter?.let {
+                        if (shouldPad) {
+                            editor.document.insertString(offset, "  " + braceCompleter)
+                            offset += 1
+                            editor.caretModel.moveToOffset(offset)
+                        } else {
+                            editor.document.insertString(offset, braceCompleter)
+                        }
+
+                        closeBraceCompleted = true
+                    }
+                }
+            }
+        }
 
         autoInsertCloseTag(project, offset, editor, provider)
         return TypedHandlerDelegate.Result.CONTINUE
@@ -64,12 +100,23 @@ class TwigTypedHandler : TypedHandlerDelegate() {
         return null
     }
 
+    private fun shouldAddMatchingStatementBrace(psi: PsiElement): Boolean {
+        return psi.node.elementType == TwigTokenTypes.STATEMENT_OPEN
+    }
+
+    private fun shouldAddMatchingExpressionBrace(psi: PsiElement): Boolean {
+        return psi.node.elementType == TwigTokenTypes.EXPRESSION_OPEN
+    }
+
+    private fun shouldAddMatchingCommentBrace(psi: PsiElement): Boolean {
+        return psi.node.elementType == TwigTokenTypes.UNCLOSED_COMMENT
+    }
+
     private fun shouldAutocompleteEndTagForBlock(psi: PsiElement): Boolean {
-        val baseTags = arrayOf("if", "for", "block", "embed")
         val tagName = getOpenTagForBlock(psi)
 
         tagName?.let {
-            if (baseTags.contains(tagName.text)) {
+            if (TwigPsiUtil.isExpectedBlockTag(tagName.text)) {
                 return true
             }
 
@@ -82,9 +129,9 @@ class TwigTypedHandler : TypedHandlerDelegate() {
     }
 
 
-    private fun autoInsertCloseTag(project: Project, offset: Int, editor: Editor, provider: FileViewProvider) {
+    private fun autoInsertCloseTag(project: Project, offset: Int, editor: Editor, provider: FileViewProvider): Boolean {
         if (!TwigConfig.isAutoGenerateCloseTagEnabled) {
-            return
+            return false
         }
 
         PsiDocumentManager.getInstance(project).commitDocument(editor.document)
@@ -92,12 +139,15 @@ class TwigTypedHandler : TypedHandlerDelegate() {
         val elementAtCaret = provider.findElementAt(offset - 1, TwigLanguage::class.java)
 
         if (elementAtCaret == null || elementAtCaret.node.elementType !== TwigTokenTypes.STATEMENT_CLOSE) {
-            return
+            return false
         }
 
         if (shouldAutocompleteEndTagForBlock(elementAtCaret)) {
             val openTag = getOpenTagForBlock(elementAtCaret)
             editor.document.insertString(offset, "{% end${openTag?.text} %}")
+            return true
         }
+
+        return false
     }
 }

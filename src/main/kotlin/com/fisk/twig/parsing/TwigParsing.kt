@@ -21,6 +21,7 @@ import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_OPEN
 import com.fisk.twig.parsing.TwigTokenTypes.STRING
 import com.fisk.twig.parsing.TwigTokenTypes.TAG
 import com.fisk.twig.parsing.TwigTokenTypes.UNCLOSED_COMMENT
+import com.fisk.twig.psi.TwigPsiUtil
 import com.intellij.lang.PsiBuilder
 import com.intellij.psi.tree.IElementType
 
@@ -143,7 +144,7 @@ class TwigParsing(private val builder: PsiBuilder) {
                     }
                 }
 
-                if (parseCloseStatement(builder, openTag) != null) {
+                if (parseCloseStatement(builder, openTag) != null || TwigPsiUtil.isExpectedBlockTag(openTag)) {
                     nonStackingMarker.drop()
                     statementMarker.done(BLOCK_WRAPPER)
                     return true
@@ -165,7 +166,7 @@ class TwigParsing(private val builder: PsiBuilder) {
     }
 
     private fun parseOpenStatement(builder: PsiBuilder): String? {
-        return parseStatement(builder, BLOCK_START_STATEMENT, { tag -> !isEndTag(tag) })
+        return parseStatement(builder, BLOCK_START_STATEMENT, { tag -> !isEndTag(tag) /* && !elseTags.contains(tag)*/ }) // todo -- this will currently break parsing
     }
 
     private fun parseCloseStatement(builder: PsiBuilder, openTag: String): String? {

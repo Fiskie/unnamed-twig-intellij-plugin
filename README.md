@@ -14,33 +14,36 @@ I would love to bridge the gap -- make the official plugin obsolete, and incorpo
 
 ## TODO
 
-- Autocomplete
-    - Braces
-    - User-defined macros
-    - User-defined template variables
-        - Local scope
-        - From embed/include parents
-    - Standard twig filters
-    - Standard twig functions
-- ~~HTML interop~~
-- Syntax highlighting
-    - ~~Support the whitespace control modifier ({{-, {%-, {#-)~~
-    - Brace matching 
-    - ~~Block matching (block and endblock, etc)~~ -- kind of there
-- Inspections
-    - Syntax errors
-    - Declared child blocks not found in the parent template
-- Rename handler, names validator ([Rename refactoring](https://www.jetbrains.org/intellij/sdk/docs/reference_guide/custom_language_support/rename_refactoring.html))
-- Find usages ([Find usages](https://www.jetbrains.org/intellij/sdk/docs/reference_guide/custom_language_support/find_usages.html))
-- PHPDoc annotation (`{# @var thing \Core\Thing #}`)
-- Folding
-- Block parent goto
-- Template include resolution
-- Override/implement block generation
-- More tests for indenting (strange bug with two simple statements; second one not indenting at all?)
-- Deploy ([Deployment](https://www.jetbrains.org/intellij/sdk/docs/tutorials/build_system/deployment.html))
- 
-    
+### Feature parity with the official Twig plugin
+
+- [ ] Autocomplete for end braces
+    - [x] Statements (`{% %}`)
+    - [ ] Expressions (`{{ }}`)
+    - [ ] Comments (`{% %}`)
+    - [ ] Whitespace control modifiers
+- [ ] Autocomplete for statement close tags
+- [x] Statement block indenting
+- [ ] End block tag suggestions
+- [ ] Remove additional whitespace in code cleanup
+- [x] Code folding
+
+### Feature parity with community Symfony plugin Twig extensions
+
+- [ ] Goto parent block
+- [ ] Template include/extends/block resolution goto
+- [ ] PHPDoc annotation support ({# @var thing \Core\Thing #})
+
+### Supplementary
+
+- [x] Structure
+- [ ] Inspections
+    - [x] Expected end block tag
+    - [ ] Missing parent block
+    - [ ] Declared child blocks not found in the parent template
+- [ ] Find usages
+- [ ] Variable refactor
+- [ ] Mixin refactor
+
 ## Development
 
 Contributing to this project will require an environment ready to develop IntelliJ plugins. [Read the guide](https://www.jetbrains.com/help/idea/configuring-intellij-platform-plugin-sdk.html)

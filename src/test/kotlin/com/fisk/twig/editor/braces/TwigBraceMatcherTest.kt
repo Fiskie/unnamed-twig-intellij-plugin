@@ -77,8 +77,8 @@ class TwigBraceMatcherTest : LightPlatformCodeInsightFixtureTestCase() {
 
     fun testStatement() {
         doBraceTest(
-                ourTestSource.replace("{% if bar %}", "<brace_match>{% if bar %}")
-                        .replace("{% if bar %}", "{% if bar <brace_match>%}")
+                ourTestSource.replace("{% if foo %}", "<brace_match>{% if foo %}")
+                        .replace("{% if foo %}", "{% if foo <brace_match>%}")
         )
     }
 

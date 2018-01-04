@@ -13,7 +13,7 @@ object TwigConfig {
         get() = getBooleanPropertyValue(AUTO_GENERATE_CLOSE_TAG)
         set(enabled) = setBooleanPropertyValue(AUTO_GENERATE_CLOSE_TAG, enabled)
 
-    var isAutocompleteStatementsEnabled: Boolean
+    var isAutocompleteEndBracesEnabled: Boolean
         get() = getBooleanPropertyValue(AUTOCOMPLETE_STATEMENTS)
         set(enabled) = setBooleanPropertyValue(AUTOCOMPLETE_STATEMENTS, enabled)
 

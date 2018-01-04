@@ -2,6 +2,7 @@ package com.fisk.twig.psi
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
+import kotlin.math.exp
 
 object TwigPsiUtil {
     fun findParentOpenTagElement(element: PsiElement?): TwigStatementOpenBrackets? {
@@ -32,5 +33,10 @@ object TwigPsiUtil {
 
         // we're a non-root statements if we're of type statements, and we have a statements parent
         return element is TwigBlock && statementsParent != null
+    }
+
+    fun isExpectedBlockTag(tag: String): Boolean {
+        val expected = arrayOf("if", "for", "block", "embed") // todo: add more tags
+        return expected.contains(tag)
     }
 }

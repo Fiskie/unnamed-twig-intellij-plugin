@@ -27,33 +27,45 @@ class TwigTypedHandlerTest : TwigActionHandlerTest() {
         super.tearDown()
     }
 
-    /**
-     * Sanity check that we do nothing when something other than "}" completes a stache
-     */
-    fun testNonStacheClosingCharacter() {
-        TwigConfig.isAutoGenerateCloseTagEnabled = true
-        doCharTest('X', "{% if foo %<caret>", "{% if foo %X<caret>")
+    fun testStatementBraceAutocomplete() {
+        TwigConfig.isAutocompleteEndBracesEnabled = false
+        doCharTest('%', "foo {<caret>", "foo {%<caret>")
 
-        TwigConfig.isAutoGenerateCloseTagEnabled = false
-        doCharTest('X', "{% if foo %<caret>", "{% if foo %X<caret>")
+        TwigConfig.isAutocompleteEndBracesEnabled = true
+        doCharTest('%', "foo {<caret>", "foo {% <caret> %}")
+
+//        TwigConfig.isAutoGenerateCloseTagEnabled = true
+//        doCharTest('}', "foo {% if bar %<caret>", "foo {% if bar %}<caret>{% endif %}")
+//        doCharTest('}', "foo {% if bar %}{% if baz %<caret>{% endif %}", "foo {% if bar %}{% if baz %}<caret>{% endif %}{% endif %}")
+//
+//        TwigConfig.isAutoGenerateCloseTagEnabled = false
+//        doCharTest('}', "foo {% if bar %<caret>", "foo {% if bar %}}<caret>")
+//        doCharTest('}', "foo {% if bar %}{% if baz %<caret>{% endif %}", "foo {% if bar %}{% if baz %}<caret>{% endif %}")
     }
 
-    fun testCloseDoubleBraces() {
-        TwigConfig.isAutocompleteStatementsEnabled = false
-        doCharTest('}', "foo {{ bar <caret>", "foo {{ bar }<caret>")
-        doCharTest('%', "foo {% if foo <caret>", "foo {% if foo %<caret>")
+    fun testExpressionBraceAutocomplete() {
+        TwigConfig.isAutocompleteEndBracesEnabled = false
+        doCharTest('{', "foo {<caret>", "foo {{<caret>")
 
-        TwigConfig.isAutocompleteStatementsEnabled = true
-        doCharTest('}', "foo {{ bar <caret>", "foo {{ bar }}<caret>")
-        doCharTest('%', "foo {% if foo <caret>", "foo {% if foo %}<caret>")
+        TwigConfig.isAutocompleteEndBracesEnabled = true
+        doCharTest('{', "foo {<caret>", "foo {{ <caret> }}")
+    }
 
-        TwigConfig.isAutoGenerateCloseTagEnabled = true
-        doCharTest('}', "foo {% if bar %<caret>", "foo {% if bar %}<caret>{% endif %}")
-        doCharTest('}', "foo {% if bar %}{% if baz %<caret>{% endif %}", "foo {% if bar %}}{% if baz %}<caret>{% endif %}{% endif %}")
+    fun testCommentBraceAutocomplete() {
+        TwigConfig.isAutocompleteEndBracesEnabled = false
+        doCharTest('#', "foo {<caret>", "foo {#<caret>")
 
-        TwigConfig.isAutoGenerateCloseTagEnabled = false
-        doCharTest('}', "foo {% if bar %<caret>", "foo {% if bar %}}<caret>")
-        doCharTest('}', "foo {% if bar %}{% if baz %<caret>{% endif %}", "foo {% if bar %}}{% if baz %}<caret>{% endif %}")
+        TwigConfig.isAutocompleteEndBracesEnabled = true
+        doCharTest('#', "foo {<caret>", "foo {#<caret>#}")
+
+    }
+
+    fun testWhitespaceControlAutocomplete() {
+        TwigConfig.isAutocompleteEndBracesEnabled = false
+        doCharTest('-', "foo {{<caret> bar }}", "foo {{-<caret> bar }}")
+
+        TwigConfig.isAutocompleteEndBracesEnabled = true
+        doCharTest('-', "foo {{<caret> bar }}", "foo {{-<caret> bar -}}")
     }
 
     fun testInsertCloseTagForOpenBlockStache() {
@@ -104,29 +116,29 @@ class TwigTypedHandlerTest : TwigActionHandlerTest() {
     }
 
     fun testInsertCloseTagForComplexExpressions() {
-        TwigConfig.isAutoGenerateCloseTagEnabled = true
+        TwigConfig.isAutocompleteEndBracesEnabled = true
         doCharTest('}', "{{ foo.bar|baz|cat() <caret>", "{{ foo.bar|baz|cat() }}<caret>")
         doCharTest('}', "{{ foo.bar + baz.cat <caret>", "{{ foo.bar + baz.cat }}<caret>")
     }
 
     fun testNoInsertCloseTagForExtraBraces() {
-        TwigConfig.isAutoGenerateCloseTagEnabled = true
-        doCharTest('}', "{% if foo %}<caret>", "{% if foo %}}<caret>")
+        TwigConfig.isAutocompleteEndBracesEnabled = true
+        doCharTest('}', "{{ foo }}<caret>", "{{ foo }}}<caret>")
     }
 
     fun testRegularStache() {
         // ensure that nothing special happens for regular 'staches, whether autoGenerateCloseTag is enabled or not
 
-        TwigConfig.isAutoGenerateCloseTagEnabled = true
+        TwigConfig.isAutocompleteEndBracesEnabled = true
         doCharTest('}', "{{ foo }<caret>", "{{ foo }}<caret>")
         doCharTest('}', "{{ foo|bar|baz }<caret>", "{{ foo|bar|baz }}<caret>")
 
         // test when caret is not at file boundary
-        TwigConfig.isAutoGenerateCloseTagEnabled = true
+        TwigConfig.isAutocompleteEndBracesEnabled = true
         doCharTest('}', "{{ foo }<caret>some\nother stuff", "{{ foo }}<caret>some\nother stuff")
         doCharTest('}', "{{ foo|bar|baz }<caret>some\nother stuff", "{{ foo|bar|baz }}<caret>some\nother stuff")
 
-        TwigConfig.isAutoGenerateCloseTagEnabled = false
+        TwigConfig.isAutocompleteEndBracesEnabled = false
         doCharTest('}', "{{ foo }<caret>", "{{ foo }}<caret>")
         doCharTest('}', "{{ foo|bar|baz }<caret>", "{{ foo|bar|baz }}<caret>")
     }
@@ -136,10 +148,10 @@ class TwigTypedHandlerTest : TwigActionHandlerTest() {
      * make sure we're well behaved when there are none.
      */
     fun testFirstCharTyped() {
-        TwigConfig.isAutoGenerateCloseTagEnabled = true
+        TwigConfig.isAutocompleteEndBracesEnabled = true
         doCharTest('}', "<caret>", "}<caret>")
 
-        TwigConfig.isAutoGenerateCloseTagEnabled = false
+        TwigConfig.isAutocompleteEndBracesEnabled = false
         doCharTest('}', "<caret>", "}<caret>")
     }
 
