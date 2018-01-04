@@ -5,7 +5,7 @@ import com.intellij.ide.util.PropertiesComponent
 /**
  * Class responsible for reads and writes of properties
  */
-internal class PropertyAccessor(private val myPropertiesComponent: PropertiesComponent) {
+class PropertyAccessor(private val myPropertiesComponent: PropertiesComponent) {
 
     fun getPropertyValue(property: Property): String {
 
