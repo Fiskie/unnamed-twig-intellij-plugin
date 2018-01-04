@@ -49,6 +49,8 @@ class TwigFormattingModelBuilder : TemplateLanguageFormattingModelBuilder() {
         }
     }
 
+    override fun dontFormatMyModel() = false
+
     class TwigIndentBlock(
             node: ASTNode,
             wrap: Wrap?,
