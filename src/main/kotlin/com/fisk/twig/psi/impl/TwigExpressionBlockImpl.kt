@@ -1,8 +1,10 @@
 package com.fisk.twig.psi.impl
 
+import com.fisk.twig.config.TwigIcons
 import com.fisk.twig.psi.TwigExpression
 import com.fisk.twig.psi.TwigExpressionBlock
 import com.intellij.lang.ASTNode
+import javax.swing.Icon
 
 class TwigExpressionBlockImpl(node: ASTNode) : TwigPsiElementImpl(node), TwigExpressionBlock {
     override fun getName(): String? {
@@ -13,5 +15,9 @@ class TwigExpressionBlockImpl(node: ASTNode) : TwigPsiElementImpl(node), TwigExp
         }
 
         return "(invalid expression)"
+    }
+
+    override fun getIcon(flags: Int): Icon {
+        return TwigIcons.Elements.expression_brace
     }
 }

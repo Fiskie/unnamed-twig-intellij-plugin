@@ -12,6 +12,6 @@ internal class TwigStructureViewModel(psiFile: PsiFile, editor: Editor?) : TextE
     override fun getRoot() = TwigTreeElementFile(psiFile as TwigPsiFile)
 
     companion object {
-        val ourSuitableClasses = arrayOf<Class<*>>(TwigBlockWrapper::class.java, TwigExpressionBlock::class.java, TwigSimpleStatement::class.java)
+        val ourSuitableClasses = arrayOf<Class<*>>(TwigBlockWrapper::class.java)
     }
 }

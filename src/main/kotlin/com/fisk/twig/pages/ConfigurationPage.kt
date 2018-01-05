@@ -1,17 +1,16 @@
 package com.fisk.twig.pages
 
 import com.fisk.twig.TwigBundle
+import com.fisk.twig.config.TwigConfig
 import com.fisk.twig.ide.EditingModel
 import com.intellij.openapi.options.SearchableConfigurable
 import com.intellij.openapi.project.Project
-import javax.swing.DefaultComboBoxModel
-import javax.swing.JComboBox
-import javax.swing.JComponent
-import javax.swing.JPanel
+import com.intellij.ui.ListCellRendererWrapper
+import javax.swing.*
 
 class ConfigurationPage(val project: Project) : SearchableConfigurable {
     @JvmField
-    var editMode: JComboBox<EditingModel>? = null
+    var editModel: JComboBox<EditingModel>? = null
     @JvmField
     var basePanel: JPanel? = null
 
@@ -32,7 +31,7 @@ class ConfigurationPage(val project: Project) : SearchableConfigurable {
     }
 
     override fun apply() {
-
+        TwigConfig.braceEditingModel = editModel?.selectedItem as String?
     }
 
     override fun enableSearch(option: String?): Runnable? {
@@ -48,12 +47,18 @@ class ConfigurationPage(val project: Project) : SearchableConfigurable {
     }
 
     private fun populateEditingModels() {
-        val model = editMode?.model as DefaultComboBoxModel
-        val new = EditingModel("new", TwigBundle.message("twig.page.options.editing.model.new"))
+        val model = editModel?.model as DefaultComboBoxModel<EditingModel>
+        val new = EditingModel(EditingModel.NEW, TwigBundle.message("twig.page.options.editing.model.new"))
 
-        model.addElement(EditingModel("none", TwigBundle.message("twig.page.options.editing.model.none")))
-        model.addElement(EditingModel("legacy", TwigBundle.message("twig.page.options.editing.model.legacy")))
+        model.addElement(EditingModel(EditingModel.NONE, TwigBundle.message("twig.page.options.editing.model.none")))
+        model.addElement(EditingModel(EditingModel.LEGACY, TwigBundle.message("twig.page.options.editing.model.legacy")))
         model.addElement(new)
+
+        editModel?.renderer = object : ListCellRendererWrapper<EditingModel>() {
+            override fun customize(list: JList<*>?, value: EditingModel?, index: Int, selected: Boolean, hasFocus: Boolean) {
+                setText(value?.name)
+            }
+        }
 
         model.selectedItem = new
     }
