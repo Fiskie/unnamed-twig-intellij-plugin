@@ -42,6 +42,7 @@
     <lang.psiStructureViewFactory language="Twig" implementationClass="com.fisk.twig.structure.TwigStructureViewFactory" />
     <liveTemplateContext implementation="com.fisk.twig.editor.templates.TwigTemplateContextType"/>
     <projectConfigurable groupId="language" provider="com.fisk.twig.pages.TwigConfigurationProvider" />
+    <psi.referenceContributor implementation="com.fisk.twig.reference.ReferenceContributor" />
     <typedHandler implementation="com.fisk.twig.editor.actions.TwigTypedHandler" order="before xmlSlash"/>
   </extensions>
 

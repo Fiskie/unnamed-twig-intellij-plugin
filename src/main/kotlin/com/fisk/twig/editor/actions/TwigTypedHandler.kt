@@ -4,6 +4,7 @@ import com.fisk.twig.TwigLanguage
 import com.fisk.twig.config.TwigConfig
 import com.fisk.twig.parsing.TwigTokenTypes
 import com.fisk.twig.psi.*
+import com.fisk.twig.psi.util.TwigPsiUtil
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.fileTypes.FileType
@@ -24,9 +25,8 @@ class TwigTypedHandler : TypedHandlerDelegate() {
             return TypedHandlerDelegate.Result.CONTINUE
         }
 
-        val previousChar = editor.document.getText(TextRange(offset - 1, offset))
-
         if (file.language is TwigLanguage) {
+            val previousChar = editor.document.getText(TextRange(offset - 1, offset))
             PsiDocumentManager.getInstance(project).commitAllDocuments()
 
             // we suppress the built-in "}" auto-complete when we see "{{"
@@ -46,48 +46,52 @@ class TwigTypedHandler : TypedHandlerDelegate() {
         return TypedHandlerDelegate.Result.CONTINUE
     }
 
-    override fun charTyped(c: Char, project: Project, editor: Editor, file: PsiFile): TypedHandlerDelegate.Result {
-        var offset = editor.caretModel.offset
+    private fun provideClosingBrace(c: Char, project: Project, editor: Editor, file: PsiFile) {
+        PsiDocumentManager.getInstance(project).commitDocument(editor.document)
+
         val provider = file.viewProvider
-        var closeBraceCompleted = false
+        var offset = editor.caretModel.offset
+        val el = provider.findElementAt(offset - 1, provider.baseLanguage)
+
+        el?.let {
+            var braceCompleter: String? = null
+            var shouldPad = false
+
+            when {
+                shouldAddMatchingStatementBrace(el) -> {
+                    braceCompleter = "%}"
+                    shouldPad = true
+                }
+                shouldAddMatchingExpressionBrace(el) -> {
+                    braceCompleter = "}}"
+                    shouldPad = true
+                }
+                shouldAddMatchingCommentBrace(el) -> {
+                    braceCompleter = "#}"
+                }
+            }
+
+            braceCompleter?.let {
+                if (shouldPad) {
+                    editor.document.insertString(offset, "  " + braceCompleter)
+                    offset += 1
+                    editor.caretModel.moveToOffset(offset)
+                } else {
+                    editor.document.insertString(offset, braceCompleter)
+                }
+            }
+        }
+    }
+
+    override fun charTyped(c: Char, project: Project, editor: Editor, file: PsiFile): TypedHandlerDelegate.Result {
+        val provider = file.viewProvider
 
         if (!provider.baseLanguage.isKindOf(TwigLanguage.INSTANCE)) {
             return TypedHandlerDelegate.Result.CONTINUE
         }
 
-        if (file.language is TwigLanguage) {
-            if (TwigConfig.isAutocompleteEndBracesEnabled) {
-                PsiDocumentManager.getInstance(project).commitDocument(editor.document)
-
-                val el = provider.findElementAt(offset - 1, provider.baseLanguage)
-
-                el?.let {
-                    var braceCompleter: String? = null
-                    var shouldPad = false
-
-                    if (shouldAddMatchingStatementBrace(el)) {
-                        braceCompleter = "%}"
-                        shouldPad = true
-                    } else if (shouldAddMatchingExpressionBrace(el)) {1
-                        braceCompleter = "}}"
-                        shouldPad = true
-                    } else if (shouldAddMatchingCommentBrace(el)) {
-                        braceCompleter = "#}"
-                    }
-
-                    braceCompleter?.let {
-                        if (shouldPad) {
-                            editor.document.insertString(offset, "  " + braceCompleter)
-                            offset += 1
-                            editor.caretModel.moveToOffset(offset)
-                        } else {
-                            editor.document.insertString(offset, braceCompleter)
-                        }
-
-                        closeBraceCompleted = true
-                    }
-                }
-            }
+        if (file.language is TwigLanguage && TwigConfig.isAutocompleteEndBracesEnabled) {
+            provideClosingBrace(c, project, editor, file)
         }
 
         // disabled -- this conflicts with our current behaviour of auto-inserting end braces.
@@ -109,10 +113,20 @@ class TwigTypedHandler : TypedHandlerDelegate() {
     }
 
     private fun shouldAddMatchingStatementBrace(psi: PsiElement): Boolean {
+        if (psi.parent is TwigStatement) {
+            // This is already a valid statement and no additional braces need to be added
+            return false
+        }
+
         return psi.node.elementType == TwigTokenTypes.STATEMENT_OPEN
     }
 
     private fun shouldAddMatchingExpressionBrace(psi: PsiElement): Boolean {
+        if (psi.parent is TwigExpressionBlock) {
+            // This is already a valid expression and no additional braces need to be added
+            return false
+        }
+
         return psi.node.elementType == TwigTokenTypes.EXPRESSION_OPEN
     }
 
@@ -168,7 +182,9 @@ class TwigTypedHandler : TypedHandlerDelegate() {
         }
 
         val elementAtCaret = provider.findElementAt(offset - 1, TwigLanguage::class.java)
-        val closeOrSimpleInverseParent = PsiTreeUtil.findFirstParent(elementAtCaret, true) { element -> element != null && (element is TwigInverseStatement || element is TwigBlockEndStatement) }
+        val closeOrSimpleInverseParent = PsiTreeUtil.findFirstParent(elementAtCaret, true) {
+            element -> element != null && (element is TwigInverseStatement || element is TwigBlockEndStatement)
+        }
 
         val parent = elementAtCaret?.parent
 

@@ -1,3 +1,5 @@
 package com.fisk.twig.psi
 
-interface TwigTag : TwigPsiElement
+import com.intellij.psi.PsiNameIdentifierOwner
+
+interface TwigTag : TwigPsiElement, PsiNameIdentifierOwner

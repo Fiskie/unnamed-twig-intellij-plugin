@@ -53,8 +53,7 @@ class TwigStructureViewTest : LightPlatformCodeInsightFixtureTestCase() {
 
                 "-" + ourTestFileName + "\n" +
                         " -if foo\n" +
-                        "  -block bar\n" +
-                        "   baz"
+                        "  block bar"
         )
     }
 
@@ -64,7 +63,7 @@ class TwigStructureViewTest : LightPlatformCodeInsightFixtureTestCase() {
                 "{% if foo %}\n" + "{% else %}\n" + "{% endif %}",
 
                 "-" + ourTestFileName + "\n" +
-                        " -if foo"
+                        " if foo"
         )
     }
 
@@ -76,8 +75,7 @@ class TwigStructureViewTest : LightPlatformCodeInsightFixtureTestCase() {
                         "{% endif %}\n",
 
                 "-" + ourTestFileName + "\n" +
-                        " -if foo\n" +
-                        "  expr"
+                        " if foo"
         )
     }
 

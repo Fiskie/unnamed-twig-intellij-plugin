@@ -2,17 +2,15 @@ package com.fisk.twig.format
 
 import com.fisk.twig.config.TwigConfig
 import com.fisk.twig.parsing.TwigTokenTypes
-import com.fisk.twig.psi.TwigPsiUtil
+import com.fisk.twig.psi.util.TwigPsiUtil
 import com.intellij.formatting.*
 import com.intellij.formatting.templateLanguages.*
 import com.intellij.lang.ASTNode
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.formatter.DocumentBasedFormattingModel
 import com.intellij.psi.formatter.FormattingDocumentModelImpl
-import com.intellij.psi.formatter.common.AbstractBlock
 import com.intellij.psi.formatter.xml.HtmlPolicy
 import com.intellij.psi.formatter.xml.SyntheticBlock
 import com.intellij.psi.templateLanguages.SimpleTemplateLanguageFormattingModelBuilder

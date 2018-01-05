@@ -50,13 +50,39 @@ class TwigFormatterIndentTest : TwigFormatterTest() {
         CodeStyleSettingsManager.getSettings(project).getIndentOptions(StdFileTypes.HTML).INDENT_SIZE = previousHtmlIndent
     }
 
+    fun testTagSpaceNormalisation() {
+        doStringBasedTest(
+                "{{   foo   }}",
+                "{{ foo }}"
+        )
+
+        doStringBasedTest(
+                "{{foo}}",
+                "{{ foo }}"
+        )
+
+        doStringBasedTest(
+                "{%   if foo   %}",
+                "{% if foo %}"
+        )
+
+        doStringBasedTest(
+                "{%if foo%}",
+                "{% if foo %}"
+        )
+
+        doStringBasedTest(
+                "{%-if foo-%}",
+                "{%- if foo -%}"
+        )
+    }
+
     fun testSimpleExpression() {
         doStringBasedTest(
                 "{{ foo }}",
                 "{{ foo }}"
         )
     }
-
 
     fun testSimpleBlock() {
         doStringBasedTest(

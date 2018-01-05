@@ -82,23 +82,24 @@ class TwigBraceMatcherTest : LightPlatformCodeInsightFixtureTestCase() {
         )
     }
 
+    fun testStatementWithWhitespaceControl() {
+        doBraceTest(
+                ourTestSource.replace("{%- if foo2 -%}", "<brace_match>{%- if foo2 -%}")
+                        .replace("{%- if foo2 -%}", "{%- if foo2 <brace_match>-%}")
+        )
+    }
+
     companion object {
 
         private val ourBraceMatchIndicator = "<brace_match>"
 
         /**
          * Convenience property for quickly setting up brace match tests.
-         *
-         *
-         * Things to note about this text:
-         * - The braces we want to match have some whitespace around them (this lets them match when the caret is before them)
-         * - All mustache ids (foo, foo2, bar, etc) are unique so that they can be easily targeted
-         * by string replace functions.
          */
         private val ourTestSource = "{% if foo %}\n" +
                 "    {{ bar }}\n" +
                 "    {{ baz }}\n" +
-                "    {% if foo2 %}\n" +
+                "    {%- if foo2 -%}\n" +
                 "        <div>\n" +
                 "            {% if foo3 %}\n" +
                 "                Content\n" +
@@ -107,7 +108,7 @@ class TwigBraceMatcherTest : LightPlatformCodeInsightFixtureTestCase() {
                 "        {{ baz2 }}\n" +
                 "        {{ bat }}\n" +
                 "        {{ baz3 }}\n" +
-                "    {% endif %}\n" +
+                "    {%- endif -%}\n" +
                 "{% else %}\n" +
                 "    Content\n" +
                 "{% endif %}\n"

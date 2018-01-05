@@ -66,4 +66,12 @@ class TwigParserFreeFormTest : TwigParserTest() {
     fun testUnclosedIfElse() {
         doTest(true)
     }
+
+    fun testUglyIfElseChain() {
+        doTest(true)
+    }
+
+    fun testUnformattedSetStatement() {
+        doTest(true)
+    }
 }

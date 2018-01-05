@@ -15,4 +15,8 @@ class TwigKeywordCompletionTest : LightPlatformCodeInsightFixtureTestCase() {
     fun testSimple() {
         doBasicTest("{% <caret> %}", "if", "for")
     }
+
+    fun testWithWhitespaceControl() {
+        doBasicTest("{%- <caret> -%}", "if", "for")
+    }
 }

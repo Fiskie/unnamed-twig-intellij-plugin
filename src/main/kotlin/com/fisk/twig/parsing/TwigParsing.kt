@@ -21,7 +21,7 @@ import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_OPEN
 import com.fisk.twig.parsing.TwigTokenTypes.STRING
 import com.fisk.twig.parsing.TwigTokenTypes.TAG
 import com.fisk.twig.parsing.TwigTokenTypes.UNCLOSED_COMMENT
-import com.fisk.twig.psi.TwigPsiUtil
+import com.fisk.twig.psi.util.TwigPsiUtil
 import com.intellij.lang.PsiBuilder
 import com.intellij.psi.tree.IElementType
 

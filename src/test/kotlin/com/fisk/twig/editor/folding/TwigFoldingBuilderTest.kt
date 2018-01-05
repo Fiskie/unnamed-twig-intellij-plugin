@@ -22,11 +22,15 @@ class TwigFoldingBuilderTest : LightPlatformCodeInsightFixtureTestCase() {
         doTest()
     }
 
-    fun testSloppyEndBlockFold() { // TODO
+    fun testSloppyEndBlockFold() {
         doTest()
     }
 
-    fun testUnclosedOpenStatement() { // TODO
+    fun testUnclosedOpenStatement() {
+        doTest()
+    }
+
+    fun testUnformattedBlockTags() {
         doTest()
     }
 

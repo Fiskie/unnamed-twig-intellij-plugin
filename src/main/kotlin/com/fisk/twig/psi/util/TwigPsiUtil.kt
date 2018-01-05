@@ -1,8 +1,22 @@
-package com.fisk.twig.psi
+package com.fisk.twig.psi.util
 
+import com.fisk.twig.file.TwigFileType
+import com.fisk.twig.psi.*
+import com.intellij.openapi.fileTypes.FileType
+import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiManager
+import com.intellij.psi.search.FileTypeIndex
+import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.PsiTreeUtil
-import kotlin.math.exp
+import com.intellij.util.indexing.FileBasedIndex
+import java.util.*
+import java.util.ArrayList
+import com.intellij.openapi.vcs.changes.committed.MockAbstractVcs.getKey
+import com.intellij.openapi.vfs.VirtualFile
+
+
+
 
 object TwigPsiUtil {
     val DEFAULT_BLOCK_TAGS = setOf("if", "for", "block", "embed", "spaceless")
@@ -52,5 +66,30 @@ object TwigPsiUtil {
      */
     fun allowsInverseTag(tag: String): Boolean {
         return INVERSE_ALLOWED.contains(tag)
+    }
+
+    fun findLabels(project: Project, key: String): List<TwigLabel> {
+        val result = ArrayList<TwigLabel>()
+        val virtualFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, TwigFileType.INSTANCE,
+                GlobalSearchScope.allScope(project))
+
+        virtualFiles
+                .mapNotNull { PsiManager.getInstance(project).findFile(it) as TwigPsiFile? }
+                .mapNotNull { PsiTreeUtil.getChildrenOfType(it, TwigLabel::class.java) }
+                .forEach { it.filterTo(result) { key == it.name } }
+
+        return result
+    }
+
+    fun findLabels(project: Project): List<TwigLabel> {
+        val result = ArrayList<TwigLabel>()
+        val virtualFiles = FileBasedIndex.getInstance().getContainingFiles<FileType, Void>(FileTypeIndex.NAME, TwigFileType.INSTANCE,
+                GlobalSearchScope.allScope(project))
+
+        virtualFiles
+                .mapNotNull { PsiManager.getInstance(project).findFile(it) as TwigPsiFile? }
+                .mapNotNull { PsiTreeUtil.getChildrenOfType(it, TwigLabel::class.java) }
+                .forEach { result.addAll(it) }
+        return result
     }
 }

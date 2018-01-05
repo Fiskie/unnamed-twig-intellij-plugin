@@ -35,6 +35,21 @@ class TwigEnterHandlerTest : TwigActionHandlerTest() {
         )
     }
 
+
+    /**
+     * On Enter between matching open/close tags,
+     * expect an extra newline to be inserted with the caret placed
+     * between the tags
+     */
+    fun testEnterBetweenMatchingTwigTagsWithWhitespaceControl() {
+        doEnterTest(
+                "{%- if foo -%}<caret>{%- endif -%}",
+                "{%- if foo -%}\n" +
+                        "<caret>\n" +
+                        "{%- endif -%}"
+        )
+    }
+
     /**
      * On Enter between MIS-matched open/close tags,
      * we still get the standard behavior

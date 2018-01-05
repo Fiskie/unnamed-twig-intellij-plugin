@@ -47,6 +47,7 @@ I would love to bridge the gap -- make the official plugin obsolete, and incorpo
 - [ ] Configurable block tag options
 - [ ] Switch between classic and new formatting styles (brace matching vs. HTML plugin style tag management)
 - [ ] Automatic matching tag rename on type a la HTML plugin
+- [ ] Unit tests for misformatted tags (`{%if%}, {{foo}}`)
 
 ## Development
 

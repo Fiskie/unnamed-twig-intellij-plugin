@@ -4,7 +4,6 @@ import com.fisk.twig.TwigLanguage
 import com.fisk.twig.psi.TwigBlockWrapper
 import com.fisk.twig.psi.TwigExpressionBlock
 import com.fisk.twig.psi.TwigPsiElement
-import com.fisk.twig.psi.TwigStatementBlock
 import com.intellij.lang.Language
 import com.intellij.lang.StdLanguages
 import com.intellij.lang.html.HTMLLanguage
