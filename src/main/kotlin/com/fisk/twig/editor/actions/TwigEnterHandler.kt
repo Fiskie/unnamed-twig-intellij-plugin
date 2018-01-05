@@ -15,10 +15,10 @@ class TwigEnterHandler : EnterHandlerDelegateAdapter() {
     override fun preprocessEnter(file: PsiFile, editor: Editor, caretOffset: Ref<Int>, caretAdvance: Ref<Int>, dataContext: DataContext, originalHandler: EditorActionHandler?): EnterHandlerDelegate.Result {
         if (file is TwigPsiFile && isBetweenTwigBlockStatementTags(editor, file, caretOffset.get())) {
             originalHandler?.execute(editor, dataContext)
-            return EnterHandlerDelegate.Result.Continue
+            return EnterHandlerDelegate.Result.Default
         }
 
-        return EnterHandlerDelegate.Result.Default
+        return EnterHandlerDelegate.Result.Continue
     }
 
     private fun isBetweenTwigBlockStatementTags(editor: Editor, file: PsiFile, offset: Int): Boolean {

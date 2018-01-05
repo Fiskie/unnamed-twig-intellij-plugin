@@ -68,33 +68,6 @@ class TwigTypedHandlerTest : TwigActionHandlerTest() {
         doCharTest('-', "foo {{<caret> bar }}", "foo {{-<caret> bar -}}")
     }
 
-    fun testInsertCloseTag() {
-        TwigConfig.isAutoGenerateCloseTagEnabled = true
-        doCharTest('}', "{% if bar %<caret>", "{% if bar %}<caret>{% endif %}")
-    }
-
-    fun testInsertCloseTagForNestedBlocks() {
-        TwigConfig.isAutoGenerateCloseTagEnabled = true
-        doCharTest('}', "{% if foo %}{% if bar %<caret>{% endif %}", "{% if foo %}{% if bar %}<caret>{% endif %}{% endif %}")
-    }
-
-    fun testInsertCloseTagWithWhitespace() {
-        // ensure that we properly identify the "foo" even if there's whitespace between it and the open tag
-        TwigConfig.isAutoGenerateCloseTagEnabled = true
-        doCharTest('}', "{%   if foo   %<caret>", "{%   if foo   %}<caret>{% endif %}")
-    }
-
-    fun testInsertCloseTagForComplexExpressions() {
-        TwigConfig.isAutocompleteEndBracesEnabled = true
-        doCharTest('}', "{{ foo.bar|baz|cat() <caret>", "{{ foo.bar|baz|cat() }}<caret>")
-        doCharTest('}', "{{ foo.bar + baz.cat <caret>", "{{ foo.bar + baz.cat }}<caret>")
-    }
-
-    fun testNoInsertCloseTagForExtraBraces() {
-        TwigConfig.isAutocompleteEndBracesEnabled = true
-        doCharTest('}', "{{ foo }}<caret>", "{{ foo }}}<caret>")
-    }
-
     fun testRegularStache() {
         // ensure that nothing special happens for regular 'staches, whether autoGenerateCloseTag is enabled or not
 
@@ -139,116 +112,6 @@ class TwigTypedHandlerTest : TwigActionHandlerTest() {
         doCharTest('{', "{{<caret>", "{{{<caret>")
     }
 
-    fun testFormatOnCloseBlockCompleted1() {
-        doCharTest('}',
-
-                "{% if foo %}\n" +
-                        "    stuff\n" +
-                        "    {% endif %<caret>",
-
-                "{% if foo %}\n" +
-                        "    stuff\n" +
-                        "{% endif %}<caret>")
-    }
-
-    fun testFormatOnCloseBlockCompleted2() {
-        doCharTest('}',
-
-                "{% if foo %}\n" +
-                        "    stuff\n" +
-                        "    {% endif %<caret> other stuff",
-
-                "{% if foo %}\n" +
-                        "    stuff\n" +
-                        "{% endif %}<caret> other stuff")
-    }
-
-    fun testFormatOnCloseBlockCompleted3() {
-        doCharTest('}',
-
-                "{% if foo %}\n" +
-                        "    stuff\n" +
-                        "    {% endif %<caret>\n" +
-                        "other stuff",
-
-                "{% if foo %}\n" +
-                        "    stuff\n" +
-                        "{% endif %}<caret>\n" +
-                        "other stuff")
-    }
-
-    fun testFormatDisabledCloseBlockCompleted() {
-        val previousFormatSetting = TwigConfig.isFormattingEnabled
-        TwigConfig.isFormattingEnabled = false
-
-        doCharTest('}',
-
-                "{% if foo %}\n" +
-                        "    stuff\n" +
-                        "    {% endif %<caret>",
-
-                "{% if foo %}\n" +
-                        "    stuff\n" +
-                        "    {% endif %}<caret>")
-
-        TwigConfig.isFormattingEnabled = previousFormatSetting
-    }
-
-    fun testFormatOnSimpleInverseCompleted1() {
-        doCharTest('}',
-
-                "{% if foo %}\n" +
-                        "    if stuff\n" +
-                        "    {% else %<caret>",
-
-                "{% if foo %}\n" +
-                        "    if stuff\n" +
-                        "{% else %}<caret>")
-    }
-
-    fun testFormatOnSimpleInverseCompleted2() {
-        doCharTest('}',
-
-                "{% if foo %}\n" +
-                        "    if stuff\n" +
-                        "    {% else %<caret> other stuff",
-
-                "{% if foo %}\n" +
-                        "    if stuff\n" +
-                        "{% else %}<caret> other stuff")
-    }
-
-    fun testFormatOnSimpleInverseCompleted3() {
-        doCharTest('}',
-
-                "{% if foo %}\n" +
-                        "    if stuff\n" +
-                        "    {% else %<caret>\n" +
-                        "other stuff",
-
-                "{% if foo %}\n" +
-                        "    if stuff\n" +
-                        "{% else %}<caret>\n" +
-                        "other stuff")
-    }
-
-    fun testFormatDisabledSimpleInverseCompleted() {
-        val previousFormatSetting = TwigConfig.isFormattingEnabled
-        TwigConfig.isFormattingEnabled = false
-
-        doCharTest('}',
-
-                "{% if foo %}\n" +
-                        "    if stuff\n" +
-                        "    {% else %<caret>",
-
-                "{% if foo %}\n" +
-                        "    if stuff\n" +
-                        "    {% else %}<caret>")
-
-        TwigConfig.isFormattingEnabled = previousFormatSetting
-    }
-
     fun testEnterBetweenBlockTags() {
         doEnterTest(
 
@@ -282,30 +145,6 @@ class TwigTypedHandlerTest : TwigActionHandlerTest() {
                 "{{ foo }}<caret>{{ foo }}",
 
                 "{{ foo }}\n" + "<caret>{{ foo }}"
-        )
-    }
-
-    fun testFinishingClosingTag() {
-        doCharTest(
-                '%',
-                "<div class=\"entry\">\n" +
-                        "    {% if foo %}test{<caret>\n" +
-                        "</div>",
-
-                "<div class=\"entry\">\n" +
-                        "    {% if foo %}test{% endif %}<caret>\n" +
-                        "</div>"
-        )
-
-        doCharTest(
-                '/',
-                "<div class=\"entry\">\n" +
-                        "    {% if foo %}test{<caret>\n" +
-                        "</div>",
-
-                "<div class=\"entry\">\n" +
-                        "    {% if foo %}test{% endif %}<caret>\n" +
-                        "</div>"
         )
     }
 }

@@ -21,6 +21,7 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <braceMatcher filetype="Twig" implementationClass="com.fisk.twig.editor.braces.TwigBraceMatcher"/>
+    <breadcrumbsInfoProvider implementation="com.fisk.twig.ide.TwigBreadcrumbsInfoProvider" />
     <codeFoldingOptionsProvider instance="com.fisk.twig.config.TwigFoldingOptionsProvider"/>
     <colorSettingsPage implementation="com.fisk.twig.pages.TwigColorsPage"/>
     <completion.contributor language="Twig" implementationClass="com.fisk.twig.completion.TwigCompletionContributor"/>

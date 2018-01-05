@@ -54,17 +54,9 @@ class TwigFileType private constructor(lang: Language) : LanguageFileType(lang),
             if (project == null) {
                 return null
             }
+
             val language = TemplateDataLanguageMappings.getInstance(project).getMapping(file)
-
-            var associatedFileType: LanguageFileType? = null
-            if (language != null) {
-                associatedFileType = language.associatedFileType
-            }
-
-            if (language == null || associatedFileType == null) {
-                associatedFileType = TwigLanguage.defaultTemplateLang
-            }
-            return associatedFileType
+            return language?.associatedFileType ?: TwigLanguage.defaultTemplateLang
         }
     }
 }

@@ -9,4 +9,9 @@ object TwigIcons {
     }
 
     val file_icon = load("/icons/file.png") // 16x16
+
+    object Elements {
+        val statement_brace = load("/icons/elements/statementBrace.png")
+        val expression_brace = load("/icons/elements/expressionBrace.png")
+    }
 }

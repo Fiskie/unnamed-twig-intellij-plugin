@@ -47,6 +47,14 @@ enum class Property {
 
     },
 
+    BRACE_EDITING_MODEL {
+        override val stringName: String
+            get() = "TwigBraceEditingModel"
+
+        override val default: String
+            get() = "new"
+    },
+
     SHOULD_OPEN_HTML {
         override val stringName: String
             get() = "TwigShouldOpenHtmlAsTwig"

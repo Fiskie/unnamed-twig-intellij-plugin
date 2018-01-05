@@ -51,6 +51,10 @@ class TwigTypedHandler : TypedHandlerDelegate() {
         val provider = file.viewProvider
         var closeBraceCompleted = false
 
+        if (!provider.baseLanguage.isKindOf(TwigLanguage.INSTANCE)) {
+            return TypedHandlerDelegate.Result.CONTINUE
+        }
+
         if (file.language is TwigLanguage) {
             if (TwigConfig.isAutocompleteEndBracesEnabled) {
                 PsiDocumentManager.getInstance(project).commitDocument(editor.document)
@@ -86,8 +90,10 @@ class TwigTypedHandler : TypedHandlerDelegate() {
             }
         }
 
-        autoInsertCloseTag(project, offset, editor, provider)
-        adjustStatementFormatting(project, offset, editor, file, provider)
+        // disabled -- this conflicts with our current behaviour of auto-inserting end braces.
+//        autoInsertCloseTag(project, offset, editor, provider)
+//         also bad because again conflicts with our current behaviour of auto-inserting end braces
+//        adjustStatementFormatting(project, offset, editor, file, provider)
         return TypedHandlerDelegate.Result.CONTINUE
     }
 
@@ -118,7 +124,7 @@ class TwigTypedHandler : TypedHandlerDelegate() {
         val tagName = getOpenTagForBlock(psi)
 
         tagName?.let {
-            if (TwigPsiUtil.isExpectedBlockTag(tagName.text)) {
+            if (TwigPsiUtil.isDefaultBlockTag(tagName.text)) {
                 return true
             }
 
@@ -129,7 +135,6 @@ class TwigTypedHandler : TypedHandlerDelegate() {
 
         return false
     }
-
 
     private fun autoInsertCloseTag(project: Project, offset: Int, editor: Editor, provider: FileViewProvider): Boolean {
         if (!TwigConfig.isAutoGenerateCloseTagEnabled) {

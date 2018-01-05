@@ -6,11 +6,13 @@ import com.fisk.twig.psi.TwigPsiUtil
 import com.intellij.formatting.*
 import com.intellij.formatting.templateLanguages.*
 import com.intellij.lang.ASTNode
+import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.formatter.DocumentBasedFormattingModel
 import com.intellij.psi.formatter.FormattingDocumentModelImpl
+import com.intellij.psi.formatter.common.AbstractBlock
 import com.intellij.psi.formatter.xml.HtmlPolicy
 import com.intellij.psi.formatter.xml.SyntheticBlock
 import com.intellij.psi.templateLanguages.SimpleTemplateLanguageFormattingModelBuilder
@@ -63,6 +65,8 @@ class TwigFormattingModelBuilder : TemplateLanguageFormattingModelBuilder() {
             node, wrap, alignment, blockFactory, settings, foreignChildren
     ) {
         override fun getTemplateTextElementType() = TwigTokenTypes.CONTENT
+
+        override fun isRequiredRange(range: TextRange?) = false
 
         /**
          * Returns this block's first "real" foreign block parent if it exists, and null otherwise.  (By "real" here, we mean that this method

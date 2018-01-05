@@ -16,7 +16,7 @@ I would love to bridge the gap -- make the official plugin obsolete, and incorpo
 
 ### Feature parity with the official Twig plugin
 
-- [ ] Autocomplete for end braces
+- ~~[ ] Autocomplete for end braces~~ Perhaps we should not do this and do as HTML tags work in IDEA instead.
     - [x] Statements (`{% %}`)
     - [ ] Expressions (`{{ }}`)
     - [ ] Comments (`{% %}`)
@@ -35,7 +35,9 @@ I would love to bridge the gap -- make the official plugin obsolete, and incorpo
 
 ### Supplementary
 
-- [x] Structure
+- [x] Structure View
+    - [ ] Icons
+- [x] Breadcrumbs
 - [ ] Inspections
     - [ ] Expected end block tag -- needs protection against coalescence
     - [ ] Declared child blocks not found in the parent template
@@ -43,6 +45,8 @@ I would love to bridge the gap -- make the official plugin obsolete, and incorpo
 - [ ] Variable refactor
 - [ ] Mixin refactor
 - [ ] Configurable block tag options
+- [ ] Switch between classic and new formatting styles (brace matching vs. HTML plugin style tag management)
+- [ ] Automatic matching tag rename on type a la HTML plugin
 
 ## Development
 
