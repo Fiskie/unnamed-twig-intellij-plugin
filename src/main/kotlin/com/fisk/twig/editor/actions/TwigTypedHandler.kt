@@ -1,10 +1,10 @@
 package com.fisk.twig.editor.actions
 
 import com.fisk.twig.TwigLanguage
+import com.fisk.twig.TwigTagUtil
 import com.fisk.twig.config.TwigConfig
 import com.fisk.twig.parsing.TwigTokenTypes
 import com.fisk.twig.psi.*
-import com.fisk.twig.psi.util.TwigPsiUtil
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.fileTypes.FileType
@@ -39,6 +39,13 @@ class TwigTypedHandler : TypedHandlerDelegate() {
                 editor.caretModel.moveToOffset(offset + 1)
 
                 // ... then finally telling subsequent responses to this charTyped to do nothing
+
+                // TODO: use just typed char and the preceding char to determine whether to add a matching brace
+                // right now, writing a new tag opener (e.g. {%) and updating the PSI before adding the completion brace
+                // causes it to become the new opening brace for the next statement in the tree, therefore it is never completed
+                // if there's any statement at any point after it.
+                // also it needs to be moved here to prevent expression autocomplete being blocked by STOP
+
                 return TypedHandlerDelegate.Result.STOP
             }
         }
@@ -138,7 +145,7 @@ class TwigTypedHandler : TypedHandlerDelegate() {
         val tagName = getOpenTagForBlock(psi)
 
         tagName?.let {
-            if (TwigPsiUtil.isDefaultBlockTag(tagName.text)) {
+            if (TwigTagUtil.isDefaultBlockTag(tagName.text)) {
                 return true
             }
 

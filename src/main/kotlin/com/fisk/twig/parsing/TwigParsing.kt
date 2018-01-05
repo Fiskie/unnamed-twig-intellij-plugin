@@ -1,6 +1,7 @@
 package com.fisk.twig.parsing
 
 import com.fisk.twig.TwigBundle
+import com.fisk.twig.TwigTagUtil
 import com.fisk.twig.parsing.TwigTokenTypes.BLOCK
 import com.fisk.twig.parsing.TwigTokenTypes.BLOCK_END_STATEMENT
 import com.fisk.twig.parsing.TwigTokenTypes.BLOCK_START_STATEMENT
@@ -21,7 +22,6 @@ import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_OPEN
 import com.fisk.twig.parsing.TwigTokenTypes.STRING
 import com.fisk.twig.parsing.TwigTokenTypes.TAG
 import com.fisk.twig.parsing.TwigTokenTypes.UNCLOSED_COMMENT
-import com.fisk.twig.psi.util.TwigPsiUtil
 import com.intellij.lang.PsiBuilder
 import com.intellij.psi.tree.IElementType
 
@@ -119,7 +119,7 @@ class TwigParsing(private val builder: PsiBuilder) {
         }
 
         /**
-         * TODO: mark errors if else tag is used in places where it is not expected - see [TwigPsiUtil.allowsInverseTag]
+         * TODO: mark errors if else tag is used in places where it is not expected - see [TwigTagUtil.allowsInverseTag]
          */
 
         // If an inverse marker is discovered in the block, we need to break out of the block
@@ -151,7 +151,7 @@ class TwigParsing(private val builder: PsiBuilder) {
                 }
             }
 
-            if (parseCloseStatement(builder, openTag) != null || TwigPsiUtil.isDefaultBlockTag(openTag)) {
+            if (parseCloseStatement(builder, openTag) != null || TwigTagUtil.isDefaultBlockTag(openTag)) {
                 nonStackingMarker.drop()
                 blockMarker.done(BLOCK_WRAPPER)
                 return true
@@ -172,19 +172,19 @@ class TwigParsing(private val builder: PsiBuilder) {
     }
 
     private fun parseOpenStatement(builder: PsiBuilder): String? {
-        return parseStatement(builder, BLOCK_START_STATEMENT, { tag -> !isEndTag(tag) /* && !elseTags.contains(tag)*/ }) // todo -- this will currently break parsing
+        return parseStatement(builder, BLOCK_START_STATEMENT, { tag -> !TwigTagUtil.isEndTag(tag) /* && !elseTags.contains(tag)*/ }) // todo -- this will currently break parsing
     }
 
     private fun parseCloseStatement(builder: PsiBuilder, openTag: String): String? {
-        return parseStatement(builder, BLOCK_END_STATEMENT, { tag -> normaliseTag(tag) == openTag })
+        return parseStatement(builder, BLOCK_END_STATEMENT, { tag -> TwigTagUtil.normaliseTag(tag) == openTag })
     }
 
     private fun parseAnyCloseStatement(builder: PsiBuilder): String? {
-        return parseStatement(builder, BLOCK_END_STATEMENT, { tag -> isEndTag(tag) })
+        return parseStatement(builder, BLOCK_END_STATEMENT, { tag -> TwigTagUtil.isEndTag(tag) })
     }
 
     private fun parseInverseStatement(builder: PsiBuilder): String? {
-        return parseStatement(builder, INVERSE_STATEMENT, { tag -> TwigPsiUtil.isInverseTag(tag) })
+        return parseStatement(builder, INVERSE_STATEMENT, { tag -> TwigTagUtil.isInverseTag(tag) })
     }
 
     private fun parseStatement(builder: PsiBuilder, type: TwigCompositeElementType, strategy: (String) -> Boolean): String? {
@@ -197,7 +197,7 @@ class TwigParsing(private val builder: PsiBuilder) {
 
                 tag?.let {
                     if (strategy(tag)) {
-                        tagName = normaliseTag(tag)
+                        tagName = TwigTagUtil.normaliseTag(tag)
                     }
                 }
 
@@ -289,22 +289,6 @@ class TwigParsing(private val builder: PsiBuilder) {
             unexpectedTokensMarker.error(expectedToken.parseExpectedMessage())
         } else {
             unexpectedTokensMarker.error(TwigBundle.message("twig.parsing.element.expected.invalid"))
-        }
-    }
-
-    /**
-     * Detects whether this tag is closing a block or not
-     */
-    private fun isEndTag(tag: String) = tag.length > 3 && tag.substring(0, 3) == "end"
-
-    /**
-     * Truncates the "end" of an end tag (e.g. endif) to return the start tag (e.g. if)
-     */
-    private fun normaliseTag(tag: String): String {
-        return if (isEndTag(tag)) {
-            tag.substring(3)
-        } else {
-            tag
         }
     }
 

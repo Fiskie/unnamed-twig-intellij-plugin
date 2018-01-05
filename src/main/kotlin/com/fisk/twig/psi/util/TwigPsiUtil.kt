@@ -15,14 +15,7 @@ import java.util.ArrayList
 import com.intellij.openapi.vcs.changes.committed.MockAbstractVcs.getKey
 import com.intellij.openapi.vfs.VirtualFile
 
-
-
-
 object TwigPsiUtil {
-    val DEFAULT_BLOCK_TAGS = setOf("if", "for", "block", "embed", "spaceless")
-    val INVERSE_TAGS = setOf("else", "elseif")
-    val INVERSE_ALLOWED = setOf("if", "for")
-
     fun findParentOpenTagElement(element: PsiElement?): TwigStatementOpenBrackets? {
         val el = PsiTreeUtil.findFirstParent(element, true) { element1 -> element1 != null && element1 is TwigStatementOpenBrackets }
 
@@ -51,21 +44,6 @@ object TwigPsiUtil {
 
         // we're a non-root statements if we're of type statements, and we have a statements parent
         return element is TwigBlock && statementsParent != null
-    }
-
-    fun isDefaultBlockTag(tag: String): Boolean {
-        return DEFAULT_BLOCK_TAGS.contains(tag)
-    }
-
-    fun isInverseTag(tag: String): Boolean {
-        return INVERSE_TAGS.contains(tag)
-    }
-
-    /**
-     * Returns true if an inverse statement can be used for this tag
-     */
-    fun allowsInverseTag(tag: String): Boolean {
-        return INVERSE_ALLOWED.contains(tag)
     }
 
     fun findLabels(project: Project, key: String): List<TwigLabel> {

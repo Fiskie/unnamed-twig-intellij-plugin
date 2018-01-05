@@ -43,6 +43,14 @@ class TwigTypedHandlerTest : TwigActionHandlerTest() {
 //        doCharTest('}', "foo {% if bar %}{% if baz %<caret>{% endif %}", "foo {% if bar %}{% if baz %}<caret>{% endif %}")
     }
 
+    fun testNestedStatementBraceAutocomplete() {
+        TwigConfig.isAutocompleteEndBracesEnabled = false
+        doCharTest('%', "{% if foo %}{<caret>{% endif %}", "{% if foo %}{%<caret>{% endif %}")
+
+        TwigConfig.isAutocompleteEndBracesEnabled = true
+        doCharTest('%', "{% if foo %}{<caret>{% endif %}", "{% if foo %}{% <caret> %}{% endif %}")
+    }
+
     fun testExpressionBraceAutocomplete() {
         TwigConfig.isAutocompleteEndBracesEnabled = false
         doCharTest('{', "foo {<caret>", "foo {{<caret>")
@@ -120,6 +128,21 @@ class TwigTypedHandlerTest : TwigActionHandlerTest() {
                 "{% if foo %}\n" +
                         "    <caret>\n" +
                         "{% endif %}"
+        )
+    }
+
+    fun testEnterBetweenNestedBlockTags() {
+        doEnterTest(
+
+                "{% block foo %}\n" +
+                        "    {% if foo %}<caret>{% endif %}\n" +
+                        "{% endblock %}",
+
+                "{% block foo %}\n" +
+                        "    {% if foo %}\n" +
+                        "        <caret>\n" +
+                        "    {% endif %}\n" +
+                        "{% endblock %}"
         )
     }
 

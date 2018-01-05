@@ -20,6 +20,8 @@ class TwigCompletionContributor : CompletionContributor() {
                 tags.forEach({
                     result.addElement(LookupElementBuilder.create(it))
                 })
+
+                result.stopHere()
             }
         })
     }

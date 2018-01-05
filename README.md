@@ -20,12 +20,12 @@ I would love to bridge the gap -- make the official plugin obsolete, and incorpo
     - [x] Statements (`{% %}`)
     - [ ] Expressions (`{{ }}`)
     - [ ] Comments (`{% %}`)
-    - [ ] Whitespace control modifiers
-- [ ] Autocomplete for statement close tags
+- [ ] Prioritise hinting for close statements
 - [x] Statement block indenting
-- [ ] End block tag suggestions
 - [ ] Remove additional whitespace in code cleanup
+- [ ] Code style page
 - [x] Code folding
+- [x] Live templates
 
 ### Feature parity with community Symfony plugin Twig extensions
 
@@ -35,6 +35,7 @@ I would love to bridge the gap -- make the official plugin obsolete, and incorpo
 
 ### Supplementary
 
+- [ ] Update whitespace control modifier on opposite brace
 - [x] Structure View
     - [ ] Icons
 - [x] Breadcrumbs
@@ -47,7 +48,7 @@ I would love to bridge the gap -- make the official plugin obsolete, and incorpo
 - [ ] Configurable block tag options
 - [ ] Switch between classic and new formatting styles (brace matching vs. HTML plugin style tag management)
 - [ ] Automatic matching tag rename on type a la HTML plugin
-- [ ] Unit tests for misformatted tags (`{%if%}, {{foo}}`)
+- [ ] Fix live templates appearing in code completion list
 
 ## Development
 
