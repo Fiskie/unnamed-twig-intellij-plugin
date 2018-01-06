@@ -10,32 +10,9 @@ import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.indexing.FileBasedIndex
-import java.util.*
 import java.util.ArrayList
-import com.intellij.openapi.vcs.changes.committed.MockAbstractVcs.getKey
-import com.intellij.openapi.vfs.VirtualFile
 
 object TwigPsiUtil {
-    fun findParentOpenTagElement(element: PsiElement?): TwigStatementOpenBrackets? {
-        val el = PsiTreeUtil.findFirstParent(element, true) { element1 -> element1 != null && element1 is TwigStatementOpenBrackets }
-
-        el?.let {
-            return el as TwigStatementOpenBrackets
-        }
-
-        return null
-    }
-
-    fun findParentCloseTagElement(element: PsiElement?): TwigStatementCloseBrackets? {
-        val el = PsiTreeUtil.findFirstParent(element, true) { element1 -> element1 != null && element1 is TwigStatementCloseBrackets }
-
-        el?.let {
-            return el as TwigStatementCloseBrackets
-        }
-
-        return null
-    }
-
     /**
      * Tests to see if the given element is not the "root" statements expression of the grammar
      */

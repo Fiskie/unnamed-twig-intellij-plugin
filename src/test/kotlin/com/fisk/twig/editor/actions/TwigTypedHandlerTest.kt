@@ -65,19 +65,44 @@ class TwigTypedHandlerTest : TwigActionHandlerTest() {
 
         TwigConfig.isAutocompleteEndBracesEnabled = true
         doCharTest('#', "foo {<caret>", "foo {#<caret>#}")
-
     }
 
-    fun testWhitespaceControlAutocomplete() {
-        TwigConfig.isAutocompleteEndBracesEnabled = false
-        doCharTest('-', "foo {{<caret> bar }}", "foo {{-<caret> bar }}")
-
-        TwigConfig.isAutocompleteEndBracesEnabled = true
+    fun testExpressionWhitespaceControlAutocomplete() {
         doCharTest('-', "foo {{<caret> bar }}", "foo {{-<caret> bar -}}")
+        doCharTest('-', "foo {{ bar <caret>}}", "foo {{- bar -<caret>}}")
     }
 
-    fun testRegularStache() {
-        // ensure that nothing special happens for regular 'staches, whether autoGenerateCloseTag is enabled or not
+    fun testStatementWhitespaceControlAutocomplete() {
+        doCharTest('-', "foo {% <caret>%}", "foo {%- -<caret>%}")
+        doCharTest('-', "foo {%<caret> if bar %}", "foo {%-<caret> if bar -%}")
+        doCharTest('-', "foo {% if bar <caret>%}", "foo {%- if bar -<caret>%}")
+    }
+
+    fun testNoWhitespaceControlAutocompleteIfTokensExist() {
+        // Make sure we do not add the whitespace control character if it's already there
+        doCharTest('-', "foo {%<caret> if bar -%}", "foo {%-<caret> if bar -%}")
+        doCharTest('-', "foo {%- if bar <caret>%}", "foo {%- if bar -<caret>%}")
+        doCharTest('-', "foo {{<caret> bar -}}", "foo {{-<caret> bar -}}")
+        doCharTest('-', "foo {{- bar <caret>}}", "foo {{- bar -<caret>}}")
+        doCharTest('-', "foo {%-<caret> if bar -%}", "foo {%--<caret> if bar -%}")
+        doCharTest('-', "foo {%- if bar <caret>-%}", "foo {%- if bar -<caret>-%}")
+        doCharTest('-', "foo {{-<caret> bar -}}", "foo {{--<caret> bar -}}")
+        doCharTest('-', "foo {{- bar <caret>-}}", "foo {{- bar -<caret>-}}")
+    }
+
+    fun testUglyWhitespaceControlAutocomplete() {
+        doCharTest('-', "foo {%<caret>if bar%}", "foo {%-<caret>if bar-%}")
+    }
+
+    fun testNoWhitespaceControlAutocompleteIfSpaced() {
+        // We don't want whitespace complete to work unless the cursor is touching the bracket
+        // Otherwise a user may just be typing a regular minus for an expression
+        doCharTest('-', "foo {{ bar <caret> }}", "foo {{ bar -<caret> }}")
+        doCharTest('-', "foo {{ <caret>bar }}", "foo {{ -<caret>bar }}")
+    }
+
+    fun testSimpleExpressions() {
+        // ensure that nothing special happens for regular expressions, whether autoGenerateCloseTag is enabled or not
 
         TwigConfig.isAutocompleteEndBracesEnabled = true
         doCharTest('}', "{{ foo }<caret>", "{{ foo }}<caret>")

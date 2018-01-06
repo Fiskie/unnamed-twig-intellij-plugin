@@ -38,6 +38,8 @@ I would love to bridge the gap -- make the official plugin obsolete, incorporate
 ### Supplementary
 
 - [ ] Update whitespace control modifier on opposite brace
+    - [x] Create paired whitespace character
+    - [ ] Erase paired whitespace character
 - [x] Structure View
     - [ ] Icons
 - [x] Breadcrumbs

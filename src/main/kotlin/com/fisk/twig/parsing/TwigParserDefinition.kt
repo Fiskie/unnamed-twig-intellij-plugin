@@ -36,14 +36,6 @@ class TwigParserDefinition : ParserDefinition {
         node?.let {
             val type = node.elementType
 
-            if (type == TwigTokenTypes.STATEMENT_OPEN) {
-                return TwigStatementOpenBracketsImpl(node)
-            }
-
-            if (type == TwigTokenTypes.STATEMENT_CLOSE) {
-                return TwigStatementCloseBracketsImpl(node)
-            }
-
             if (type == TwigTokenTypes.EXPRESSION) {
                 return TwigExpressionImpl(node)
             }

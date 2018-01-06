@@ -213,6 +213,9 @@ class TwigParsing(private val builder: PsiBuilder) {
                 tag?.let {
                     if (strategy(tag)) {
                         tagName = TwigTagUtil.normaliseTag(tag)
+                    } else {
+                        marker.rollbackTo()
+                        return null
                     }
                 }
 
@@ -235,13 +238,8 @@ class TwigParsing(private val builder: PsiBuilder) {
 
         builder.advanceLexer() // consume last STATEMENT_CLOSE
 
-        if (tagName != null) {
-            marker.done(type)
-            return tagName
-        } else {
-            marker.rollbackTo()
-            return null
-        }
+        marker.done(type)
+        return tagName
     }
 
     private fun parseExpressionBlock(builder: PsiBuilder): Boolean {

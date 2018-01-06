@@ -77,6 +77,60 @@ class TwigTypedHandler : TypedHandlerDelegate() {
         }
     }
 
+    private fun completeWhitespaceControlModifier(c: Char, project: Project, editor: Editor, file: PsiFile) {
+        if (c != '-') {
+            return
+        }
+
+        PsiDocumentManager.getInstance(project).commitDocument(editor.document)
+
+        // Whitespace control modifiers
+        val openingBrace = file.findElementAt(editor.caretModel.offset - 1)
+
+        openingBrace?.let {
+            val closingElementType = when (openingBrace.node.elementType) {
+                TwigTokenTypes.STATEMENT_OPEN -> TwigTokenTypes.STATEMENT_CLOSE
+                TwigTokenTypes.EXPRESSION_OPEN -> TwigTokenTypes.EXPRESSION_CLOSE
+                TwigTokenTypes.COMMENT_OPEN -> TwigTokenTypes.COMMENT_CLOSE
+                else -> null
+            }
+
+            closingElementType?.let {
+                val closingBrace = PsiTreeUtil.findSiblingForward(openingBrace, closingElementType, {})
+
+                closingBrace?.let {
+                    // Make sure that the brace lengths are what we expect at this point
+                    if (closingBrace.textLength == 2 && openingBrace.textLength == 3) {
+                        editor.document.insertString(closingBrace.textOffset, "-")
+                    }
+                }
+            }
+
+        }
+
+        val closingBrace = file.findElementAt(editor.caretModel.offset)
+
+        closingBrace?.let {
+            val closingElementType = when (closingBrace.node.elementType) {
+                TwigTokenTypes.STATEMENT_CLOSE -> TwigTokenTypes.STATEMENT_OPEN
+                TwigTokenTypes.EXPRESSION_CLOSE -> TwigTokenTypes.EXPRESSION_OPEN
+                TwigTokenTypes.COMMENT_CLOSE -> TwigTokenTypes.COMMENT_OPEN
+                else -> null
+            }
+
+            closingElementType?.let {
+                val openingBrace = PsiTreeUtil.findSiblingBackward(closingBrace, closingElementType, {})
+
+                openingBrace?.let {
+                    // Make sure that the brace lengths are what we expect at this point
+                    if (closingBrace.textLength == 3 && openingBrace.textLength == 2) {
+                        editor.document.insertString(openingBrace.textOffset + openingBrace.textLength, "-")
+                    }
+                }
+            }
+        }
+    }
+
     override fun charTyped(c: Char, project: Project, editor: Editor, file: PsiFile): TypedHandlerDelegate.Result {
         val provider = file.viewProvider
 
@@ -84,9 +138,8 @@ class TwigTypedHandler : TypedHandlerDelegate() {
             return TypedHandlerDelegate.Result.CONTINUE
         }
 
-        // TODO: Try to handle Whitespace control modifiers
-
         // TODO: Try to handle matching start/close tag renames
+        completeWhitespaceControlModifier(c, project, editor, file)
 
         // disabled -- this conflicts with our current behaviour of auto-inserting end braces.
 //        autoInsertCloseTag(project, offset, editor, provider)
