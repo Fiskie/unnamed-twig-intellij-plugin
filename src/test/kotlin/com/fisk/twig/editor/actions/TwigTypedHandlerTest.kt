@@ -134,12 +134,12 @@ class TwigTypedHandlerTest : TwigActionHandlerTest() {
      * Ensure that IDEA does not provide any automatic "}" insertion
      */
     fun testSuppressNativeBracketInsert() {
-        TwigConfig.isAutoGenerateCloseTagEnabled = true
+        TwigConfig.isAutocompleteEndBracesEnabled = true
         doCharTest('{', "<caret>", "{<caret>")
-        doCharTest('{', "{<caret>", "{{<caret>")
-        doCharTest('{', "{{<caret>", "{{{<caret>")
+        doCharTest('{', "{<caret>", "{{ <caret> }}")
+        doCharTest('{', "{{<caret>", "{{{ <caret> }}")
 
-        TwigConfig.isAutoGenerateCloseTagEnabled = false
+        TwigConfig.isAutocompleteEndBracesEnabled = false
         doCharTest('{', "<caret>", "{<caret>")
         doCharTest('{', "{<caret>", "{{<caret>")
         doCharTest('{', "{{<caret>", "{{{<caret>")
