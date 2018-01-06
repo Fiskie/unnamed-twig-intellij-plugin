@@ -25,68 +25,55 @@ class TwigTypedHandler : TypedHandlerDelegate() {
             return TypedHandlerDelegate.Result.CONTINUE
         }
 
+        val previousChar = editor.document.getText(TextRange(offset - 1, offset))
+
         if (file.language is TwigLanguage) {
-            val previousChar = editor.document.getText(TextRange(offset - 1, offset))
-            PsiDocumentManager.getInstance(project).commitAllDocuments()
+            if (TwigConfig.isAutocompleteEndBracesEnabled) {
+                var braceCompleter: String? = null
+                var shouldPad = false
 
-            // we suppress the built-in "}" auto-complete when we see "{{"
-            if (c == '{' && previousChar == "{") {
-                // since the "}" autocomplete is built in to IDEA, we need to hack around it a bit by
-                // intercepting it before it is inserted, doing the work of inserting for the user
-                // by inserting the '{' the user just typed...
-                editor.document.insertString(offset, Character.toString(c))
-                // ... and position their caret after it as they'd expect...
-                editor.caretModel.moveToOffset(offset + 1)
+                // IDEA's HTML plugin has really screwy brace autocomplete so we need to handle braces in beforeCharTyped...
+                if (previousChar == "{") {
+                    when (c) {
+                        '{' -> {
+                            braceCompleter = "}}"
+                            shouldPad = true
+                        }
+                        '%' -> {
+                            braceCompleter = "%}"
+                            shouldPad = true
+                        }
+                        '#' -> {
+                            braceCompleter = "#}"
+                        }
+                    }
+                }
 
-                // ... then finally telling subsequent responses to this charTyped to do nothing
-
-                // TODO: use just typed char and the preceding char to determine whether to add a matching brace
-                // right now, writing a new tag opener (e.g. {%) and updating the PSI before adding the completion brace
-                // causes it to become the new opening brace for the next statement in the tree, therefore it is never completed
-                // if there's any statement at any point after it.
-                // also it needs to be moved here to prevent expression autocomplete being blocked by STOP
-
-                return TypedHandlerDelegate.Result.STOP
+                if (braceCompleter != null) {
+                    editor.document.insertString(offset, Character.toString(c))
+                    editor.caretModel.moveToOffset(offset + 1)
+                    completeBrace(editor, offset + 1, braceCompleter, shouldPad)
+                    return TypedHandlerDelegate.Result.STOP
+                }
+            } else {
+                if (previousChar == "{" && c == '{') {
+                    editor.document.insertString(offset, Character.toString(c))
+                    editor.caretModel.moveToOffset(offset + 1)
+                    return TypedHandlerDelegate.Result.STOP
+                }
             }
         }
+
 
         return TypedHandlerDelegate.Result.CONTINUE
     }
 
-    private fun provideClosingBrace(c: Char, project: Project, editor: Editor, file: PsiFile) {
-        PsiDocumentManager.getInstance(project).commitDocument(editor.document)
-
-        val provider = file.viewProvider
-        var offset = editor.caretModel.offset
-        val el = provider.findElementAt(offset - 1, provider.baseLanguage)
-
-        el?.let {
-            var braceCompleter: String? = null
-            var shouldPad = false
-
-            when {
-                shouldAddMatchingStatementBrace(el) -> {
-                    braceCompleter = "%}"
-                    shouldPad = true
-                }
-                shouldAddMatchingExpressionBrace(el) -> {
-                    braceCompleter = "}}"
-                    shouldPad = true
-                }
-                shouldAddMatchingCommentBrace(el) -> {
-                    braceCompleter = "#}"
-                }
-            }
-
-            braceCompleter?.let {
-                if (shouldPad) {
-                    editor.document.insertString(offset, "  " + braceCompleter)
-                    offset += 1
-                    editor.caretModel.moveToOffset(offset)
-                } else {
-                    editor.document.insertString(offset, braceCompleter)
-                }
-            }
+    private fun completeBrace(editor: Editor, offset: Int, braceCompleter: String, shouldPad: Boolean) {
+        if (shouldPad) {
+            editor.document.insertString(offset, "  " + braceCompleter)
+            editor.caretModel.moveToOffset(offset + 1)
+        } else {
+            editor.document.insertString(offset, braceCompleter)
         }
     }
 
@@ -97,9 +84,9 @@ class TwigTypedHandler : TypedHandlerDelegate() {
             return TypedHandlerDelegate.Result.CONTINUE
         }
 
-        if (file.language is TwigLanguage && TwigConfig.isAutocompleteEndBracesEnabled) {
-            provideClosingBrace(c, project, editor, file)
-        }
+        // TODO: Try to handle Whitespace control modifiers
+
+        // TODO: Try to handle matching start/close tag renames
 
         // disabled -- this conflicts with our current behaviour of auto-inserting end braces.
 //        autoInsertCloseTag(project, offset, editor, provider)
@@ -117,28 +104,6 @@ class TwigTypedHandler : TypedHandlerDelegate() {
         }
 
         return null
-    }
-
-    private fun shouldAddMatchingStatementBrace(psi: PsiElement): Boolean {
-        if (psi.parent is TwigStatement) {
-            // This is already a valid statement and no additional braces need to be added
-            return false
-        }
-
-        return psi.node.elementType == TwigTokenTypes.STATEMENT_OPEN
-    }
-
-    private fun shouldAddMatchingExpressionBrace(psi: PsiElement): Boolean {
-        if (psi.parent is TwigExpressionBlock) {
-            // This is already a valid expression and no additional braces need to be added
-            return false
-        }
-
-        return psi.node.elementType == TwigTokenTypes.EXPRESSION_OPEN
-    }
-
-    private fun shouldAddMatchingCommentBrace(psi: PsiElement): Boolean {
-        return psi.node.elementType == TwigTokenTypes.UNCLOSED_COMMENT
     }
 
     private fun shouldAutocompleteEndTagForBlock(psi: PsiElement): Boolean {

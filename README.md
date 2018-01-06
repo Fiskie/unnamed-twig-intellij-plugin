@@ -10,16 +10,16 @@ The official IntelliJ Twig plugin is pretty barebones. There are also some weird
 
 The Symfony plugin extends it with some nice features such as PHPDoc, but it's unable to add features like syntax validation without fully reimplementing the parser.
 
-I would love to bridge the gap -- make the official plugin obsolete, and incorporate the extra features from the Symfony plugin. 
+I would love to bridge the gap -- make the official plugin obsolete, incorporate quality-of-life features from the Symfony plugin, and allow others to make improvements to the plugin. 
 
 ## TODO
 
 ### Feature parity with the official Twig plugin
 
-- ~~[ ] Autocomplete for end braces~~ Perhaps we should not do this and do as HTML tags work in IDEA instead.
+- [x] Autocompletion for end braces
     - [x] Statements (`{% %}`)
-    - [ ] Expressions (`{{ }}`)
-    - [ ] Comments (`{% %}`)
+    - [x] Expressions (`{{ }}`)
+    - [x] Comments (`{% %}`)
 - [ ] Prioritise hinting for close statements
 - [x] Statement block indenting
 - [ ] Remove additional whitespace in code cleanup
@@ -31,6 +31,8 @@ I would love to bridge the gap -- make the official plugin obsolete, and incorpo
 
 - [ ] Goto parent block
 - [ ] Template include/extends/block resolution goto
+- [ ] Parent block implements/extends goto on line marker
+- [ ] Macro goto on line marker
 - [ ] PHPDoc annotation support ({# @var thing \Core\Thing #})
 
 ### Supplementary

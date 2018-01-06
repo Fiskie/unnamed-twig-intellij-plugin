@@ -167,22 +167,37 @@ class TwigParsing(private val builder: PsiBuilder) {
         return false
     }
 
+    /**
+     * Will parse any valid statement; this is used if a start/end block statement pair cannot be matched
+     */
     private fun parseSingleStatement(builder: PsiBuilder): String? {
         return parseStatement(builder, SIMPLE_STATEMENT, { _ -> true })
     }
 
+    /**
+     * Will parse any statement that does not contain an end tag (/^end/)
+     */
     private fun parseOpenStatement(builder: PsiBuilder): String? {
         return parseStatement(builder, BLOCK_START_STATEMENT, { tag -> !TwigTagUtil.isEndTag(tag) /* && !elseTags.contains(tag)*/ }) // todo -- this will currently break parsing
     }
 
+    /**
+     * Will parse a statement which is an end block statement for the given openTag
+     */
     private fun parseCloseStatement(builder: PsiBuilder, openTag: String): String? {
         return parseStatement(builder, BLOCK_END_STATEMENT, { tag -> TwigTagUtil.normaliseTag(tag) == openTag })
     }
 
+    /**
+     * Will parse any close statement; this is used to gracefully handle unexpected tag errors
+     */
     private fun parseAnyCloseStatement(builder: PsiBuilder): String? {
         return parseStatement(builder, BLOCK_END_STATEMENT, { tag -> TwigTagUtil.isEndTag(tag) })
     }
 
+    /**
+     * Will parse inverse statements, i.e. else and elseif tags
+     */
     private fun parseInverseStatement(builder: PsiBuilder): String? {
         return parseStatement(builder, INVERSE_STATEMENT, { tag -> TwigTagUtil.isInverseTag(tag) })
     }
