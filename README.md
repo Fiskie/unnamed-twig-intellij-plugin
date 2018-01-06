@@ -20,12 +20,11 @@ I would love to bridge the gap -- make the official plugin obsolete, incorporate
     - [x] Statements (`{% %}`)
     - [x] Expressions (`{{ }}`)
     - [x] Comments (`{% %}`)
-- [x] Structure View
-    - [ ] Icons
+- [x] Composite Twig/HTML structure view
 - [ ] Prioritise hinting for close statements
 - [x] Statement block indenting
 - [ ] Remove additional whitespace in code cleanup
-- [ ] Code style page
+- [ ] Code style page -- almost, wtf is with the formatter not working
 - [x] Code folding
 - [x] Live templates
 
@@ -52,6 +51,7 @@ I would love to bridge the gap -- make the official plugin obsolete, incorporate
 - [ ] Configurable block tag options
 - [ ] Automatic matching tag rename on type a la HTML plugin
 - [ ] Fix live templates appearing in code completion list
+- [ ] Improved structure view icons
 
 ## Development
 
