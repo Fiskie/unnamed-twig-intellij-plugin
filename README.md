@@ -1,4 +1,4 @@
-# (WIP) idea-community-twig
+# (WIP) idea-community-twig ![Travis](https://api.travis-ci.org/fiskie/idea-community-twig.svg?branch=master)
 
 (WIP) A plugin to replace the official Twig plugin found in IntelliJ IDEA/PhpStorm.
 
