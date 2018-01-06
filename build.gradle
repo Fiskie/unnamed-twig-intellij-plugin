@@ -27,7 +27,7 @@ sourceSets {
 }
 
 intellij {
-    pluginName = 'intellij-community-twig'
+    pluginName = 'idea-community-twig'
     version = 'IU-2017.3.2'
     plugins = ['PsiViewer:3.28.93', 'JavaScriptLanguage', 'CSS']
 }
