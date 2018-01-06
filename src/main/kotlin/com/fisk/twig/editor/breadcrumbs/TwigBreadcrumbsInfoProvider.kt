@@ -1,4 +1,4 @@
-package com.fisk.twig.ide
+package com.fisk.twig.editor.breadcrumbs
 
 import com.fisk.twig.TwigLanguage
 import com.fisk.twig.psi.TwigBlockWrapper

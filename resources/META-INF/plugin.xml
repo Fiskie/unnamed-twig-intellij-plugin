@@ -21,8 +21,10 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <braceMatcher filetype="Twig" implementationClass="com.fisk.twig.editor.braces.TwigBraceMatcher"/>
-    <breadcrumbsInfoProvider implementation="com.fisk.twig.ide.TwigBreadcrumbsInfoProvider" />
+    <breadcrumbsInfoProvider implementation="com.fisk.twig.editor.breadcrumbs.TwigBreadcrumbsInfoProvider" />
     <codeFoldingOptionsProvider instance="com.fisk.twig.config.TwigFoldingOptionsProvider"/>
+    <!--<codeStyleSettingsProvider implementation="com.fisk.twig.pages.TwigCodeStyleSettingsProvider"/>-->
+
     <colorSettingsPage implementation="com.fisk.twig.pages.TwigColorsPage"/>
     <completion.contributor language="Twig" implementationClass="com.fisk.twig.completion.TwigCompletionContributor" />
     <defaultLiveTemplatesProvider implementation="com.fisk.twig.editor.templates.TwigLiveTemplatesProvider"/>
@@ -31,6 +33,7 @@
     <fileTypeFactory implementation="com.fisk.twig.file.TwigFileTypeFactory"/>
     <highlightErrorFilter implementation="com.fisk.twig.inspections.TwigErrorFilter"/>
     <html.scriptContentProvider language="Twig" implementationClass="com.fisk.twig.TwigScriptContentProvider"/>
+    <!--<langCodeStyleSettingsProvider implementation="com.fisk.twig.pages.TwigLanguageCodeStyleSettingsProvider"/>-->
     <lang.commenter language="Twig" implementationClass="com.fisk.twig.editor.comments.TwigCommenterManager"/>
     <lang.fileViewProviderFactory language="Twig" implementationClass="com.fisk.twig.file.TwigFileViewProviderFactory"/>
     <lang.findUsagesProvider language="Twig" implementationClass="com.fisk.twig.ide.TwigFindUsagesProvider"/>
@@ -41,7 +44,7 @@
     <lang.syntaxHighlighterFactory language="Twig" implementationClass="com.fisk.twig.TwigHighlighterFactory"/>
     <lang.psiStructureViewFactory language="Twig" implementationClass="com.fisk.twig.structure.TwigStructureViewFactory" />
     <liveTemplateContext implementation="com.fisk.twig.editor.templates.TwigTemplateContextType"/>
-    <projectConfigurable groupId="language" provider="com.fisk.twig.pages.TwigConfigurationProvider" />
+    <!--<projectConfigurable groupId="language" provider="com.fisk.twig.pages.TwigConfigurationProvider" />-->
     <psi.referenceContributor implementation="com.fisk.twig.reference.ReferenceContributor" />
     <typedHandler implementation="com.fisk.twig.editor.actions.TwigTypedHandler" order="before xmlSlash"/>
   </extensions>

@@ -10,7 +10,6 @@ import com.intellij.openapi.options.colors.ColorDescriptor
 import com.intellij.openapi.options.colors.ColorSettingsPage
 
 class TwigColorsPage : ColorSettingsPage {
-
     override fun getDisplayName(): String {
         return TwigBundle.message("twig.files.file.type.description")
     }
