@@ -8,6 +8,9 @@ import com.intellij.util.ProcessingContext
 
 class TwigCompletionContributor : CompletionContributor() {
     // todo: detect and suggest closing tag?
+    // todo: find out how to omit live template tags from completion results
+    // changing the order with order="first" or order="before LiveTemplatesCompletionContributor" in plugin.xml does
+    // absolutely nothing
     val tags = setOf(
             "if", "for", "include", "extends", "with", "block", "embed", "else", "endif", "endfor", "endblock",
             "endembed", "sandbox", "endsandbox", "spaceless", "endspaceless", "verbatim", "endverbatim", "import",

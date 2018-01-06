@@ -20,6 +20,8 @@ I would love to bridge the gap -- make the official plugin obsolete, incorporate
     - [x] Statements (`{% %}`)
     - [x] Expressions (`{{ }}`)
     - [x] Comments (`{% %}`)
+- [x] Structure View
+    - [ ] Icons
 - [ ] Prioritise hinting for close statements
 - [x] Statement block indenting
 - [ ] Remove additional whitespace in code cleanup
@@ -40,8 +42,6 @@ I would love to bridge the gap -- make the official plugin obsolete, incorporate
 - [ ] Update whitespace control modifier on opposite brace
     - [x] Create paired whitespace character
     - [ ] Erase paired whitespace character
-- [x] Structure View
-    - [ ] Icons
 - [x] Breadcrumbs
 - [ ] Inspections
     - [ ] Expected end block tag -- needs protection against coalescence
@@ -50,7 +50,6 @@ I would love to bridge the gap -- make the official plugin obsolete, incorporate
 - [ ] Variable refactor
 - [ ] Mixin refactor
 - [ ] Configurable block tag options
-- [ ] Switch between classic and new formatting styles (brace matching vs. HTML plugin style tag management)
 - [ ] Automatic matching tag rename on type a la HTML plugin
 - [ ] Fix live templates appearing in code completion list
 

@@ -144,7 +144,7 @@ class TwigTypedHandler : TypedHandlerDelegate() {
         // disabled -- this conflicts with our current behaviour of auto-inserting end braces.
 //        autoInsertCloseTag(project, offset, editor, provider)
 //         also bad because again conflicts with our current behaviour of auto-inserting end braces
-        adjustStatementFormatting(project, editor, file, provider)
+//        adjustStatementFormatting(project, editor, file, provider)
         return TypedHandlerDelegate.Result.CONTINUE
     }
 
@@ -199,6 +199,7 @@ class TwigTypedHandler : TypedHandlerDelegate() {
 
     /**
      * Adjust formatting for else and end tags
+     * disabled because it's a little buggy right now.
      */
     private fun adjustStatementFormatting(project: Project, editor: Editor, file: PsiFile, provider: FileViewProvider) {
         if (!TwigConfig.isFormattingEnabled) {

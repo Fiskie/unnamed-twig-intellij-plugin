@@ -129,41 +129,45 @@ class TwigParsing(private val builder: PsiBuilder) {
 
         prematureInverseMarker.rollbackTo()
 
-        val blockMarker = builder.mark()
-        val nonStackingMarker = builder.mark()
+        val statementMarker = builder.mark()
+        val blockStatementMarker = builder.mark()
 
         val openTag = parseOpenStatement(builder)
 
-        if (openTag.match) {
-            // We have found a statement which either opens a block or is a single statement
+        if (!openTag.match) {
+            blockStatementMarker.drop()
+            statementMarker.rollbackTo()
+            return false
+        }
 
-            parseRoot(builder)
+        // We have found a statement which either opens a block or is a single statement
+        parseRoot(builder)
 
-            while (true) {
-                // handle inverse chain
-                if (parseInverseStatement(builder).match) {
-                    parseRoot(builder)
-                } else {
-                    break
-                }
+        while (true) {
+            // handle inverse chain
+            if (parseInverseStatement(builder).match) {
+                parseRoot(builder)
+            } else {
+                break
             }
+        }
 
-            if (parseCloseStatement(builder, openTag.normalisedTagName).match || TwigTagUtil.isDefaultBlockTag(openTag.normalisedTagName)) {
-                nonStackingMarker.drop()
-                blockMarker.done(BLOCK_WRAPPER)
-                return true
-            }
+        val closeMarker = builder.mark()
 
-            nonStackingMarker.rollbackTo()
-            parseSingleStatement(builder)
-            blockMarker.done(BLOCK_WRAPPER)
-
+        if (parseCloseStatement(builder, openTag.normalisedTagName).match || TwigTagUtil.isDefaultBlockTag(openTag.normalisedTagName)) {
+            blockStatementMarker.drop()
+            closeMarker.drop()
+            statementMarker.done(BLOCK_WRAPPER)
             return true
         }
 
-        nonStackingMarker.drop()
-        blockMarker.rollbackTo()
-        return false
+        closeMarker.rollbackTo()
+        blockStatementMarker.rollbackTo()
+
+        parseSingleStatement(builder)
+        statementMarker.done(BLOCK_WRAPPER)
+
+        return true
     }
 
     /**
@@ -203,8 +207,7 @@ class TwigParsing(private val builder: PsiBuilder) {
 
     private fun parseStatement(builder: PsiBuilder, type: TwigCompositeElementType, strategy: (String) -> Boolean): StatementResult {
         val marker = builder.mark()
-        var tagName: String = ""
-        var match = false
+        var tagName = ""
 
         if (builder.tokenType != STATEMENT_OPEN) {
             marker.rollbackTo()

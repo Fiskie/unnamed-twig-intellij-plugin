@@ -24,7 +24,7 @@
     <breadcrumbsInfoProvider implementation="com.fisk.twig.ide.TwigBreadcrumbsInfoProvider" />
     <codeFoldingOptionsProvider instance="com.fisk.twig.config.TwigFoldingOptionsProvider"/>
     <colorSettingsPage implementation="com.fisk.twig.pages.TwigColorsPage"/>
-    <completion.contributor language="Twig" implementationClass="com.fisk.twig.completion.TwigCompletionContributor"/>
+    <completion.contributor language="Twig" implementationClass="com.fisk.twig.completion.TwigCompletionContributor" />
     <defaultLiveTemplatesProvider implementation="com.fisk.twig.editor.templates.TwigLiveTemplatesProvider"/>
     <enterHandlerDelegate implementation="com.fisk.twig.editor.actions.TwigEnterHandler"/>
     <fileIndentOptionsProvider implementation="com.fisk.twig.format.TwigFileIndentOptionsProvider"/>

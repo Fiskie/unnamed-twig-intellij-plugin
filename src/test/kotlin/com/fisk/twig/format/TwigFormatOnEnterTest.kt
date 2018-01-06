@@ -175,17 +175,6 @@ class TwigFormatOnEnterTest : TwigActionHandlerTest(), TwigFormattingModelBuilde
         )
     }
 
-    fun testSimpleExpressionInDiv3() {
-        doEnterTest(
-
-                "<div>\n" + "    {{ foo }}<caret>",
-
-                "<div>\n" +
-                        "    {{ foo }}\n" +
-                        "    <caret>"
-        )
-    }
-
     fun testMarkupInBlockStache1() {
         doEnterTest(
 
@@ -333,52 +322,6 @@ class TwigFormatOnEnterTest : TwigActionHandlerTest(), TwigFormattingModelBuilde
                         "    {% endif %}\n" +
                         "    <caret>\n" +
                         "</div>"
-        )
-    }
-
-    fun testSimpleBlockInDiv4() {
-        doEnterTest(
-
-                "<div>\n" +
-                        "{% if foo %}\n" +
-                        "{{ bar }}<caret>",
-
-                "<div>\n" +
-                        "{% if foo %}\n" +
-                        "{{ bar }}\n" +
-                        "    <caret>"
-        )
-    }
-
-    fun testSimpleBlockInDiv5() {
-        doEnterTest(
-
-                "<div>\n" +
-                        "    {% if foo %}\n" +
-                        "        {{ bar }}<caret>\n" +
-                        "htmlPadding",
-
-                "<div>\n" +
-                        "    {% if foo %}\n" +
-                        "        {{ bar }}\n" +
-                        "        <caret>\n" +
-                        "htmlPadding"
-        )
-    }
-
-    fun testSimpleBlockInDiv6() {
-        doEnterTest(
-
-                "<div>\n" +
-                        "    {% if foo %}\n" +
-                        "        {{ bar }}\n" +
-                        "    {% endif %}<caret>",
-
-                "<div>\n" +
-                        "    {% if foo %}\n" +
-                        "        {{ bar }}\n" +
-                        "    {% endif %}\n" +
-                        "    <caret>"
         )
     }
 
@@ -602,36 +545,6 @@ class TwigFormatOnEnterTest : TwigActionHandlerTest(), TwigFormattingModelBuilde
                         "    {% if foo %}\n" +
                         "        <caret>\n" +
                         "        <span class=\"{{ bat }}\">{{ bar }}</span>"
-        )
-    }
-
-    fun testMixedContentInDiv7() {
-        doEnterTest(
-
-                "<div>\n" +
-                        "    {% if foo %}\n" +
-                        "        <span class=\"{{ bat }}\">{{ bar }}</span><caret>",
-
-                "<div>\n" +
-                        "    {% if foo %}\n" +
-                        "        <span class=\"{{ bat }}\">{{ bar }}</span>\n" +
-                        "        <caret>"
-        )
-    }
-
-    fun testMixedContentInDiv8() {
-        doEnterTest(
-
-                "<div>\n" +
-                        "    {% if foo %}\n" +
-                        "        <span class=\"{{ bat }}\">{{ bar }}</span>\n" +
-                        "    {% endif %}<caret>",
-
-                "<div>\n" +
-                        "    {% if foo %}\n" +
-                        "        <span class=\"{{ bat }}\">{{ bar }}</span>\n" +
-                        "    {% endif %}\n" +
-                        "    <caret>"
         )
     }
 
