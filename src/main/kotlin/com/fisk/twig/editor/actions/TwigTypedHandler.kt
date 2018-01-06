@@ -27,7 +27,7 @@ class TwigTypedHandler : TypedHandlerDelegate() {
 
         val previousChar = editor.document.getText(TextRange(offset - 1, offset))
 
-        if (file.language is TwigLanguage) {
+        if (file.language is TwigLanguage || file.viewProvider.baseLanguage is TwigLanguage) {
             if (TwigConfig.isAutocompleteEndBracesEnabled) {
                 var braceCompleter: String? = null
                 var shouldPad = false
@@ -144,7 +144,7 @@ class TwigTypedHandler : TypedHandlerDelegate() {
         // disabled -- this conflicts with our current behaviour of auto-inserting end braces.
 //        autoInsertCloseTag(project, offset, editor, provider)
 //         also bad because again conflicts with our current behaviour of auto-inserting end braces
-//        adjustStatementFormatting(project, offset, editor, file, provider)
+        adjustStatementFormatting(project, editor, file, provider)
         return TypedHandlerDelegate.Result.CONTINUE
     }
 
@@ -200,21 +200,20 @@ class TwigTypedHandler : TypedHandlerDelegate() {
     /**
      * Adjust formatting for else and end tags
      */
-    private fun adjustStatementFormatting(project: Project, offset: Int, editor: Editor, file: PsiFile, provider: FileViewProvider) {
+    private fun adjustStatementFormatting(project: Project, editor: Editor, file: PsiFile, provider: FileViewProvider) {
         if (!TwigConfig.isFormattingEnabled) {
             // formatting disabled; nothing to do
             return
         }
 
-        val elementAtCaret = provider.findElementAt(offset - 1, TwigLanguage::class.java)
-        val closeOrSimpleInverseParent = PsiTreeUtil.findFirstParent(elementAtCaret, true) {
-            element -> element != null && (element is TwigInverseStatement || element is TwigBlockEndStatement)
+        val offset = editor.caretModel.offset - 1
+
+        val elementAtCaret = provider.findElementAt(offset, TwigLanguage::class.java)
+        val parentIsStatementBlock = PsiTreeUtil.findFirstParent(elementAtCaret, true) {
+            element -> element != null && (element is TwigStatement)
         }
 
-        val parent = elementAtCaret?.parent
-
-        // run the formatter if the user just completed typing a SIMPLE_INVERSE or a CLOSE_BLOCK_STACHE
-        if (closeOrSimpleInverseParent != null) {
+        if (parentIsStatementBlock != null) {
             // grab the current caret position (AutoIndentLinesHandler is about to mess with it)
             PsiDocumentManager.getInstance(project).commitDocument(editor.document)
             val caretModel = editor.caretModel

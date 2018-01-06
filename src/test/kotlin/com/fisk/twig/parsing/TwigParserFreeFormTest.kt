@@ -74,4 +74,14 @@ class TwigParserFreeFormTest : TwigParserTest() {
     fun testUnformattedSetStatement() {
         doTest(true)
     }
+
+    fun testEmptyStatement() {
+        doTest(true)
+    }
+
+    fun testNestedEmptyStatement() {
+        // todo: write expected response
+        // this is going to fail because inverse checks are consuming empty {% %} tags
+        doTest(true)
+    }
 }

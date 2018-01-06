@@ -22,6 +22,7 @@ import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_OPEN
 import com.fisk.twig.parsing.TwigTokenTypes.STRING
 import com.fisk.twig.parsing.TwigTokenTypes.TAG
 import com.fisk.twig.parsing.TwigTokenTypes.UNCLOSED_COMMENT
+import com.fisk.twig.psi.util.StatementResult
 import com.intellij.lang.PsiBuilder
 import com.intellij.psi.tree.IElementType
 
@@ -47,7 +48,7 @@ class TwigParsing(private val builder: PsiBuilder) {
             if (tokenType === STATEMENT_OPEN) {
                 val problemMark = builder.mark()
 
-                if (parseAnyCloseStatement(builder) != null) {
+                if (parseAnyCloseStatement(builder).match) {
                     problemMark.error(TwigBundle.message("twig.parsing.close_block_mismatch"))
                 } else {
                     // not sure what this is yet
@@ -114,10 +115,6 @@ class TwigParsing(private val builder: PsiBuilder) {
     }
 
     private fun parseStatementChain(builder: PsiBuilder): Boolean {
-        if (builder.tokenType != STATEMENT_OPEN) {
-            return false
-        }
-
         /**
          * TODO: mark errors if else tag is used in places where it is not expected - see [TwigTagUtil.allowsInverseTag]
          */
@@ -125,7 +122,7 @@ class TwigParsing(private val builder: PsiBuilder) {
         // If an inverse marker is discovered in the block, we need to break out of the block
         val prematureInverseMarker = builder.mark()
 
-        if (parseInverseStatement(builder) != null) {
+        if (parseInverseStatement(builder).match) {
             prematureInverseMarker.rollbackTo()
             return false
         }
@@ -137,21 +134,21 @@ class TwigParsing(private val builder: PsiBuilder) {
 
         val openTag = parseOpenStatement(builder)
 
-        if (openTag != null) {
+        if (openTag.match) {
             // We have found a statement which either opens a block or is a single statement
 
             parseRoot(builder)
 
             while (true) {
                 // handle inverse chain
-                if (parseInverseStatement(builder) != null) {
+                if (parseInverseStatement(builder).match) {
                     parseRoot(builder)
                 } else {
                     break
                 }
             }
 
-            if (parseCloseStatement(builder, openTag) != null || TwigTagUtil.isDefaultBlockTag(openTag)) {
+            if (parseCloseStatement(builder, openTag.normalisedTagName).match || TwigTagUtil.isDefaultBlockTag(openTag.normalisedTagName)) {
                 nonStackingMarker.drop()
                 blockMarker.done(BLOCK_WRAPPER)
                 return true
@@ -164,59 +161,62 @@ class TwigParsing(private val builder: PsiBuilder) {
             return true
         }
 
+        nonStackingMarker.drop()
+        blockMarker.rollbackTo()
         return false
     }
 
     /**
      * Will parse any valid statement; this is used if a start/end block statement pair cannot be matched
      */
-    private fun parseSingleStatement(builder: PsiBuilder): String? {
+    private fun parseSingleStatement(builder: PsiBuilder): StatementResult {
         return parseStatement(builder, SIMPLE_STATEMENT, { _ -> true })
     }
 
     /**
      * Will parse any statement that does not contain an end tag (/^end/)
      */
-    private fun parseOpenStatement(builder: PsiBuilder): String? {
+    private fun parseOpenStatement(builder: PsiBuilder): StatementResult {
         return parseStatement(builder, BLOCK_START_STATEMENT, { tag -> !TwigTagUtil.isEndTag(tag) /* && !elseTags.contains(tag)*/ }) // todo -- this will currently break parsing
     }
 
     /**
      * Will parse a statement which is an end block statement for the given openTag
      */
-    private fun parseCloseStatement(builder: PsiBuilder, openTag: String): String? {
+    private fun parseCloseStatement(builder: PsiBuilder, openTag: String): StatementResult {
         return parseStatement(builder, BLOCK_END_STATEMENT, { tag -> TwigTagUtil.normaliseTag(tag) == openTag })
     }
 
     /**
      * Will parse any close statement; this is used to gracefully handle unexpected tag errors
      */
-    private fun parseAnyCloseStatement(builder: PsiBuilder): String? {
+    private fun parseAnyCloseStatement(builder: PsiBuilder): StatementResult {
         return parseStatement(builder, BLOCK_END_STATEMENT, { tag -> TwigTagUtil.isEndTag(tag) })
     }
 
     /**
      * Will parse inverse statements, i.e. else and elseif tags
      */
-    private fun parseInverseStatement(builder: PsiBuilder): String? {
+    private fun parseInverseStatement(builder: PsiBuilder): StatementResult {
         return parseStatement(builder, INVERSE_STATEMENT, { tag -> TwigTagUtil.isInverseTag(tag) })
     }
 
-    private fun parseStatement(builder: PsiBuilder, type: TwigCompositeElementType, strategy: (String) -> Boolean): String? {
+    private fun parseStatement(builder: PsiBuilder, type: TwigCompositeElementType, strategy: (String) -> Boolean): StatementResult {
         val marker = builder.mark()
-        var tagName: String? = null
+        var tagName: String = ""
+        var match = false
+
+        if (builder.tokenType != STATEMENT_OPEN) {
+            marker.rollbackTo()
+            return StatementResult(false)
+        }
 
         do {
             if (builder.tokenType == TAG) {
                 val tag = builder.tokenText
 
                 tag?.let {
-                    if (strategy(tag)) {
-                        tagName = TwigTagUtil.normaliseTag(tag)
-                    } else {
-                        marker.rollbackTo()
-                        return null
-                    }
+                    tagName = tag
                 }
 
                 parseLeafToken(builder, TAG)
@@ -238,8 +238,13 @@ class TwigParsing(private val builder: PsiBuilder) {
 
         builder.advanceLexer() // consume last STATEMENT_CLOSE
 
-        marker.done(type)
-        return tagName
+        if (strategy(tagName)) {
+            marker.done(type)
+            return StatementResult(true, tagName)
+        } else {
+            marker.rollbackTo()
+            return StatementResult(false, tagName)
+        }
     }
 
     private fun parseExpressionBlock(builder: PsiBuilder): Boolean {

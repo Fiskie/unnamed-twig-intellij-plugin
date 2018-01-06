@@ -14,7 +14,7 @@ import com.intellij.psi.PsiFile
 class TwigEnterHandler : EnterHandlerDelegateAdapter() {
     override fun preprocessEnter(file: PsiFile, editor: Editor, caretOffset: Ref<Int>, caretAdvance: Ref<Int>, dataContext: DataContext, originalHandler: EditorActionHandler?): EnterHandlerDelegate.Result {
         if (file is TwigPsiFile && isBetweenTwigBlockStatementTags(editor, file, caretOffset.get())) {
-            originalHandler?.execute(editor, dataContext)
+            originalHandler?.execute(editor, editor.caretModel.currentCaret, dataContext)
             return EnterHandlerDelegate.Result.Default
         }
 
