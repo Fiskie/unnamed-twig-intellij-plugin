@@ -10,14 +10,23 @@ class TwigMoverTest : LightPlatformCodeInsightFixtureTestCase() {
         doTest("twig")
     }
 
-    fun testMoveTwigTag() {
+    fun testMoveHtmlBlockWhenOpenHtmlAsTwig() {
+        TwigTestUtils.setOpenHtmlAsTwig(true, project, myFixture.testRootDisposable)
+        doTest("twig")
+    }
+
+    fun testMoveTwigExpression() {
+        doTest("twig")
+    }
+
+    fun testMoveTwigStatementBlock() {
         doTest("twig")
     }
 
     private fun doTest(ext: String) {
         myFixture.configureByFile(getTestName(false) + "." + ext)
         myFixture.performEditorAction(IdeActions.ACTION_MOVE_STATEMENT_UP_ACTION)
-        myFixture.checkResultByFile(getTestName(false) + "_after." + ext)
+        myFixture.checkResultByFile(getTestName(false) + ".after." + ext)
     }
 
     override fun getTestDataPath(): String {

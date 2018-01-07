@@ -50,7 +50,7 @@ class TwigFormatterIndentTest : TwigFormatterTest() {
         CodeStyleSettingsManager.getSettings(project).getIndentOptions(StdFileTypes.HTML).INDENT_SIZE = previousHtmlIndent
     }
 
-    fun testTagSpaceNormalisation() {
+    fun testTagSpacingFix() {
         doStringBasedTest(
                 "{{   foo   }}",
                 "{{ foo }}"

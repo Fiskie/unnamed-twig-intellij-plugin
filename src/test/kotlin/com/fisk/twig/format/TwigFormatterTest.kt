@@ -78,7 +78,7 @@ abstract class TwigFormatterTest : LightPlatformCodeInsightFixtureTestCase(), Tw
      */
     @Throws(Exception::class)
     internal fun doFileBasedTest(@NonNls fileNameBefore: String, templateDataLanguageType: LanguageFileType) {
-        doTextTest(loadFile(fileNameBefore), loadFile(fileNameBefore.replace(".twig", "_expected.twig")), templateDataLanguageType)
+        doTextTest(loadFile(fileNameBefore), loadFile(fileNameBefore.replace(".twig", ".after.twig")), templateDataLanguageType)
     }
 
     @Throws(IncorrectOperationException::class)
