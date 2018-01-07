@@ -146,16 +146,9 @@ class TwigParsing(private val builder: PsiBuilder) {
         }
 
         // We have found a statement which either opens a block or is a single statement
-        parseRoot(builder)
-
-        while (true) {
-            // handle inverse chain
-            if (parseInverseStatement(builder).match) {
-                parseRoot(builder)
-            } else {
-                break
-            }
-        }
+        do {
+            parseRoot(builder)
+        } while (parseInverseStatement(builder).match)
 
         val closeMarker = builder.mark()
 
