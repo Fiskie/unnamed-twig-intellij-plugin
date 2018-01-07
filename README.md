@@ -46,7 +46,8 @@ I would love to bridge the gap -- make the official plugin obsolete, incorporate
     - [ ] Expected end block tag -- needs protection against coalescence
     - [ ] Declared child blocks not found in the parent template
 - [ ] Find usages
-- [ ] Variable refactor
+- [x] Variable refactor -- Basic, does it on a per-file scope for now.
+    - [ ] Scoped variable refactor - recognise `for` block scope
 - [ ] Mixin refactor
 - [ ] Configurable block tag options
 - [ ] Automatic matching tag rename on type a la HTML plugin

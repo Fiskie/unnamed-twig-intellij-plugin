@@ -1,17 +1,13 @@
 package com.fisk.twig.psi.impl
 
 import com.fisk.twig.psi.TwigLabel
+import com.fisk.twig.psi.reference.TwigLabelReference
 import com.fisk.twig.psi.util.TwigElementFactory
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiNameIdentifierOwner
-import com.intellij.psi.impl.source.tree.LeafPsiElement
-import com.intellij.psi.util.PsiTreeUtil
 
 class TwigLabelImpl(node: ASTNode) : TwigPsiElementImpl(node), TwigLabel {
-    override fun getName(): String? {
-        return text
-    }
+    override fun getName(): String = text
 
     override fun setName(newName: String): PsiElement {
         val keyNode = firstChild.node
@@ -23,7 +19,7 @@ class TwigLabelImpl(node: ASTNode) : TwigPsiElementImpl(node), TwigLabel {
         return this
     }
 
-    override fun getNameIdentifier(): PsiElement? {
-        return firstChild.node?.psi
-    }
+    override fun getNameIdentifier() = firstChild.node?.psi
+
+    override fun getReference() = TwigLabelReference(this)
 }

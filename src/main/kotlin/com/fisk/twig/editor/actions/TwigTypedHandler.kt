@@ -15,6 +15,7 @@ import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.codeStyle.CodeStyleManager
+import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.PsiTreeUtil
 
 class TwigTypedHandler : TypedHandlerDelegate() {
@@ -77,7 +78,25 @@ class TwigTypedHandler : TypedHandlerDelegate() {
         }
     }
 
-    private fun completeWhitespaceControlModifier(c: Char, project: Project, editor: Editor, file: PsiFile) {
+    private fun getCloseBraceForElement(elementType: IElementType) : IElementType? {
+        return when (elementType) {
+            TwigTokenTypes.STATEMENT_OPEN -> TwigTokenTypes.STATEMENT_CLOSE
+            TwigTokenTypes.EXPRESSION_OPEN -> TwigTokenTypes.EXPRESSION_CLOSE
+            TwigTokenTypes.COMMENT_OPEN -> TwigTokenTypes.COMMENT_CLOSE
+            else -> null
+        }
+    }
+
+    private fun getOpenBraceForElement(elementType: IElementType) : IElementType? {
+        return when (elementType) {
+            TwigTokenTypes.STATEMENT_CLOSE -> TwigTokenTypes.STATEMENT_OPEN
+            TwigTokenTypes.EXPRESSION_CLOSE -> TwigTokenTypes.EXPRESSION_OPEN
+            TwigTokenTypes.COMMENT_CLOSE -> TwigTokenTypes.COMMENT_OPEN
+            else -> null
+        }
+    }
+
+    private fun addWhitespaceControlModifier(c: Char, project: Project, editor: Editor, file: PsiFile) {
         if (c != '-') {
             return
         }
@@ -88,12 +107,7 @@ class TwigTypedHandler : TypedHandlerDelegate() {
         val openingBrace = file.findElementAt(editor.caretModel.offset - 1)
 
         openingBrace?.let {
-            val closingElementType = when (openingBrace.node.elementType) {
-                TwigTokenTypes.STATEMENT_OPEN -> TwigTokenTypes.STATEMENT_CLOSE
-                TwigTokenTypes.EXPRESSION_OPEN -> TwigTokenTypes.EXPRESSION_CLOSE
-                TwigTokenTypes.COMMENT_OPEN -> TwigTokenTypes.COMMENT_CLOSE
-                else -> null
-            }
+            val closingElementType = getCloseBraceForElement(openingBrace.node.elementType)
 
             closingElementType?.let {
                 val closingBrace = PsiTreeUtil.findSiblingForward(openingBrace, closingElementType, {})
@@ -111,12 +125,7 @@ class TwigTypedHandler : TypedHandlerDelegate() {
         val closingBrace = file.findElementAt(editor.caretModel.offset)
 
         closingBrace?.let {
-            val closingElementType = when (closingBrace.node.elementType) {
-                TwigTokenTypes.STATEMENT_CLOSE -> TwigTokenTypes.STATEMENT_OPEN
-                TwigTokenTypes.EXPRESSION_CLOSE -> TwigTokenTypes.EXPRESSION_OPEN
-                TwigTokenTypes.COMMENT_CLOSE -> TwigTokenTypes.COMMENT_OPEN
-                else -> null
-            }
+            val closingElementType = getOpenBraceForElement(closingBrace.node.elementType)
 
             closingElementType?.let {
                 val openingBrace = PsiTreeUtil.findSiblingBackward(closingBrace, closingElementType, {})
@@ -139,7 +148,7 @@ class TwigTypedHandler : TypedHandlerDelegate() {
         }
 
         // TODO: Try to handle matching start/close tag renames
-        completeWhitespaceControlModifier(c, project, editor, file)
+        addWhitespaceControlModifier(c, project, editor, file)
 
         // disabled -- this conflicts with our current behaviour of auto-inserting end braces.
 //        autoInsertCloseTag(project, offset, editor, provider)

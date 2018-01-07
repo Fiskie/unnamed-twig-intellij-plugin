@@ -1,5 +1,6 @@
 package com.fisk.twig.pages
 
+import com.fisk.twig.TwigBundle
 import com.fisk.twig.TwigLanguage
 import com.intellij.application.options.CodeStyleAbstractConfigurable
 import com.intellij.application.options.CodeStyleAbstractPanel
@@ -14,7 +15,7 @@ class TwigCodeStyleSettingsProvider : CodeStyleSettingsProvider() {
                 return TwigCodeStylePanel(currentSettings, settings)
             }
 
-            override fun getHelpTopic() = "reference needed" // todo
+            override fun getHelpTopic() = TwigBundle.message("twig.page.code_style.help")
         }
     }
 

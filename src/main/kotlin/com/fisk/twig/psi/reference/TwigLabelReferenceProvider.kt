@@ -1,0 +1,33 @@
+package com.fisk.twig.psi.reference
+
+import com.fisk.twig.parsing.TwigTokenTypes
+import com.fisk.twig.psi.impl.TwigLabelImpl
+import com.intellij.openapi.util.TextRange
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiReference
+import com.intellij.psi.PsiReferenceProvider
+import com.intellij.psi.TokenType
+import com.intellij.psi.tree.TokenSet
+import com.intellij.util.ProcessingContext
+
+class TwigLabelReferenceProvider : PsiReferenceProvider() {
+    override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
+        if (element !is TwigLabelImpl) {
+            return PsiReference.EMPTY_ARRAY
+        }
+
+        val labelSet = TokenSet.create(TwigTokenTypes.LABEL)
+        var textNode = element.node.findChildByType(labelSet)
+
+        if (textNode != null) {
+            textNode = textNode.treeNext
+            while (textNode != null && labelSet.contains(textNode.elementType)) {
+                textNode = textNode.treeNext
+            }
+            val reference = TwigLabelReference(element)
+            return arrayOf(reference)
+        }
+
+        return PsiReference.EMPTY_ARRAY
+    }
+}

@@ -6,21 +6,24 @@ import com.intellij.lang.LanguageStructureViewBuilder
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.util.Disposer
 import com.intellij.psi.PsiFile
-import com.intellij.testFramework.PlatformTestUtil
 import com.intellij.testFramework.PlatformTestUtil.assertTreeEqual
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
 import com.intellij.util.Consumer
-import com.intellij.util.ui.tree.TreeUtil
 
 class TwigStructureViewTest : LightPlatformCodeInsightFixtureTestCase() {
     private fun doStructureViewTest(fileText: String, expectedTree: String) {
         myFixture.configureByText(ourTestFileName, fileText)
 
-        doTestStructureView(myFixture.file, Consumer { composite ->
-            val svc = composite.selectedStructureView as StructureViewComponent
-            PlatformTestUtil.waitForPromise(svc.rebuildAndUpdate())
-            TreeUtil.expandAll(svc.tree)
-            assertTreeEqual(svc.tree, expectedTree + "\n")
+        doTestStructureView(myFixture.file, Consumer { component ->
+            val tree = (component.selectedStructureView as StructureViewComponent).tree
+
+            // expand the whole tree
+            val rowCount = tree.rowCount
+            for (i in 0..rowCount) {
+                tree.expandRow(i)
+            }
+
+            assertTreeEqual(tree, expectedTree + "\n")
         })
     }
 
@@ -30,15 +33,11 @@ class TwigStructureViewTest : LightPlatformCodeInsightFixtureTestCase() {
         val builder = LanguageStructureViewBuilder.INSTANCE.getStructureViewBuilder(file)!!
 
         var composite: StructureViewComposite? = null
-
         try {
-            val description = StructureViewComposite.StructureViewDescriptor("Twig", builder.createStructureView(fileEditor, file.project), null)
-            composite = StructureViewComposite(description)
+            composite = builder.createStructureView(fileEditor, file.project) as StructureViewComposite
             consumer.consume(composite)
         } finally {
-            composite?.let {
-                Disposer.dispose(composite)
-            }
+            if (composite != null) Disposer.dispose(composite)
         }
     }
 
@@ -80,7 +79,6 @@ class TwigStructureViewTest : LightPlatformCodeInsightFixtureTestCase() {
     }
 
     companion object {
-
         private val ourTestFileName = "test.twig"
     }
 }
