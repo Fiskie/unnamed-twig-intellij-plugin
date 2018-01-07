@@ -2,8 +2,12 @@ package com.fisk.twig.format
 
 import com.fisk.twig.config.TwigConfig
 import com.fisk.twig.parsing.TwigTokenTypes
-import com.intellij.formatting.*
-import com.intellij.formatting.templateLanguages.*
+import com.intellij.formatting.Alignment
+import com.intellij.formatting.FormattingModel
+import com.intellij.formatting.Wrap
+import com.intellij.formatting.templateLanguages.DataLanguageBlockWrapper
+import com.intellij.formatting.templateLanguages.TemplateLanguageBlock
+import com.intellij.formatting.templateLanguages.TemplateLanguageFormattingModelBuilder
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.codeStyle.CodeStyleSettings

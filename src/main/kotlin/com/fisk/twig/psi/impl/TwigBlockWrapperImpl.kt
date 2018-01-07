@@ -3,7 +3,6 @@ package com.fisk.twig.psi.impl
 import com.fisk.twig.config.TwigIcons
 import com.fisk.twig.psi.*
 import com.intellij.lang.ASTNode
-import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import javax.swing.Icon
 
@@ -19,7 +18,7 @@ class TwigBlockWrapperImpl(node: ASTNode) : TwigPsiElementImpl(node), TwigBlockW
         return null
     }
 
-    fun getBlockOpenStatement() : TwigStatement? {
+    fun getBlockOpenStatement(): TwigStatement? {
         return PsiTreeUtil.findChildOfType(this, TwigBlockStartStatement::class.java) ?:
                 PsiTreeUtil.findChildOfType(this, TwigSimpleStatement::class.java) ?:
                 PsiTreeUtil.findChildOfType(this, TwigInverseStatement::class.java)

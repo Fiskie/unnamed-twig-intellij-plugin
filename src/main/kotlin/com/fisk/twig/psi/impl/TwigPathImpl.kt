@@ -4,8 +4,6 @@ import com.fisk.twig.psi.TwigPath
 import com.fisk.twig.psi.util.TwigElementFactory
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
-import com.intellij.psi.impl.source.tree.LeafPsiElement
-import com.intellij.psi.util.PsiTreeUtil
 
 class TwigPathImpl(node: ASTNode) : TwigPsiElementImpl(node), TwigPath {
     override fun getName(): String? {

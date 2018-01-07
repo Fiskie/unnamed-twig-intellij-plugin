@@ -3,7 +3,6 @@ package com.fisk.twig
 import com.fisk.twig.parsing.TwigRawLexer
 import com.fisk.twig.parsing.TwigTokenTypes
 import com.intellij.lang.annotation.HighlightSeverity
-import com.intellij.lexer.Lexer
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase

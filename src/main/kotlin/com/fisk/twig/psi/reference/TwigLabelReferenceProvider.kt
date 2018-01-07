@@ -2,11 +2,9 @@ package com.fisk.twig.psi.reference
 
 import com.fisk.twig.parsing.TwigTokenTypes
 import com.fisk.twig.psi.impl.TwigLabelImpl
-import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
 import com.intellij.psi.PsiReferenceProvider
-import com.intellij.psi.TokenType
 import com.intellij.psi.tree.TokenSet
 import com.intellij.util.ProcessingContext
 

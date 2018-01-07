@@ -1,7 +1,5 @@
 package com.fisk.twig.psi.impl
 
-import com.fisk.twig.psi.TwigPsiElement
-import com.fisk.twig.psi.util.TwigPsiUtil
 import com.fisk.twig.psi.TwigTag
 import com.fisk.twig.psi.util.TwigElementFactory
 import com.intellij.lang.ASTNode

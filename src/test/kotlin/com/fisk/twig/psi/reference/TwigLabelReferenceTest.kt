@@ -1,7 +1,6 @@
 package com.fisk.twig.psi.reference
 
 import com.fisk.twig.util.TwigTestUtils
-import com.intellij.testFramework.LightPlatformCodeInsightTestCase
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
 
 class TwigLabelReferenceTest : LightPlatformCodeInsightFixtureTestCase() {

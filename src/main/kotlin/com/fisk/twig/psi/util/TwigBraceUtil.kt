@@ -4,7 +4,7 @@ import com.fisk.twig.parsing.TwigTokenTypes
 import com.intellij.psi.tree.IElementType
 
 object TwigBraceUtil {
-    fun getCloseBraceForElement(elementType: IElementType) : IElementType? {
+    fun getCloseBraceForElement(elementType: IElementType): IElementType? {
         return when (elementType) {
             TwigTokenTypes.STATEMENT_OPEN -> TwigTokenTypes.STATEMENT_CLOSE
             TwigTokenTypes.EXPRESSION_OPEN -> TwigTokenTypes.EXPRESSION_CLOSE
@@ -13,7 +13,7 @@ object TwigBraceUtil {
         }
     }
 
-    fun getOpenBraceForElement(elementType: IElementType) : IElementType? {
+    fun getOpenBraceForElement(elementType: IElementType): IElementType? {
         return when (elementType) {
             TwigTokenTypes.STATEMENT_CLOSE -> TwigTokenTypes.STATEMENT_OPEN
             TwigTokenTypes.EXPRESSION_CLOSE -> TwigTokenTypes.EXPRESSION_OPEN

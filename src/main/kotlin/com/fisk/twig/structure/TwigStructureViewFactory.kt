@@ -14,7 +14,7 @@ import com.intellij.psi.PsiFile
 
 internal class TwigStructureViewFactory : PsiStructureViewFactory {
     override fun getStructureViewBuilder(psiFile: PsiFile): StructureViewBuilder? {
-        return object: TemplateLanguageStructureViewBuilder(psiFile) {
+        return object : TemplateLanguageStructureViewBuilder(psiFile) {
             override fun createMainView(fileEditor: FileEditor?, mainFile: PsiFile?): StructureViewComposite.StructureViewDescriptor? {
                 if (!psiFile.isValid) {
                     return null

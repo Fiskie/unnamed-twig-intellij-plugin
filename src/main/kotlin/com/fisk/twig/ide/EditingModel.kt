@@ -1,8 +1,8 @@
 package com.fisk.twig.ide
 
-data class EditingModel (
-    val id: String,
-    val name: String
+data class EditingModel(
+        val id: String,
+        val name: String
 ) {
     companion object {
         val NEW = "new"

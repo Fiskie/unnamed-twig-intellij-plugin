@@ -4,7 +4,8 @@ import com.fisk.twig.TwigLanguage
 import com.fisk.twig.TwigTagUtil
 import com.fisk.twig.config.TwigConfig
 import com.fisk.twig.parsing.TwigTokenTypes
-import com.fisk.twig.psi.*
+import com.fisk.twig.psi.TwigStatement
+import com.fisk.twig.psi.TwigTag
 import com.fisk.twig.psi.util.TwigBraceUtil
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.openapi.editor.Editor
@@ -16,7 +17,6 @@ import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.codeStyle.CodeStyleManager
-import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.PsiTreeUtil
 
 class TwigTypedHandler : TypedHandlerDelegate() {
@@ -202,8 +202,8 @@ class TwigTypedHandler : TypedHandlerDelegate() {
         val offset = editor.caretModel.offset - 1
 
         val elementAtCaret = provider.findElementAt(offset, TwigLanguage::class.java)
-        val parentIsStatementBlock = PsiTreeUtil.findFirstParent(elementAtCaret, true) {
-            element -> element != null && (element is TwigStatement)
+        val parentIsStatementBlock = PsiTreeUtil.findFirstParent(elementAtCaret, true) { element ->
+            element != null && (element is TwigStatement)
         }
 
         if (parentIsStatementBlock != null) {

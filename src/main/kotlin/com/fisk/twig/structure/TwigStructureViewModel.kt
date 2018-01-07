@@ -1,7 +1,7 @@
 package com.fisk.twig.structure
 
-import com.fisk.twig.psi.*
-import com.intellij.ide.structureView.StructureViewTreeElement
+import com.fisk.twig.psi.TwigBlockWrapper
+import com.fisk.twig.psi.TwigPsiFile
 import com.intellij.ide.structureView.TextEditorBasedStructureViewModel
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiFile

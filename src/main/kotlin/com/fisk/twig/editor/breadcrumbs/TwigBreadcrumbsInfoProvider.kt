@@ -5,10 +5,8 @@ import com.fisk.twig.psi.TwigBlockWrapper
 import com.fisk.twig.psi.TwigExpressionBlock
 import com.fisk.twig.psi.TwigPsiElement
 import com.intellij.lang.Language
-import com.intellij.lang.StdLanguages
 import com.intellij.lang.html.HTMLLanguage
 import com.intellij.psi.PsiElement
-import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.xml.XmlTag
 import com.intellij.ui.breadcrumbs.BreadcrumbsProvider
 

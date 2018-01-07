@@ -2,7 +2,6 @@ package com.fisk.twig.pages
 
 import com.fisk.twig.TwigLanguage
 import com.intellij.application.options.SmartIndentOptionsEditor
-import com.intellij.lang.Language
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings
 import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider
 

@@ -1,7 +1,6 @@
 package com.fisk.twig.editor.actions
 
 import com.fisk.twig.parsing.TwigTokenTypes
-import com.fisk.twig.psi.TwigBlockWrapper
 import com.fisk.twig.psi.TwigPsiFile
 import com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegate
 import com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegateAdapter

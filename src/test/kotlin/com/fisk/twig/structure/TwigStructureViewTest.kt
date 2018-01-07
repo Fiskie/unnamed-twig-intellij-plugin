@@ -6,29 +6,30 @@ import com.intellij.lang.LanguageStructureViewBuilder
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.util.Disposer
 import com.intellij.psi.PsiFile
+import com.intellij.testFramework.PlatformTestUtil
 import com.intellij.testFramework.PlatformTestUtil.assertTreeEqual
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
 import com.intellij.util.Consumer
+import com.intellij.util.ui.tree.TreeUtil
+
 
 class TwigStructureViewTest : LightPlatformCodeInsightFixtureTestCase() {
+    companion object {
+        private val ourTestFileName = "test.twig"
+    }
 
     private fun doStructureViewTest(fileText: String, expectedTree: String) {
         myFixture.configureByText(ourTestFileName, fileText)
 
-        testStructureView(myFixture.file, Consumer { component ->
-            val tree = (component.selectedStructureView as StructureViewComponent).tree
-
-            // expand the whole tree
-            val rowCount = tree.rowCount
-            for (i in 0..rowCount) {
-                tree.expandRow(i)
-            }
-
-            assertTreeEqual(tree, expectedTree + "\n")
+        doTestStructureView(myFixture.file, Consumer { composite ->
+            val svc = composite.selectedStructureView as StructureViewComponent
+            PlatformTestUtil.waitForPromise(svc.rebuildAndUpdate())
+            TreeUtil.expandAll(svc.tree)
+            assertTreeEqual(svc.tree, expectedTree + "\n")
         })
     }
 
-    fun testStructureView(file: PsiFile, consumer: Consumer<StructureViewComposite>) {
+    private fun doTestStructureView(file: PsiFile, consumer: Consumer<StructureViewComposite>) {
         val vFile = file.virtualFile
         val fileEditor = FileEditorManager.getInstance(project).getSelectedEditor(vFile)
         val builder = LanguageStructureViewBuilder.INSTANCE.getStructureViewBuilder(file)!!
@@ -77,9 +78,5 @@ class TwigStructureViewTest : LightPlatformCodeInsightFixtureTestCase() {
                 "-" + ourTestFileName + "\n" +
                         " if foo"
         )
-    }
-
-    companion object {
-        private val ourTestFileName = "test.twig"
     }
 }
