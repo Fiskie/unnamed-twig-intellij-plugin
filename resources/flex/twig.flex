@@ -67,9 +67,9 @@ DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
     }
 
     {ExpressionOpen} {
-            yybegin(expression_block);
-            return TwigTokenTypes.EXPRESSION_OPEN;
-        }
+        yybegin(expression_block);
+        return TwigTokenTypes.EXPRESSION_OPEN;
+    }
 
     {StatementOpen} {
         yybegin(statement_block_tag);
