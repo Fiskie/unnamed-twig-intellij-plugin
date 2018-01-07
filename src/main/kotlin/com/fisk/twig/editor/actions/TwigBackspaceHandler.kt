@@ -13,7 +13,6 @@ class TwigBackspaceHandler : BackspaceHandlerDelegate() {
     }
 
     override fun charDeleted(c: Char, file: PsiFile?, editor: Editor?): Boolean {
-        println("Char: $c")
         removeWhitespaceControlModifier(c, file!!.project, editor!!, file)
         return true
     }

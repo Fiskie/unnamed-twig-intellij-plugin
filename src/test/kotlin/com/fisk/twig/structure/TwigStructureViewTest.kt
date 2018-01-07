@@ -11,10 +11,11 @@ import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCa
 import com.intellij.util.Consumer
 
 class TwigStructureViewTest : LightPlatformCodeInsightFixtureTestCase() {
+
     private fun doStructureViewTest(fileText: String, expectedTree: String) {
         myFixture.configureByText(ourTestFileName, fileText)
 
-        doTestStructureView(myFixture.file, Consumer { component ->
+        testStructureView(myFixture.file, Consumer { component ->
             val tree = (component.selectedStructureView as StructureViewComponent).tree
 
             // expand the whole tree
@@ -27,7 +28,7 @@ class TwigStructureViewTest : LightPlatformCodeInsightFixtureTestCase() {
         })
     }
 
-    private fun doTestStructureView(file: PsiFile, consumer: Consumer<StructureViewComposite>) {
+    fun testStructureView(file: PsiFile, consumer: Consumer<StructureViewComposite>) {
         val vFile = file.virtualFile
         val fileEditor = FileEditorManager.getInstance(project).getSelectedEditor(vFile)
         val builder = LanguageStructureViewBuilder.INSTANCE.getStructureViewBuilder(file)!!

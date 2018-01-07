@@ -1,7 +1,6 @@
-package com.fisk.twig.psi
+package com.fisk.twig.parsing
 
 import com.fisk.twig.TwigLanguage
-import com.fisk.twig.parsing.TwigParserDefinition
 import com.fisk.twig.util.TwigTestUtils
 import com.intellij.ide.util.PropertiesComponent
 import com.intellij.ide.util.PropertiesComponentImpl

@@ -24,8 +24,9 @@ such as support for Find Usages and named element refactors.
 
 ### Milestone 2: Supplementary PSI features
 
+- [ ] Line mover: Move entire statement block if caret on start/end tag
 - [ ] Update whitespace control modifier on paired brace
-    - Improve removal - currently only works on backspace press (where is the delete handler?)
+    - [ ] Improve removal - currently only works on backspace press (where is the delete handler?)
 - [x] Breadcrumbs
 - [ ] Inspections
     - [ ] Expected end block tag -- needs protection against coalescence

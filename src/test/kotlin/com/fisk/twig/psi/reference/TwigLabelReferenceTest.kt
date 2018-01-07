@@ -1,9 +1,9 @@
-package com.fisk.twig.psi
+package com.fisk.twig.psi.reference
 
 import com.fisk.twig.util.TwigTestUtils
 import com.intellij.testFramework.LightPlatformCodeInsightTestCase
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
 
-class TwigReferenceTest : LightPlatformCodeInsightFixtureTestCase() {
+class TwigLabelReferenceTest : LightPlatformCodeInsightFixtureTestCase() {
     override fun getTestDataPath() = TwigTestUtils.BASE_TEST_DATA_PATH
 }

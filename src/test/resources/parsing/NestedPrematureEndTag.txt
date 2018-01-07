@@ -40,10 +40,11 @@ Twig: NestedPrematureEndTag.twig
   PsiWhiteSpace('\n')
   TwigBlockImpl(Twig:BLOCK)
     <empty list>
-  TwigBlockEndStatementImpl(Twig:BLOCK_END_STATEMENT)
-    PsiElement(Twig:STATEMENT_OPEN)('{%')
-    PsiWhiteSpace(' ')
-    TwigTagImpl(Twig:TAG)
-      PsiElement(Twig:TAG)('endblock')
-    PsiWhiteSpace(' ')
-    PsiElement(Twig:STATEMENT_CLOSE)('%}')
+  PsiErrorElement:Mismatched close block
+    TwigBlockEndStatementImpl(Twig:BLOCK_END_STATEMENT)
+      PsiElement(Twig:STATEMENT_OPEN)('{%')
+      PsiWhiteSpace(' ')
+      TwigTagImpl(Twig:TAG)
+        PsiElement(Twig:TAG)('endblock')
+      PsiWhiteSpace(' ')
+      PsiElement(Twig:STATEMENT_CLOSE)('%}')
