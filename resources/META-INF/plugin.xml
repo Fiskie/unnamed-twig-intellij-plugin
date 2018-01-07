@@ -41,7 +41,6 @@
     <lang.formatter language="Twig" implementationClass="com.fisk.twig.format.TwigFormattingModelBuilder"/>
     <lang.parserDefinition language="Twig" implementationClass="com.fisk.twig.parsing.TwigParserDefinition" />
     <lang.psiStructureViewFactory language="Twig" implementationClass="com.fisk.twig.structure.TwigStructureViewFactory" />
-    <lang.substitutor language="HTML" implementationClass="com.fisk.twig.file.TwigLanguageSubstitutor"/>
     <lang.syntaxHighlighterFactory language="Twig" implementationClass="com.fisk.twig.TwigHighlighterFactory"/>
     <liveTemplateContext implementation="com.fisk.twig.editor.templates.TwigTemplateContextType"/>
     <!--<projectConfigurable groupId="language" provider="com.fisk.twig.pages.TwigConfigurationProvider" />-->

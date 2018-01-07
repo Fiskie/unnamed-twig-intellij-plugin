@@ -24,19 +24,4 @@ object TwigTestUtils {
 
         return PathManager.getHomePath() + "/contrib/twig/src/test/resources"
     }
-
-    @TestOnly
-    fun setOpenHtmlAsTwig(value: Boolean, project: Project, parentDisposable: Disposable) {
-        val oldValue = TwigConfig.shouldOpenHtmlAsTwig(project)
-
-        if (oldValue == value) {
-            return
-        }
-
-        TwigConfig.setShouldOpenHtmlAsTwig(value, project)
-
-        Disposer.register(parentDisposable, Disposable {
-            TwigConfig.setShouldOpenHtmlAsTwig(oldValue, project)
-        })
-    }
 }

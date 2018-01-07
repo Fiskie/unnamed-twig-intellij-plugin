@@ -5,13 +5,11 @@ import com.intellij.openapi.actionSystem.IdeActions
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
 
 class TwigMoverTest : LightPlatformCodeInsightFixtureTestCase() {
-    fun testMoveHtmlTextWhenOpenHtmlAsTwig() {
-        TwigTestUtils.setOpenHtmlAsTwig(true, project, myFixture.testRootDisposable)
+    fun testMoveHtmlText() {
         doTest("twig")
     }
 
-    fun testMoveHtmlBlockWhenOpenHtmlAsTwig() {
-        TwigTestUtils.setOpenHtmlAsTwig(true, project, myFixture.testRootDisposable)
+    fun testMoveHtmlBlock() {
         doTest("twig")
     }
 

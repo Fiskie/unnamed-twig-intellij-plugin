@@ -30,8 +30,7 @@ class PropertyNameTest(val propertyTestDefinition: PropertyTestDefinition) {
                 PropertyTestDefinition(Property.BRACE_EDITING_MODEL, "TwigBraceEditingModel"),
                 PropertyTestDefinition(Property.AUTO_COLLAPSE_BLOCKS, "TwigAutoCollapseBlocks"),
                 PropertyTestDefinition(Property.COMMENTER_LANGUAGE_ID, "TwigCommenterLanguageId"),
-                PropertyTestDefinition(Property.AUTOCOMPLETE_STATEMENTS, "TwigAutocompleteStatements"),
-                PropertyTestDefinition(Property.SHOULD_OPEN_HTML, "TwigShouldOpenHtmlAsTwig"))
+                PropertyTestDefinition(Property.AUTOCOMPLETE_STATEMENTS, "TwigAutocompleteStatements"))
 
         @Parameterized.Parameters
         @JvmStatic

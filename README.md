@@ -12,24 +12,23 @@ such as support for Find Usages and named element refactors.
     - [x] Expressions (`{{ }}`)
     - [x] Comments (`{% %}`)
 - [x] Composite Twig/HTML structure view
-    - [ ] Fix tests
-- [ ] Prioritise hinting for close statements
+- [x] Live templates
+- [x] Code folding
 - [x] Statement block indenting
+- [ ] Multi-line expression hash indenting
+- [ ] Prioritise end tag hinting for close statements
 - [ ] Remove additional whitespace in code cleanup
 - [ ] Code style page -- almost, wtf is with the formatter not working
-- [x] Code folding
 - [ ] Reindent lines on line move up/down
-- [x] Live templates
-    - [ ] Add tests
 
 ### Milestone 2: Supplementary PSI features
 
+- [x] Breadcrumbs
 - [ ] Line mover: Move entire statement block if caret on start/end tag
 - [ ] Update whitespace control modifier on paired brace
     - [ ] Improve removal - currently only works on backspace press (where is the delete handler?)
-- [x] Breadcrumbs
-- [ ] Inspections
-    - [ ] Expected end block tag -- needs protection against coalescence
+- [ ] Annotations/Inspections
+    - [ ] Expected end block tag -- protection against coalescence is desired, but tricky
     - [ ] Declared child blocks not found in the parent template
 - [ ] Reference support - Find usages and name refactor for the following:
     - [x] Variables - basic, unstable -- matches to property names right now
@@ -38,7 +37,6 @@ such as support for Find Usages and named element refactors.
     - [ ] Scoped variables in a `macro`
     - [ ] Add tests
 - [ ] Automatic matching tag rename on type a la HTML plugin
-- [ ] Fix live templates appearing in code completion list
 
 ### Milestone 3: Feature parity with community Symfony plugin Twig extensions
 

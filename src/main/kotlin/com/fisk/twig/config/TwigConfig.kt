@@ -36,19 +36,6 @@ object TwigConfig {
         get() = getStringPropertyValue(BRACE_EDITING_MODEL)
         set(model) = setStringPropertyValue(BRACE_EDITING_MODEL, model)
 
-    private fun getRawOpenHtmlAsTwigValue(project: Project): String {
-        return getStringPropertyValue(SHOULD_OPEN_HTML, project)
-    }
-
-    fun shouldOpenHtmlAsTwig(project: Project): Boolean {
-        return ENABLED == getRawOpenHtmlAsTwigValue(project)
-    }
-
-    fun setShouldOpenHtmlAsTwig(value: Boolean, project: Project): Boolean {
-        setBooleanPropertyValue(SHOULD_OPEN_HTML, value, project)
-        return true
-    }
-
     private fun getStringPropertyValue(property: Property, project: Project? = null): String {
         return PropertyAccessor(getProperties(project)).getPropertyValue(property)
     }

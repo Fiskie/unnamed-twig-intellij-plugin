@@ -48,7 +48,7 @@ class TwigFileType private constructor(lang: Language) : LanguageFileType(lang),
         val INSTANCE: LanguageFileType = TwigFileType()
 
         @NonNls
-        val DEFAULT_EXTENSION = "twig;html"
+        val DEFAULT_EXTENSION = "twig"
 
         private fun getAssociatedFileType(file: VirtualFile?, project: Project?): LanguageFileType? {
             if (project == null) {

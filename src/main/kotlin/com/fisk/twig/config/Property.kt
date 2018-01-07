@@ -53,14 +53,6 @@ enum class Property {
 
         override val default: String
             get() = "new"
-    },
-
-    SHOULD_OPEN_HTML {
-        override val stringName: String
-            get() = "TwigShouldOpenHtmlAsTwig"
-
-        override val default: String
-            get() = ""
     };
 
     /**

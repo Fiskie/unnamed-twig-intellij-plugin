@@ -4,7 +4,7 @@
               toReformat="true">
         <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true"/>
         <context>
-            <option name="Twig" value="true"/>
+            <option name="HTML" value="true"/>
         </context>
     </template>
     <template name="emb" value="{% embed '$TEMPLATE$' %}&#10;$END$&#10;{% endembed %}"
@@ -12,7 +12,7 @@
               toReformat="true">
         <variable name="TEMPLATE" expression="" defaultValue="" alwaysStopAt="true"/>
         <context>
-            <option name="Twig" value="true"/>
+            <option name="HTML" value="true"/>
         </context>
     </template>
     <template name="esc" value="{% autoescape $TYPE$ %}&#10;$END$&#10;{% endautoescape %}"
@@ -20,14 +20,14 @@
               toReformat="true">
         <variable name="TYPE" expression="" defaultValue="" alwaysStopAt="true"/>
         <context>
-            <option name="Twig" value="true"/>
+            <option name="HTML" value="true"/>
         </context>
     </template>
     <template name="ext" value="{% extends '$TEMPLATE$'$END$ %}" description="Twig: extends 'template'"
               toReformat="true">
         <variable name="TEMPLATE" expression="" defaultValue="" alwaysStopAt="true"/>
         <context>
-            <option name="Twig" value="true"/>
+            <option name="HTML" value="true"/>
         </context>
     </template>
     <template name="for" value="{% for $VAR$ in $SEQUENCE$ %}&#10;$END$&#10;{% endfor %}"
@@ -35,35 +35,35 @@
         <variable name="VAR" expression="" defaultValue="" alwaysStopAt="true"/>
         <variable name="SEQUENCE" expression="" defaultValue="" alwaysStopAt="true"/>
         <context>
-            <option name="Twig" value="true"/>
+            <option name="HTML" value="true"/>
         </context>
     </template>
     <template name="from" value="{% from '$TEMPLATE$' import $END$ %}"
               description="Twig: from 'template' import..." toReformat="true">
         <variable name="TEMPLATE" expression="" defaultValue="" alwaysStopAt="true"/>
         <context>
-            <option name="Twig" value="true"/>
+            <option name="HTML" value="true"/>
         </context>
     </template>
     <template name="if" value="{% if $CONDITION$ %}&#10;$END$&#10;{% endif %}"
               description="Twig: if...endif" toReformat="true">
         <variable name="CONDITION" expression="" defaultValue="" alwaysStopAt="true"/>
         <context>
-            <option name="Twig" value="true"/>
+            <option name="HTML" value="true"/>
         </context>
     </template>
     <template name="imp" value="{% import '$TEMPLATE$'$END$ %}"
               description="Twig: import 'template'" toReformat="true">
         <variable name="TEMPLATE" expression="" defaultValue="" alwaysStopAt="true"/>
         <context>
-            <option name="Twig" value="true"/>
+            <option name="HTML" value="true"/>
         </context>
     </template>
     <template name="inc" value="{% include '$TEMPLATE$'$END$ %}"
               description="Twig: include 'template'" toReformat="true">
         <variable name="TEMPLATE" expression="" defaultValue="" alwaysStopAt="true"/>
         <context>
-            <option name="Twig" value="true"/>
+            <option name="HTML" value="true"/>
         </context>
     </template>
     <template name="mcr" value="{% macro $NAME$($PARAMETERS$) %}&#10;$END$&#10;{% endmacro %}"
@@ -71,25 +71,25 @@
         <variable name="NAMES" expression="" defaultValue="" alwaysStopAt="true"/>
         <variable name="PARAMETERS" expression="" defaultValue="" alwaysStopAt="true"/>
         <context>
-            <option name="Twig" value="true"/>
+            <option name="HTML" value="true"/>
         </context>
     </template>
     <template name="sbx" value="{% sandbox %}&#10;$END$&#10;{% endsandbox %}"
               description="Twig: sandbox...endsandbox" toReformat="true">
         <context>
-            <option name="Twig" value="true"/>
+            <option name="HTML" value="true"/>
         </context>
     </template>
     <template name="spl" value="{% spaceless %}&#10;$END$&#10;{% endspaceless %}"
               description="Twig: spaceless...endspaceless" toReformat="true">
         <context>
-            <option name="Twig" value="true"/>
+            <option name="HTML" value="true"/>
         </context>
     </template>
     <template name="verb" value="{% verbatim %}&#10;$END$&#10;{% endverbatim %}"
               description="Twig: verbatim...endverbatim" toReformat="true">
         <context>
-            <option name="Twig" value="true"/>
+            <option name="HTML" value="true"/>
         </context>
     </template>
 </templateSet>
