@@ -1,4 +1,4 @@
-package com.fisk.twig.parsing
+package com.fisk.twig.lexer
 
 import com.fisk.twig.parsing.TwigTokenTypes.EXPRESSION_CLOSE
 import com.fisk.twig.parsing.TwigTokenTypes.EXPRESSION_OPEN

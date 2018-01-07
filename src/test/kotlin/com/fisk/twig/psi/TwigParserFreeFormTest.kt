@@ -1,4 +1,4 @@
-package com.fisk.twig.parsing
+package com.fisk.twig.psi
 
 class TwigParserFreeFormTest : TwigParserTest() {
     fun testSimpleExpression() {

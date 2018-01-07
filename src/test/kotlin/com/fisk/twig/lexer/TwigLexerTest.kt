@@ -1,5 +1,6 @@
-package com.fisk.twig.parsing
+package com.fisk.twig.lexer
 
+import com.fisk.twig.parsing.TwigRawLexer
 import com.intellij.lexer.Lexer
 import com.intellij.psi.tree.IElementType
 import com.intellij.testFramework.PlatformLiteFixture
