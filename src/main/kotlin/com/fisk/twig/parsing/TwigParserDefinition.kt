@@ -30,7 +30,7 @@ class TwigParserDefinition : ParserDefinition {
         return IStubFileElementType("FILE", TwigLanguage.INSTANCE)
     }
 
-    override fun createLexer(project: Project?) = TwigMergingLexer()
+    override fun createLexer(project: Project?) = TwigCommentMergingLexer()
 
     override fun createElement(node: ASTNode?): PsiElement {
         node?.let {

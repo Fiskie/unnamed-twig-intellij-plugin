@@ -26,6 +26,10 @@ sourceSets {
     main.resources.srcDir 'resources'
 }
 
+patchPluginXml {
+    sinceBuild "171.3780"
+}
+
 intellij {
     pluginName = 'idea-community-twig'
     version = 'IU-2017.3.2'

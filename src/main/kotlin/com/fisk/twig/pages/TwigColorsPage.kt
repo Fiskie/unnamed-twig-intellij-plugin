@@ -10,23 +10,17 @@ import com.intellij.openapi.options.colors.ColorDescriptor
 import com.intellij.openapi.options.colors.ColorSettingsPage
 
 class TwigColorsPage : ColorSettingsPage {
-    override fun getDisplayName(): String {
-        return TwigBundle.message("twig.files.file.type.description")
-    }
+    override fun getDisplayName() = TwigBundle.message("twig.files.file.type.description")
 
     override fun getIcon() = TwigIcons.file_icon
 
-    override fun getAttributeDescriptors(): Array<AttributesDescriptor> {
-        return ATTRS
-    }
+    override fun getAttributeDescriptors() = ATTRS
 
-    override fun getColorDescriptors(): Array<ColorDescriptor> {
-        return ColorDescriptor.EMPTY_ARRAY
-    }
+    override fun getColorDescriptors(): Array<out ColorDescriptor> = ColorDescriptor.EMPTY_ARRAY
 
-    override fun getHighlighter(): SyntaxHighlighter {
-        return TwigHighlighter()
-    }
+    override fun getHighlighter() = TwigHighlighter()
+
+    override fun getAdditionalHighlightingTagToDescriptorMap() = null
 
     override fun getDemoText(): String {
         return "{% include 'root.html' with {foo: bar, arr: [1, 2, 3]} %} \n" +
@@ -43,27 +37,19 @@ class TwigColorsPage : ColorSettingsPage {
                 "{% endblock %}\n"
     }
 
-    override fun getAdditionalHighlightingTagToDescriptorMap(): Map<String, TextAttributesKey>? {
-        return null
-    }
-
     companion object {
         private val ATTRS: Array<AttributesDescriptor>
 
         init {
-            val attrs = arrayOfNulls<AttributesDescriptor>(TwigHighlighter.DISPLAY_NAMES.size)
             val textAttributesKeys = TwigHighlighter.DISPLAY_NAMES.keys
             val keys = textAttributesKeys.toTypedArray()
-            for (i in keys.indices) {
+
+            ATTRS = Array(TwigHighlighter.DISPLAY_NAMES.size, {i ->
                 val key = keys[i]
                 val name = TwigHighlighter.DISPLAY_NAMES[key]?.getFirst()
 
-                name?.let {
-                    attrs[i] = AttributesDescriptor(name, key)
-                }
-            }
-
-            ATTRS = attrs as Array<AttributesDescriptor>
+                AttributesDescriptor(name ?: "", key)
+            })
         }
     }
 }

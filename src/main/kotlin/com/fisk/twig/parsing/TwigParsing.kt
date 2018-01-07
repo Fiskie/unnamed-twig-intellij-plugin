@@ -72,7 +72,8 @@ class TwigParsing(private val builder: PsiBuilder) {
         // parse zero or more statements (empty statements are acceptable)
         while (true) {
             val optionalStatementMarker = builder.mark()
-            if (parseStatement(builder)) {
+
+            if (parseTwigConstruct(builder)) {
                 optionalStatementMarker.drop()
             } else {
                 optionalStatementMarker.rollbackTo()
@@ -83,7 +84,7 @@ class TwigParsing(private val builder: PsiBuilder) {
         statementsMarker.done(BLOCK)
     }
 
-    private fun parseStatement(builder: PsiBuilder): Boolean {
+    private fun parseTwigConstruct(builder: PsiBuilder): Boolean {
         if (parseExpressionBlock(builder)) {
             return true
         }
@@ -98,6 +99,11 @@ class TwigParsing(private val builder: PsiBuilder) {
             return true
         }
 
+        if (builder.tokenType == COMMENT) {
+            parseLeafToken(builder, COMMENT)
+            return true
+        }
+
         if (builder.tokenType == UNCLOSED_COMMENT) {
             val unclosedCommentMarker = builder.mark()
             parseLeafToken(builder, UNCLOSED_COMMENT)
@@ -106,15 +112,14 @@ class TwigParsing(private val builder: PsiBuilder) {
             return true
         }
 
-        if (builder.tokenType == COMMENT) {
-            parseLeafToken(builder, COMMENT)
-            return true
-        }
-
         return false
     }
 
     private fun parseStatementChain(builder: PsiBuilder): Boolean {
+        if (builder.tokenType != STATEMENT_OPEN) {
+            return false
+        }
+
         /**
          * TODO: mark errors if else tag is used in places where it is not expected - see [TwigTagUtil.allowsInverseTag]
          */
@@ -206,12 +211,15 @@ class TwigParsing(private val builder: PsiBuilder) {
     }
 
     private fun parseStatement(builder: PsiBuilder, type: TwigCompositeElementType, strategy: (String) -> Boolean): StatementResult {
+        if (builder.tokenType != STATEMENT_OPEN) {
+            return StatementResult(false)
+        }
+
         val marker = builder.mark()
         var tagName = ""
 
-        if (builder.tokenType != STATEMENT_OPEN) {
-            marker.rollbackTo()
-            return StatementResult(false)
+        if (builder.lookAhead(1) != STATEMENT_CLOSE) {
+            builder.advanceLexer()
         }
 
         do {
@@ -220,6 +228,11 @@ class TwigParsing(private val builder: PsiBuilder) {
 
                 tag?.let {
                     tagName = tag
+                }
+
+                if (!strategy(tagName)) {
+                    marker.rollbackTo()
+                    return StatementResult(false, tagName)
                 }
 
                 parseLeafToken(builder, TAG)
@@ -251,32 +264,32 @@ class TwigParsing(private val builder: PsiBuilder) {
     }
 
     private fun parseExpressionBlock(builder: PsiBuilder): Boolean {
-        if (builder.tokenType == EXPRESSION_OPEN) {
-            val blockMarker = builder.mark()
-
-            do {
-                builder.advanceLexer()
-
-                val expressionMarker = builder.mark()
-
-                if (parseExpression(builder)) {
-                    expressionMarker.drop()
-                } else {
-                    expressionMarker.rollbackTo()
-                }
-
-                if (builder.tokenType == EXPRESSION_CLOSE) {
-                    break
-                }
-            } while (!builder.eof())
-
-            builder.advanceLexer() // consume last EXPRESSION_CLOSE
-
-            blockMarker.done(TwigTokenTypes.EXPRESSION_BLOCK)
-            return true
+        if (builder.tokenType != EXPRESSION_OPEN) {
+            return false
         }
 
-        return false
+        val blockMarker = builder.mark()
+
+        do {
+            builder.advanceLexer()
+
+            val expressionMarker = builder.mark()
+
+            if (parseExpression(builder)) {
+                expressionMarker.drop()
+            } else {
+                expressionMarker.rollbackTo()
+            }
+
+            if (builder.tokenType == EXPRESSION_CLOSE) {
+                break
+            }
+        } while (!builder.eof())
+
+        builder.advanceLexer() // consume last EXPRESSION_CLOSE
+
+        blockMarker.done(TwigTokenTypes.EXPRESSION_BLOCK)
+        return true
     }
 
     /**

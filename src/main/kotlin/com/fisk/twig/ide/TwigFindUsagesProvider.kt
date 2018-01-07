@@ -1,6 +1,6 @@
 package com.fisk.twig.ide
 
-import com.fisk.twig.parsing.TwigMergingLexer
+import com.fisk.twig.parsing.TwigCommentMergingLexer
 import com.fisk.twig.parsing.TwigTokenTypes
 import com.fisk.twig.psi.TwigPsiElement
 import com.intellij.lang.cacheBuilder.DefaultWordsScanner
@@ -10,7 +10,7 @@ import com.intellij.psi.PsiElement
 
 class TwigFindUsagesProvider : FindUsagesProvider {
     override fun getWordsScanner(): WordsScanner? {
-        return DefaultWordsScanner(TwigMergingLexer(), TwigTokenTypes.IDENTIFIERS, TwigTokenTypes.COMMENTS, TwigTokenTypes.STRING_LITERALS)
+        return DefaultWordsScanner(TwigCommentMergingLexer(), TwigTokenTypes.IDENTIFIERS, TwigTokenTypes.COMMENTS, TwigTokenTypes.STRING_LITERALS)
     }
 
     override fun getNodeText(element: PsiElement, useFullName: Boolean): String {

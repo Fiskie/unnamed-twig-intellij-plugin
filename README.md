@@ -18,20 +18,26 @@ such as support for Find Usages and named element refactors.
 - [ ] Multi-line expression hash indenting
 - [ ] Prioritise end tag hinting for close statements
 - [ ] Remove additional whitespace in code cleanup
-- [ ] Code style page -- almost, wtf is with the formatter not working
+- [ ] Code style configuration page
+    - [ ] Hard wrap
+    - [ ] Wrap on typing
+    - [ ] Visual guides
+    - [ ] Spaces inside statement braces toggle
+    - [ ] Spaces inside expression braces toggle
 - [ ] Reindent lines on line move up/down
 
 ### Milestone 2: Supplementary PSI features
 
 - [x] Breadcrumbs
-- [ ] Line mover: Move entire statement block if caret on start/end tag
+- [ ] Line mover: Move entire statement block if caret on start/end tag (add StatementUpDownMover)
 - [ ] Update whitespace control modifier on paired brace
     - [ ] Improve removal - currently only works on backspace press (where is the delete handler?)
 - [ ] Annotations/Inspections
     - [ ] Expected end block tag -- protection against coalescence is desired, but tricky
     - [ ] Declared child blocks not found in the parent template
+    - [ ] Unclosed comment inspection
 - [ ] Reference support - Find usages and name refactor for the following:
-    - [x] Variables - basic, unstable -- matches to property names right now
+    - [x] Variables - basic, unstable -- matches to property names right now, expression PSI needs improving.
     - [ ] Macro names
     - [ ] Scoped variables in a `for` block
     - [ ] Scoped variables in a `macro`
