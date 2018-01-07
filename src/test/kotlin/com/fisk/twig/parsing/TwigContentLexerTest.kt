@@ -14,7 +14,7 @@ class TwigContentLexerTest : TwigLexerTest() {
         // Functionally this probably won't change anything, but
         // I'd like it if it weren't so hacky
         val result = tokenize("var foo = function() { console.log(bar) }")
-        result.shouldMatchTokenTypes(CONTENT)
         result.shouldMatchTokenContent("var foo = function() { console.log(bar) }")
+        result.shouldMatchTokenTypes(CONTENT)
     }
 }

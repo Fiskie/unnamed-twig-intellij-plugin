@@ -807,7 +807,7 @@ final class _TwigLexer implements FlexLexer {
           case 47: break;
           case 18: 
             { yybegin(expression_block);
-            return TwigTokenTypes.EXPRESSION_OPEN;
+        return TwigTokenTypes.EXPRESSION_OPEN;
             } 
             // fall through
           case 48: break;

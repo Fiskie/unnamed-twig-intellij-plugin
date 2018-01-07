@@ -1,0 +1,12 @@
+Twig: LooseBraces.twig
+  TwigBlockImpl(Twig:BLOCK)
+    PsiElement(Twig:CONTENT)('{ { { ')
+    TwigExpressionBlockImpl(Twig:EXPRESSION_BLOCK)
+      PsiElement(Twig:EXPRESSION_OPEN)('{{')
+      PsiWhiteSpace(' ')
+      TwigExpressionImpl(Twig:EXPRESSION)
+        TwigLabelImpl(Twig:LABEL)
+          PsiElement(Twig:LABEL)('foo')
+      PsiWhiteSpace(' ')
+      PsiElement(Twig:EXPRESSION_CLOSE)('}}')
+    PsiWhiteSpace(' { { } }')

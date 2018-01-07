@@ -179,7 +179,7 @@ DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
 
     "," { return TwigTokenTypes.COMMA; }
 
-    {Label} { return TwigTokenTypes.VARIABLE; }
+    {Label} { return TwigTokenTypes.LABEL; }
 
     {WhiteSpace} { return TwigTokenTypes.WHITE_SPACE; }
 }

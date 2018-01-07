@@ -33,6 +33,11 @@ class TwigParserFreeFormTest : TwigParserTest() {
         doTest(true)
     }
 
+    fun testLooseBraces() {
+        // Make sure CONTENT is being parsed properly
+        doTest(true)
+    }
+
     fun testSimpleSetStatement() {
         doTest(true)
     }
