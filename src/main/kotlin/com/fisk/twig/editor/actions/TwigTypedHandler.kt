@@ -5,6 +5,7 @@ import com.fisk.twig.TwigTagUtil
 import com.fisk.twig.config.TwigConfig
 import com.fisk.twig.parsing.TwigTokenTypes
 import com.fisk.twig.psi.*
+import com.fisk.twig.psi.util.TwigBraceUtil
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.fileTypes.FileType
@@ -78,24 +79,6 @@ class TwigTypedHandler : TypedHandlerDelegate() {
         }
     }
 
-    private fun getCloseBraceForElement(elementType: IElementType) : IElementType? {
-        return when (elementType) {
-            TwigTokenTypes.STATEMENT_OPEN -> TwigTokenTypes.STATEMENT_CLOSE
-            TwigTokenTypes.EXPRESSION_OPEN -> TwigTokenTypes.EXPRESSION_CLOSE
-            TwigTokenTypes.COMMENT_OPEN -> TwigTokenTypes.COMMENT_CLOSE
-            else -> null
-        }
-    }
-
-    private fun getOpenBraceForElement(elementType: IElementType) : IElementType? {
-        return when (elementType) {
-            TwigTokenTypes.STATEMENT_CLOSE -> TwigTokenTypes.STATEMENT_OPEN
-            TwigTokenTypes.EXPRESSION_CLOSE -> TwigTokenTypes.EXPRESSION_OPEN
-            TwigTokenTypes.COMMENT_CLOSE -> TwigTokenTypes.COMMENT_OPEN
-            else -> null
-        }
-    }
-
     private fun addWhitespaceControlModifier(c: Char, project: Project, editor: Editor, file: PsiFile) {
         if (c != '-') {
             return
@@ -107,7 +90,7 @@ class TwigTypedHandler : TypedHandlerDelegate() {
         val openingBrace = file.findElementAt(editor.caretModel.offset - 1)
 
         openingBrace?.let {
-            val closingElementType = getCloseBraceForElement(openingBrace.node.elementType)
+            val closingElementType = TwigBraceUtil.getCloseBraceForElement(openingBrace.node.elementType)
 
             closingElementType?.let {
                 val closingBrace = PsiTreeUtil.findSiblingForward(openingBrace, closingElementType, {})
@@ -125,7 +108,7 @@ class TwigTypedHandler : TypedHandlerDelegate() {
         val closingBrace = file.findElementAt(editor.caretModel.offset)
 
         closingBrace?.let {
-            val closingElementType = getOpenBraceForElement(closingBrace.node.elementType)
+            val closingElementType = TwigBraceUtil.getOpenBraceForElement(closingBrace.node.elementType)
 
             closingElementType?.let {
                 val openingBrace = PsiTreeUtil.findSiblingBackward(closingBrace, closingElementType, {})

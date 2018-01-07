@@ -18,14 +18,14 @@ such as support for Find Usages and named element refactors.
 - [ ] Remove additional whitespace in code cleanup
 - [ ] Code style page -- almost, wtf is with the formatter not working
 - [x] Code folding
+- [ ] Reindent lines on line move up/down
 - [x] Live templates
     - [ ] Add tests
 
 ### Milestone 2: Supplementary PSI features
 
-- [ ] Update whitespace control modifier on opposite brace
-    - [x] Create paired whitespace character
-    - [ ] Erase paired whitespace character
+- [ ] Update whitespace control modifier on paired brace
+    - Improve removal - currently only works on backspace press (where is the delete handler?)
 - [x] Breadcrumbs
 - [ ] Inspections
     - [ ] Expected end block tag -- needs protection against coalescence
