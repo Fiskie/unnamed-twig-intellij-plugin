@@ -43,6 +43,7 @@ such as support for Find Usages and named element refactors.
     - [ ] Scoped variables in a `macro`
     - [ ] Add tests
 - [ ] Automatic matching tag rename on type a la HTML plugin
+- [ ] Add the special `loop` object when in `for` context
 
 ### Milestone 3: Feature parity with community Symfony plugin Twig extensions
 
