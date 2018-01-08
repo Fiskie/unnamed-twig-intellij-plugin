@@ -12,7 +12,11 @@ import com.intellij.psi.tree.TokenSet
 
 class TwigErrorFilter private constructor() : TemplateLanguageErrorFilter(START_TEMPLATE_TOKENS, TwigFileViewProvider::class.java, "HTML") {
     override fun shouldIgnoreErrorAt(viewProvider: FileViewProvider, offset: Int): Boolean {
-        return if (super.shouldIgnoreErrorAt(viewProvider, offset)) true else hasWhitespacesInHtmlBetweenErrorAndOpenTokens(offset, viewProvider as TemplateLanguageFileViewProvider)
+        if (super.shouldIgnoreErrorAt(viewProvider, offset)) {
+            return true
+        }
+
+        return hasWhitespacesInHtmlBetweenErrorAndOpenTokens(offset, viewProvider as TemplateLanguageFileViewProvider)
     }
 
     companion object {

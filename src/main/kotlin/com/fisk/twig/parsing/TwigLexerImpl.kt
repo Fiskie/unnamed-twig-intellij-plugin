@@ -4,13 +4,16 @@ import com.intellij.lexer.MergeFunction
 import com.intellij.lexer.MergingLexerAdapterBase
 
 /**
- * All this does is merge comment tokens together to create UNCLOSED_COMMENT or COMMENT
+ * This will merge comment tokens to help the IDE, and merge CONTENT tokens since the lexer is a little broken.
  */
 class TwigLexerImpl : MergingLexerAdapterBase(TwigRawLexer()) {
     companion object {
         val MERGE_FUNCTION = MergeFunction { type, originalLexer ->
-            if (type == TwigTokenTypes.CONTENT && originalLexer.tokenType == TwigTokenTypes.CONTENT) {
-                originalLexer.advance()
+            if (type == TwigTokenTypes.CONTENT) {
+                while (originalLexer.tokenType == TwigTokenTypes.CONTENT) {
+                    originalLexer.advance()
+                }
+
                 return@MergeFunction TwigTokenTypes.CONTENT
             }
 
