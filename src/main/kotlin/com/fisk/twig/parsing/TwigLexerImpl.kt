@@ -6,9 +6,14 @@ import com.intellij.lexer.MergingLexerAdapterBase
 /**
  * All this does is merge comment tokens together to create UNCLOSED_COMMENT or COMMENT
  */
-class TwigCommentMergingLexer : MergingLexerAdapterBase(TwigRawLexer()) {
+class TwigLexerImpl : MergingLexerAdapterBase(TwigRawLexer()) {
     companion object {
         val MERGE_FUNCTION = MergeFunction { type, originalLexer ->
+            if (type == TwigTokenTypes.CONTENT && originalLexer.tokenType == TwigTokenTypes.CONTENT) {
+                originalLexer.advance()
+                return@MergeFunction TwigTokenTypes.CONTENT
+            }
+
             if (type !== TwigTokenTypes.COMMENT_OPEN) {
                 return@MergeFunction type
             }

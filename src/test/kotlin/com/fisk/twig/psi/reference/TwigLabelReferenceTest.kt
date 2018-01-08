@@ -5,4 +5,8 @@ import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCa
 
 class TwigLabelReferenceTest : LightPlatformCodeInsightFixtureTestCase() {
     override fun getTestDataPath() = TwigTestUtils.BASE_TEST_DATA_PATH
+
+    fun testStuff() {
+        // todo
+    }
 }

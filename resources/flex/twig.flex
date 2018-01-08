@@ -56,7 +56,6 @@ Label = [A-Za-z_]\w*
 %state twig
 %state comment
 %state expression
-%state subexpression
 %state hash
 %%
 
@@ -76,7 +75,7 @@ Label = [A-Za-z_]\w*
 
     // Check for anything that is not a string containing "{"; that's CONTENT
     !([^]*"{"[^]*) {
-        return TwigTokenTypes.CONTENT;
+        return handleContent();
     }
 }
 
@@ -98,7 +97,7 @@ Label = [A-Za-z_]\w*
     // however they are being tokenized oddly.
 
     \{[^\{#%]+ {
-        yypopState(); return TwigTokenTypes.CONTENT;
+        yypopState(); return handleContent();
     }
 }
 
@@ -106,7 +105,7 @@ Label = [A-Za-z_]\w*
     "}" { yypopState(); return TwigTokenTypes.RBRACE; }
 }
 
-<subexpression, expression, hash> {
+<expression, hash> {
     "(" { return TwigTokenTypes.LPARENTH; }
     ")" { return TwigTokenTypes.RPARENTH; }
     "[" { return TwigTokenTypes.LBRACKET; }
