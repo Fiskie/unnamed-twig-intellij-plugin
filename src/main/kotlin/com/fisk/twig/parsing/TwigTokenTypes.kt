@@ -62,6 +62,8 @@ object TwigTokenTypes {
     @JvmField
     val COMMA = TwigElementType("COMMA", "twig.parsing.element.expected.comma")
     @JvmField
+    val COLON = TwigElementType("COLON", "twig.parsing.element.expected.colon")
+    @JvmField
     val COMMENT = TwigElementType("COMMENT", "twig.parsing.element.expected.comment")
 
     val EXPRESSION_BLOCK = TwigCompositeElementType("EXPRESSION_BLOCK")

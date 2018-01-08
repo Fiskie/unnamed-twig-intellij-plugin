@@ -13,6 +13,11 @@ class TwigFormatterSampleFileTest : TwigFormatterTest() {
         doFileBasedTest()
     }
 
+    @Throws(Exception::class)
+    fun testLargeFileBenchmark() {
+        doFileBasedTest()
+    }
+
     /**
      * Test out formatting with a non-HTML template data language
      *

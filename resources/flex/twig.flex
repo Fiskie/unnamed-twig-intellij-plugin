@@ -51,53 +51,109 @@ CommentClose = -?#\}
 
 Label = [A-Za-z_]\w*
 
-AnyChar = [.]
-DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
-
-%state expression_block
 %state statement
 %state statement_block_tag
+%state twig
 %state comment
+%state expression
 %%
 
 <YYINITIAL> {
+    ~"{" {
+        // backtrack over any stache characters at the end of this string
+        while (yylength() > 0 && yytext().subSequence(yylength() - 1, yylength()).toString().equals("{")) {
+            yypushback(1);
+        }
+
+        yypushState(twig);
+
+        if (!yytext().toString().equals("")) {
+          return handleContent();
+        }
+    }
+
+    // Check for anything that is not a string containing "{"; that's CONTENT
+    !([^]*"{"[^]*) {
+        return TwigTokenTypes.CONTENT;
+    }
+}
+
+<twig> {
     {CommentOpen} {
-        yybegin(comment);
-        return TwigTokenTypes.COMMENT_OPEN;
+        yypopState(); yypushState(comment); return TwigTokenTypes.COMMENT_OPEN;
     }
 
     {ExpressionOpen} {
-        yybegin(expression_block);
-        return TwigTokenTypes.EXPRESSION_OPEN;
+        yypopState(); yypushState(expression); return TwigTokenTypes.EXPRESSION_OPEN;
     }
 
     {StatementOpen} {
-        yybegin(statement_block_tag);
-        return TwigTokenTypes.STATEMENT_OPEN;
+        yypopState(); yypushState(statement_block_tag); return TwigTokenTypes.STATEMENT_OPEN;
     }
 
     // FIXME: fix content lexer to consume content properly
     // Right now it's splitting CONTENT on certain delimiters (#, %, {). External fragments will work,
     // however they are being tokenized oddly.
 
-    [^\{]+?(\{\{|\{#|\{%) {
-        yypushback(2);
-        return handleContent();
-    }
-
     \{[^\{#%]+ {
-        return handleContent();
+        yypopState(); return TwigTokenTypes.CONTENT;
+    }
+}
+
+<expression> {
+    "(" { return TwigTokenTypes.LPARENTH; }
+    ")" { return TwigTokenTypes.RPARENTH; }
+    "[" { return TwigTokenTypes.LBRACKET; }
+    "]" { return TwigTokenTypes.RBRACKET; }
+    "{" { return TwigTokenTypes.LBRACE; }
+    "}"\~?"}}" | "}"\~?"%}" { return TwigTokenTypes.RBRACE; }
+    ":" { return TwigTokenTypes.COLON; }
+    "true"/[}\)\t \n\x0B\f\r] { return TwigTokenTypes.BOOLEAN; }
+    "false"/[}\)\t \n\x0B\f\r] { return TwigTokenTypes.BOOLEAN; }
+    \-?[0-9]+(\.[0-9]+)?/[}\)\t \n\x0B\f\r] { return TwigTokenTypes.NUMBER; }
+    "|" { return TwigTokenTypes.FILTER_SEP; }
+    [\/.] { return TwigTokenTypes.SEP; }
+    "=" { return TwigTokenTypes.EQUALS; }
+    \"([^\"\\]|\\.)*\" { return TwigTokenTypes.STRING; }
+    '([^'\\]|\\.)*' { return TwigTokenTypes.STRING; }
+
+    "odd" |
+    "even" {
+        return TwigTokenTypes.TEST;
     }
 
-    [^\{]+ {
-        return handleContent();
+    // in the order of operator precedence (except for 'not', which is a negator)
+    "with" | "not" |
+    "b-and" | "b-xor" | "b-or" |
+    "or" | "and" |
+    "==" | "!=" | "<" | ">" | ">=" | "<=" |
+    "in" |
+    "matches" |
+    "starts with" | "ends with" |
+    ".." |
+    "+" | "-" | "~" | "*" | "/" | "//" | "%" | "is" | "**" |
+    "??" | "?:" {
+        return TwigTokenTypes.OPERATOR;
+    }
+
+    "," { return TwigTokenTypes.COMMA; }
+
+    {Label} { return TwigTokenTypes.LABEL; }
+
+    {WhiteSpace} { return TwigTokenTypes.WHITE_SPACE; }
+
+    {StatementClose} {
+        yypopState(); return TwigTokenTypes.STATEMENT_CLOSE;
+    }
+
+    {ExpressionClose} {
+        yypopState(); return TwigTokenTypes.EXPRESSION_CLOSE;
     }
 }
 
 <comment> {
     {CommentClose} {
-        yybegin(YYINITIAL);
-        return TwigTokenTypes.COMMENT_CLOSE;
+        yypopState(); return TwigTokenTypes.COMMENT_CLOSE;
     }
 
     ~{CommentClose} {
@@ -116,80 +172,15 @@ DoubleQuotesChars = (([^\"\\]|("\\"{AnyChar})))
 
 <statement_block_tag> {
     {Label} {
-        yybegin(statement);
+        yypopState();
+        yypushState(expression);
         return TwigTokenTypes.TAG;
     }
 
-    {StatementClose} {
-        yybegin(YYINITIAL);
+    \~?{StatementClose} {
+        yypopState();
         return TwigTokenTypes.STATEMENT_CLOSE;
     }
-
-    {WhiteSpace} { return TwigTokenTypes.WHITE_SPACE; }
-}
-
-<statement> {
-    {StatementClose} {
-        yybegin(YYINITIAL);
-        return TwigTokenTypes.STATEMENT_CLOSE;
-    }
-
-    "odd" |
-    "even" {
-        return TwigTokenTypes.TEST;
-    }
-
-//    [\t \n\x0B\f\r]* { return TwigTokenTypes.WHITE_SPACE; }
-    "=" { return TwigTokenTypes.EQUALS; }
-}
-
-<expression_block> {
-    {ExpressionClose} {
-        yybegin(YYINITIAL);
-        return TwigTokenTypes.EXPRESSION_CLOSE;
-    }
-}
-
-<statement, expression_block> {
-    "(" { return TwigTokenTypes.LPARENTH; }
-    ")" { return TwigTokenTypes.RPARENTH; }
-    "[" { return TwigTokenTypes.LBRACKET; }
-    "]" { return TwigTokenTypes.RBRACKET; }
-    "{" { return TwigTokenTypes.LBRACE; }
-    "}" { return TwigTokenTypes.RBRACE; }
-    "true"/[}\)\t \n\x0B\f\r] { return TwigTokenTypes.BOOLEAN; }
-    "false"/[}\)\t \n\x0B\f\r] { return TwigTokenTypes.BOOLEAN; }
-    \-?[0-9]+(\.[0-9]+)?/[}\)\t \n\x0B\f\r] { return TwigTokenTypes.NUMBER; }
-    "|" { return TwigTokenTypes.FILTER_SEP; }
-    [\/.] { return TwigTokenTypes.SEP; }
-
-    // in the order of operator precedence (except for 'not', which is a negator)
-    "not" |
-    "b-and" | "b-xor" | "b-or" |
-    "or" | "and" |
-    "==" | "!=" | "<" | ">" | ">=" | "<=" |
-    "in" |
-    "matches" |
-    "starts with" | "ends with" |
-    ".." |
-    "+" | "-" | "~" | "*" | "/" | "//" | "%" | "is" | "**" |
-    "??" | "?:" {
-        return TwigTokenTypes.OPERATOR;
-    }
-
-    "," { return TwigTokenTypes.COMMA; }
-
-    {Label} { return TwigTokenTypes.LABEL; }
-
-    {WhiteSpace} { return TwigTokenTypes.WHITE_SPACE; }
-}
-
-<statement, expression_block>(b?[\"]{DoubleQuotesChars}*[\"]) {
-    return TwigTokenTypes.STRING;
-}
-
-<statement, expression_block>(b?[']([^'\\]|("\\"{AnyChar}))*[']) {
-    return TwigTokenTypes.STRING;
 }
 
 {WhiteSpace}+ { return TwigTokenTypes.WHITE_SPACE; }

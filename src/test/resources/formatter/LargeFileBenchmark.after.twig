@@ -1,0 +1,124 @@
+{% extends 'layout/base.twig' %}
+
+{% block content %}
+
+    {% if not session_user.isPremium() %}
+        <div class="well well-sm">
+            <h4>Premium Search</h4>
+
+            <p>Only Premium users can view ownership details for each item, but
+                feel free to browse.</p>
+            <p><a href="{{ path_for('premium_subscribe') }}" class="btn btn-premium">Get
+                    Premium</a>
+            </p>
+        </div>
+    {% endif %}
+
+    <div class="row row-browser">
+        <div class="col-md-8">
+            <div class="premium-search-results">
+                {% for result in results.iter() %}
+                    {% include 'premium/_item-result.twig' %}
+                {% else %}
+                    {% if no_filters %}
+                        <div class="well well-sm">
+                            <h4>Add at least <strong>one search filter</strong>
+                                to
+                                begin.</h4>
+                            <p>
+                                Click <i class="fa fa-search"></i> <strong>Build
+                                    a
+                                    Search</strong> to customize your search.
+                            </p>
+                        </div>
+                    {% elseif error_title %}
+                        <div class="alert alert-warning">
+                            <h4>
+                                {{ error_title }}
+                            </h4>
+                            <p>
+                                {{ error_message }}
+                            </p>
+                            <p>
+                                <a class="btn btn-default" href="">
+                                    Try again
+                                </a>
+                            </p>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            <h4>No results found.</h4>
+                            <p>
+                                We can't seem to find anything with the filters
+                                you specified. We tried really hard, too.
+                            </p>
+                            <p>
+                                If you know that an item matching these filters
+                                actually exists, it may be in a private inventory or it hasn't been tracked yet.
+                            </p>
+                            <p>
+                                You can try widening your search.
+                            </p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% if results %}
+                {{ filters.getPagination('/premium/search/', 15, resultCount).draw()|raw }}
+            {% endif %}
+        </div>
+        <div class="col-md-4">
+            <div class="premium-search-form">
+                <h2 class="title">Premium Search</h2>
+                <a class="btn btn-premium btn-block btn-lg"
+                   id="build-premium-search">
+                    <i class="fa fa-search"></i> Build a Search
+                </a>
+                {% if results and session_user.isPremium() %}
+                    <a class="btn btn-info btn-block" id="check-exchanges">
+                        <i class="fa fa-exchange"></i> Check exchanges
+                    </a>
+                {% endif %}
+                <p class="warning">
+                    <small class="text-muted">
+                        What you see here is for your eyes only.
+                        Do not distribute results to other users.
+                    </small>
+                </p>
+                <p class="warning">
+                    <small class="text-muted">
+                        Items are sorted by original ID, so newer items will
+                        appear
+                        first.
+                        The timestamp displayed reflects the time the inventory
+                        was
+                        parsed.
+                    </small>
+                </p>
+                <p class="warning">
+                    <small class="text-muted">
+                        Items displayed in search results may be out-of-date.
+                    </small>
+                </p>
+            </div>
+            <div class="premium-search-form">
+                <h6>{{ filters_title }}</h6>
+                <div class="list-group list-group-filters">
+                    {% for crumb in crumbs %}
+                        <a class='list-group-item'
+                           href='{{ crumb.getRemoveUrl() }}'>
+                            {{ crumb.getText() }}
+                        </a>
+                    {% else %}
+                        <div class="list-group-item">
+                            (No filters)
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% if session_user.canSeeAds() %}
+                {% include 'layout/ads/topbox.twig' %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

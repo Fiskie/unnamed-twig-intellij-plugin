@@ -33,6 +33,14 @@ class TwigParserFreeFormTest : TwigParserTest() {
         doTest(true)
     }
 
+    fun testHtmlTodo() {
+        doTest(true)
+    }
+
+    fun testJSContent() {
+        doTest(true)
+    }
+
     fun testLooseBraces() {
         // Make sure CONTENT is being parsed properly
         doTest(true)
@@ -84,9 +92,12 @@ class TwigParserFreeFormTest : TwigParserTest() {
         doTest(true)
     }
 
+    fun testDoubleRBraceInObject() {
+        // makes sure }} in an object isn't being parsed as an expression closer
+        doTest(true)
+    }
+
     fun testNestedEmptyStatement() {
-        // todo: write expected response
-        // this is going to fail because inverse checks are consuming empty {% %} tags
         doTest(true)
     }
 }

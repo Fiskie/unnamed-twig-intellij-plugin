@@ -19,8 +19,6 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.jetbrains.intellij'
 
-tasks.withType(JavaCompile) { options.encoding = 'UTF-8' }
-
 sourceSets {
     main.java.srcDirs = ['gen']
     main.resources.srcDir 'resources'
@@ -35,6 +33,13 @@ intellij {
     version = 'IU-2017.3.2'
     plugins = ['PsiViewer:3.28.93', 'JavaScriptLanguage', 'CSS']
 }
+
+idea {
+    module {
+//        excludeDirs += file("src/test")
+    }
+}
+
 repositories {
     mavenCentral()
 }
