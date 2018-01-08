@@ -56,6 +56,8 @@ Label = [A-Za-z_]\w*
 %state twig
 %state comment
 %state expression
+%state subexpression
+%state hash
 %%
 
 <YYINITIAL> {
@@ -100,13 +102,17 @@ Label = [A-Za-z_]\w*
     }
 }
 
-<expression> {
+<hash> {
+    "}" { yypopState(); return TwigTokenTypes.RBRACE; }
+}
+
+<subexpression, expression, hash> {
     "(" { return TwigTokenTypes.LPARENTH; }
     ")" { return TwigTokenTypes.RPARENTH; }
     "[" { return TwigTokenTypes.LBRACKET; }
     "]" { return TwigTokenTypes.RBRACKET; }
-    "{" { return TwigTokenTypes.LBRACE; }
-    "}"\~?"}}" | "}"\~?"%}" { return TwigTokenTypes.RBRACE; }
+    "{" { yypushState(hash); return TwigTokenTypes.LBRACE; }
+    "}" { return TwigTokenTypes.RBRACE; }
     ":" { return TwigTokenTypes.COLON; }
     "true"/[}\)\t \n\x0B\f\r] { return TwigTokenTypes.BOOLEAN; }
     "false"/[}\)\t \n\x0B\f\r] { return TwigTokenTypes.BOOLEAN; }
@@ -141,7 +147,9 @@ Label = [A-Za-z_]\w*
     {Label} { return TwigTokenTypes.LABEL; }
 
     {WhiteSpace} { return TwigTokenTypes.WHITE_SPACE; }
+}
 
+<expression> {
     {StatementClose} {
         yypopState(); return TwigTokenTypes.STATEMENT_CLOSE;
     }
