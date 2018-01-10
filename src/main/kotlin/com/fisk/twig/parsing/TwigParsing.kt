@@ -384,46 +384,27 @@ class TwigParsing(private val builder: PsiBuilder) {
     private fun parseExpression(builder: PsiBuilder): Boolean {
         val expressionMarker = builder.mark()
 
-        val variableMarker = builder.mark()
-        if (parseLeafToken(builder, LABEL)) {
-            variableMarker.drop()
-
-            expressionMarker.done(EXPRESSION)
-
-//            val funMarker = builder.mark()
-//
-//            val sepMarker = builder.mark()
-
-            return true
-        } else {
-            variableMarker.rollbackTo()
-        }
-
-        val stringMarker = builder.mark()
-        if (parseLeafToken(builder, STRING)) {
-            stringMarker.drop()
-            expressionMarker.done(EXPRESSION)
-            return true
-        } else {
-            stringMarker.rollbackTo()
-        }
-
-        val integerMarker = builder.mark()
-        if (parseLeafToken(builder, NUMBER)) {
-            integerMarker.drop()
-            expressionMarker.done(EXPRESSION)
-            return true
-        } else {
-            integerMarker.rollbackTo()
-        }
-
-        val booleanMarker = builder.mark()
-        if (parseLeafToken(builder, BOOLEAN)) {
-            booleanMarker.drop()
-            expressionMarker.done(EXPRESSION)
-            return true
-        } else {
-            booleanMarker.rollbackTo()
+        when (builder.tokenType) {
+            LABEL -> {
+                parseLeafToken(builder, LABEL)
+                expressionMarker.done(EXPRESSION)
+                return true
+            }
+            STRING -> {
+                parseLeafToken(builder, STRING)
+                expressionMarker.done(EXPRESSION)
+                return true
+            }
+            NUMBER -> {
+                parseLeafToken(builder, NUMBER)
+                expressionMarker.done(EXPRESSION)
+                return true
+            }
+            BOOLEAN -> {
+                parseLeafToken(builder, BOOLEAN)
+                expressionMarker.done(EXPRESSION)
+                return true
+            }
         }
 
         expressionMarker.error(TwigBundle.message("twig.parsing.expected.path.or.data"))
