@@ -11,10 +11,8 @@
       Improved and open-source Twig support for IntelliJ IDEA.
     ]]></description>
 
-  <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
-    ]]>
+  <change-notes>
+    Very unstable pre-release version!
   </change-notes>
 
   <idea-version since-build="145.0"/>

@@ -104,4 +104,8 @@ class TwigParserFreeFormTest : TwigParserTest() {
     fun testMultipleSets() {
         doTest(true)
     }
+
+    fun testCustomTag() {
+        doTest(true)
+    }
 }

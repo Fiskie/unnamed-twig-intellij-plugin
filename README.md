@@ -5,7 +5,7 @@ such as support for Find Usages and named element refactors.
 
 ## Differences with the official plugin
 
-* Code style is extended from the current HTML code style settings.
+* Code style is extended from the current HTML code style settings. This means your indents will be determined by the HTML indent settings.
 
 ## TODO
 

@@ -32,59 +32,19 @@ class TwigParserDefinition : ParserDefinition {
 
     override fun createLexer(project: Project?) = TwigLexerImpl()
 
-    override fun createElement(node: ASTNode?): PsiElement {
-        node?.let {
-            val type = node.elementType
-
-            if (type == TwigTokenTypes.EXPRESSION) {
-                return TwigExpressionImpl(node)
-            }
-
-            if (type == TwigTokenTypes.COMMENT) {
-                return TwigCommentImpl(node)
-            }
-
-            if (type == TwigTokenTypes.BLOCK) {
-                return TwigBlockImpl(node)
-            }
-
-            if (type == TwigTokenTypes.BLOCK_WRAPPER) {
-                return TwigBlockWrapperImpl(node)
-            }
-
-            if (type == TwigTokenTypes.LABEL) {
-                return TwigLabelImpl(node)
-            }
-
-            if (type == TwigTokenTypes.STRING) {
-                return TwigStringImpl(node)
-            }
-
-            if (type == TwigTokenTypes.TAG) {
-                return TwigTagImpl(node)
-            }
-
-            if (type == TwigTokenTypes.BLOCK_START_STATEMENT) {
-                return TwigBlockStartStatementImpl(node)
-            }
-
-            if (type == TwigTokenTypes.BLOCK_END_STATEMENT) {
-                return TwigBlockEndStatementImpl(node)
-            }
-
-            if (type == TwigTokenTypes.INVERSE_STATEMENT) {
-                return TwigInverseStatementImpl(node)
-            }
-
-            if (type == TwigTokenTypes.SIMPLE_STATEMENT) {
-                return TwigSimpleStatementImpl(node)
-            }
-
-            if (type == TwigTokenTypes.EXPRESSION_BLOCK) {
-                return TwigExpressionBlockImpl(node)
-            }
-        }
-
-        return TwigPsiElementImpl(node!!)
+    override fun createElement(node: ASTNode?) = when (node?.elementType) {
+        TwigTokenTypes.EXPRESSION -> TwigExpressionImpl(node)
+        TwigTokenTypes.COMMENT -> TwigCommentImpl(node)
+        TwigTokenTypes.BLOCK -> TwigBlockImpl(node)
+        TwigTokenTypes.BLOCK_WRAPPER -> TwigBlockWrapperImpl(node)
+        TwigTokenTypes.LABEL -> TwigLabelImpl(node)
+        TwigTokenTypes.STRING -> TwigStringImpl(node)
+        TwigTokenTypes.TAG -> TwigTagImpl(node)
+        TwigTokenTypes.BLOCK_START_STATEMENT -> TwigBlockStartStatementImpl(node)
+        TwigTokenTypes.BLOCK_END_STATEMENT -> TwigBlockEndStatementImpl(node)
+        TwigTokenTypes.INVERSE_STATEMENT -> TwigInverseStatementImpl(node)
+        TwigTokenTypes.SIMPLE_STATEMENT -> TwigSimpleStatementImpl(node)
+        TwigTokenTypes.EXPRESSION_BLOCK -> TwigExpressionBlockImpl(node)
+        else -> TwigPsiElementImpl(node!!)
     }
 }

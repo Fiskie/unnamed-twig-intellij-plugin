@@ -2,6 +2,7 @@ package com.fisk.twig.ide
 
 import com.fisk.twig.parsing.TwigLexerImpl
 import com.fisk.twig.parsing.TwigTokenTypes
+import com.fisk.twig.psi.TwigLabel
 import com.fisk.twig.psi.TwigPsiElement
 import com.intellij.lang.cacheBuilder.DefaultWordsScanner
 import com.intellij.lang.cacheBuilder.WordsScanner
@@ -18,6 +19,10 @@ class TwigFindUsagesProvider : FindUsagesProvider {
     }
 
     override fun getDescriptiveName(element: PsiElement): String {
+        if (element is TwigLabel) {
+            return "label"
+        }
+
         if (element is TwigPsiElement) {
             return element.getName() ?: ""
         }

@@ -11,9 +11,7 @@ import com.intellij.psi.codeStyle.CodeStyleSettingsProvider
 class TwigCodeStyleSettingsProvider : CodeStyleSettingsProvider() {
     override fun createSettingsPage(settings: CodeStyleSettings, originalSettings: CodeStyleSettings?): Configurable {
         return object : CodeStyleAbstractConfigurable(settings, originalSettings, "Twig") {
-            override fun createPanel(settings: CodeStyleSettings?): CodeStyleAbstractPanel {
-                return TwigCodeStylePanel(currentSettings, settings)
-            }
+            override fun createPanel(settings: CodeStyleSettings?) = TwigCodeStylePanel(currentSettings, settings)
 
             override fun getHelpTopic() = TwigBundle.message("twig.page.code_style.help")
         }
