@@ -171,22 +171,6 @@ class TwigTypedHandlerTest : TwigActionHandlerTest() {
         )
     }
 
-    fun testFormatterDisabledEnterBetweenBlockTags() {
-        val previousFormatSetting = TwigConfig.isFormattingEnabled
-        TwigConfig.isFormattingEnabled = false
-
-        doEnterTest(
-
-                "{% if foo %}<caret>{% endif %}",
-
-                "{% if foo %}\n" +
-                        "<caret>\n" +
-                        "{% endif %}"
-        )
-
-        TwigConfig.isFormattingEnabled = previousFormatSetting
-    }
-
     fun testEnterNotBetweenBlockTags() {
         doEnterTest(
 

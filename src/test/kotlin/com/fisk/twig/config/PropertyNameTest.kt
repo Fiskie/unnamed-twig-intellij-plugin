@@ -26,7 +26,6 @@ class PropertyNameTest(val propertyTestDefinition: PropertyTestDefinition) {
 
         internal val PROPERTY_TEST_DEFINITIONS = Arrays.asList(
                 PropertyTestDefinition(Property.AUTO_GENERATE_CLOSE_TAG, "TwigEnableAutoGenerateCloseTag"),
-                PropertyTestDefinition(Property.FORMATTER, "TwigFormatter"),
                 PropertyTestDefinition(Property.BRACE_EDITING_MODEL, "TwigBraceEditingModel"),
                 PropertyTestDefinition(Property.AUTO_COLLAPSE_BLOCKS, "TwigAutoCollapseBlocks"),
                 PropertyTestDefinition(Property.COMMENTER_LANGUAGE_ID, "TwigCommenterLanguageId"),

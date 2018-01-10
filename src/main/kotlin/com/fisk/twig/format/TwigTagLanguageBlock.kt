@@ -31,8 +31,6 @@ class TwigTagLanguageBlock(node: ASTNode,
                 TwigTokenTypes.EXPRESSION_CLOSE -> return getBraceSpacing()
                 TwigTokenTypes.STATEMENT_CLOSE -> return getBraceSpacing()
             }
-
-//            return Spacing.createSpacing(0, 1, 0, false, 1)
         }
 
         return null

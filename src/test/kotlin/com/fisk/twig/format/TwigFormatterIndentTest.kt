@@ -7,27 +7,6 @@ import com.intellij.psi.codeStyle.CodeStyleSettingsManager
 
 class TwigFormatterIndentTest : TwigFormatterTest() {
     /**
-     * This sanity check should be enough to ensure that we don't format
-     * when the formatter is disabled
-     */
-    fun testFormatterDisabled() {
-        val previousFormatterSetting = TwigConfig.isFormattingEnabled
-        TwigConfig.isFormattingEnabled = false
-
-        doStringBasedTest(
-                "{% if foo %}\n" +
-                        "{{ bar }}\n" +
-                        "{% endif %}\n",
-
-                "{% if foo %}\n" +
-                        "{{ bar }}\n" +
-                        "{% endif %}\n"
-        )
-
-        TwigConfig.isFormattingEnabled = previousFormatterSetting
-    }
-
-    /**
      * Sanity check that we respect non-default (i.e. 4) indent sizes
      */
     fun testHTMLHonorsNonDefaultIndentSize() {

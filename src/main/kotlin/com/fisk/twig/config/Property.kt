@@ -22,14 +22,6 @@ enum class Property {
             get() = ENABLED
     },
 
-    FORMATTER {
-        override val stringName: String
-            get() = "TwigFormatter"
-
-        override val default: String
-            get() = ENABLED
-    },
-
     AUTO_COLLAPSE_BLOCKS {
         override val stringName: String
             get() = "TwigAutoCollapseBlocks"

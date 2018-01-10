@@ -194,11 +194,6 @@ class TwigTypedHandler : TypedHandlerDelegate() {
      * disabled because it's a little buggy right now.
      */
     private fun adjustStatementFormatting(project: Project, editor: Editor, file: PsiFile, provider: FileViewProvider) {
-        if (!TwigConfig.isFormattingEnabled) {
-            // formatting disabled; nothing to do
-            return
-        }
-
         val offset = editor.caretModel.offset - 1
 
         val elementAtCaret = provider.findElementAt(offset, TwigLanguage::class.java)

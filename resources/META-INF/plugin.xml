@@ -18,6 +18,7 @@
   <idea-version since-build="145.0"/>
 
   <extensions defaultExtensionNs="com.intellij">
+    <backspaceHandlerDelegate implementation="com.fisk.twig.ide.actions.TwigBackspaceHandler" order="before xmlSlash"/>
     <braceMatcher filetype="Twig" implementationClass="com.fisk.twig.ide.braces.TwigBraceMatcher"/>
     <breadcrumbsInfoProvider implementation="com.fisk.twig.ide.breadcrumbs.TwigBreadcrumbsInfoProvider" />
     <codeFoldingOptionsProvider instance="com.fisk.twig.config.TwigFoldingOptionsProvider"/>
@@ -43,8 +44,8 @@
     <liveTemplateContext implementation="com.fisk.twig.ide.templates.TwigTemplateContextType"/>
     <!--<projectConfigurable groupId="language" provider="com.fisk.twig.ide.pages.TwigConfigurationProvider" />-->
     <psi.referenceContributor implementation="com.fisk.twig.psi.reference.ReferenceContributor" />
+    <!--<statementUpDownMover implementation="com.fisk.twig.ide.actions.TwigStatementUpDownMover" />-->
     <typedHandler implementation="com.fisk.twig.ide.actions.TwigTypedHandler" order="before xmlSlash"/>
-    <backspaceHandlerDelegate implementation="com.fisk.twig.ide.actions.TwigBackspaceHandler" order="before xmlSlash"/>
   </extensions>
 
   <actions>

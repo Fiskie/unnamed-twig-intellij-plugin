@@ -24,9 +24,9 @@ class TwigHighlightingTest : LightPlatformCodeInsightFixtureTestCase() {
         myFixture.checkHighlighting(true, false, true)
     }
 
-    fun testUncompletedTag() {
-        doTest("twig")
-    }
+//    fun testUncompletedTag() {
+//        doTest("twig")
+//    }
 
     fun testUncompletedTagInTwig() {
         doTest("twig")

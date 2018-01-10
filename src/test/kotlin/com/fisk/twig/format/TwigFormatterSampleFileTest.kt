@@ -4,7 +4,7 @@ import com.intellij.lang.javascript.JavaScriptFileType
 
 class TwigFormatterSampleFileTest : TwigFormatterTest() {
     @Throws(Exception::class)
-    fun testMixedContent() {
+    fun testJSScriptTagIndent() {
         doFileBasedTest()
     }
 
@@ -14,7 +14,7 @@ class TwigFormatterSampleFileTest : TwigFormatterTest() {
     }
 
     @Throws(Exception::class)
-    fun testLargeFileBenchmark() {
+    fun testHTMLContinuationIndent() {
         doFileBasedTest()
     }
 

@@ -5,9 +5,8 @@ import junit.framework.Assert
 import org.junit.Test
 
 class PropertyAccessorTest {
-
     // grab a Property to use in this test.  NOTE: the specific property is not significant.
-    private val myTestProperty = Property.FORMATTER
+    private val myTestProperty = Property.AUTOCOMPLETE_STATEMENTS
 
     @Test
     fun testGetPropertyValue() {

@@ -4,42 +4,6 @@ import com.fisk.twig.config.TwigConfig
 import com.fisk.twig.ide.actions.TwigActionHandlerTest
 
 class TwigFormatOnEnterTest : TwigActionHandlerTest(), TwigFormattingModelBuilderTest {
-
-    private var myPrevFormatSetting: Boolean = false
-
-    @Throws(Exception::class)
-    override fun setUp() {
-        super.setUp()
-
-        myPrevFormatSetting = TwigConfig.isFormattingEnabled
-        TwigConfig.isFormattingEnabled = true
-    }
-
-    @Throws(Exception::class)
-    override fun tearDown() {
-        TwigConfig.isFormattingEnabled = myPrevFormatSetting
-
-        super.tearDown()
-    }
-
-    /**
-     * This sanity check should be enough to ensure that we don't format on Enter
-     * when the formatter is disabled
-     */
-    fun testEnterWithFormatterDisabled() {
-        val previousFormatterSetting = TwigConfig.isFormattingEnabled
-        TwigConfig.isFormattingEnabled = false
-
-        doEnterTest(
-
-                "{% if foo %}<caret>",
-
-                "{% if foo %}\n" + "<caret>"
-        )
-
-        TwigConfig.isFormattingEnabled = previousFormatterSetting
-    }
-
     fun testSimpleExpression() {
         doEnterTest(
 

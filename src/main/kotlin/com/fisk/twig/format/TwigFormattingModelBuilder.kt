@@ -35,12 +35,6 @@ class TwigFormattingModelBuilder : TemplateLanguageFormattingModelBuilder() {
      * causing an stack-overflowing loop of polite format-delegation.
      */
     override fun createModel(element: PsiElement, settings: CodeStyleSettings): FormattingModel {
-        if (!TwigConfig.isFormattingEnabled) {
-            // formatting is disabled, return the no-op formatter (note that this still delegates formatting
-            // to the templated language, which lets the users manage that separately)
-            return SimpleTemplateLanguageFormattingModelBuilder().createModel(element, settings)
-        }
-
         val node = element.node
 
         return if (node.elementType == TwigTokenTypes.OUTER_ELEMENT_TYPE) {

@@ -17,9 +17,9 @@ such as support for Find Usages and named element refactors.
     - [x] Comments (`{% %}`)
 - [x] Composite Twig/HTML structure view
 - [x] Live templates
-- [x] Remove additional whitespace around braces
+- [x] Remove additional whitespace around braces during code cleanup
 - [x] Code folding
-- [ ] Multi-line expression hash indenting
+- [ ] Continuation indent for expressions
 - [ ] Prioritise end tag hinting for close statements
 - [ ] Formatting/code style configuration
     - [x] Statement block indenting
@@ -33,13 +33,12 @@ such as support for Find Usages and named element refactors.
 
 - [x] Breadcrumbs
 - [ ] Line mover: Move entire statement block if caret on start/end tag (add StatementUpDownMover)
-- [ ] Whitespace control modifier (`{{-`) paired brace autocomplete
-    - [x] Working implementation
-    - [ ] Improve removal - currently only works on backspace press (where is the delete handler?)
+- [x] Whitespace control modifier (`{{-`) paired brace autocomplete -- currently only removes on backspace press, where is the delete handler?
 - [ ] Annotations/Inspections
-    - [ ] Expected end block tag -- has a coalescence problem and may need to be implemented as an annotation
+    - [ ] Expected end block tag -- has a coalescence problem and should probably be implemented as an annotation
     - [ ] Declared child blocks not found in the parent template
     - [ ] Unclosed comment inspection
+    - [ ] Anything other than a `block` in an `embed`
 - [ ] Reference support - Find usages and name refactor for the following:
     - [x] Variables - basic, unstable -- matches to property names right now; expression PSI needs improving.
     - [ ] Macro names

@@ -17,10 +17,6 @@ object TwigConfig {
         get() = getBooleanPropertyValue(AUTOCOMPLETE_STATEMENTS)
         set(enabled) = setBooleanPropertyValue(AUTOCOMPLETE_STATEMENTS, enabled)
 
-    var isFormattingEnabled: Boolean
-        get() = getBooleanPropertyValue(FORMATTER)
-        set(enabled) = setBooleanPropertyValue(FORMATTER, enabled)
-
     val isAutoCollapseBlocksEnabled: Boolean
         get() = getBooleanPropertyValue(AUTO_COLLAPSE_BLOCKS)
 
