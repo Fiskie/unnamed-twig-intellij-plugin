@@ -115,14 +115,45 @@ class TwigParsing(private val builder: PsiBuilder) {
         return false
     }
 
+    /**
+     * Checking for a matching end tag will prevent building a massive PSI tree then backtracking over it
+     *
+     * This is a massive, MASSIVE performance enhancement for standalone statements, as we are aiming to support custom
+     * tags, and we can't be sure if they have a matching end tags
+     */
+    private fun hasMatchingEndTagAhead(builder: PsiBuilder, tag: String) : Boolean {
+        val start = builder.mark()
+
+        while (!builder.eof()) {
+            builder.advanceLexer()
+
+            if (builder.tokenType == TAG && builder.tokenText == "end$tag") {
+                start.rollbackTo()
+                return true
+            }
+        }
+
+        start.rollbackTo()
+        return false
+    }
+
     private fun parseStatementChain(builder: PsiBuilder): Boolean {
         if (builder.tokenType != STATEMENT_OPEN) {
             return false
         }
 
-        /**
-         * TODO: mark errors if else tag is used in places where it is not expected - see [TwigTagUtils.allowsInverseTag]
-         */
+        val tagStatementMarker = builder.mark()
+
+        builder.advanceLexer()
+
+        if (builder.tokenType != TAG && builder.lookAhead(1) != STATEMENT_CLOSE) {
+            tagStatementMarker.rollbackTo()
+            return false
+        }
+
+        val tagName = builder.tokenText
+
+        tagStatementMarker.rollbackTo()
 
         // If an inverse marker is discovered in the block, we need to break out of the block
         val prematureInverseMarker = builder.mark()
@@ -137,30 +168,34 @@ class TwigParsing(private val builder: PsiBuilder) {
         val statementMarker = builder.mark()
         val blockStatementMarker = builder.mark()
 
-        val openTag = parseOpenStatement(builder)
+        if (hasMatchingEndTagAhead(builder, tagName!!) || TwigTagUtils.isEndTag(tagName) || TwigTagUtils.isDefaultBlockTag(tagName)) {
+            val openTag = parseOpenStatement(builder)
 
-        if (!openTag.match) {
+            if (!openTag.match) {
+                blockStatementMarker.drop()
+                statementMarker.rollbackTo()
+                return false
+            }
+
+            // We have found a statement which either opens a block or is a single statement
+            do {
+                parseRoot(builder)
+            } while (parseInverseStatement(builder).match)
+
+            val closeMarker = builder.mark()
+
+            if (parseCloseStatement(builder, openTag.normalisedTagName).match || TwigTagUtils.isDefaultBlockTag(openTag.normalisedTagName)) {
+                blockStatementMarker.drop()
+                closeMarker.drop()
+                statementMarker.done(BLOCK_WRAPPER)
+                return true
+            }
+
+            closeMarker.rollbackTo()
+            blockStatementMarker.rollbackTo()
+        } else {
             blockStatementMarker.drop()
-            statementMarker.rollbackTo()
-            return false
         }
-
-        // We have found a statement which either opens a block or is a single statement
-        do {
-            parseRoot(builder)
-        } while (parseInverseStatement(builder).match)
-
-        val closeMarker = builder.mark()
-
-        if (parseCloseStatement(builder, openTag.normalisedTagName).match || TwigTagUtils.isDefaultBlockTag(openTag.normalisedTagName)) {
-            blockStatementMarker.drop()
-            closeMarker.drop()
-            statementMarker.done(BLOCK_WRAPPER)
-            return true
-        }
-
-        closeMarker.rollbackTo()
-        blockStatementMarker.rollbackTo()
 
         parseSingleStatement(builder)
         statementMarker.done(BLOCK_WRAPPER)

@@ -100,4 +100,8 @@ class TwigParserFreeFormTest : TwigParserTest() {
     fun testNestedEmptyStatement() {
         doTest(true)
     }
+
+    fun testMultipleSets() {
+        doTest(true)
+    }
 }
