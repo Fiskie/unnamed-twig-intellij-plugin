@@ -1,7 +1,7 @@
 package com.fisk.twig.parsing
 
 import com.fisk.twig.TwigBundle
-import com.fisk.twig.TwigTagUtil
+import com.fisk.twig.TwigTagUtils
 import com.fisk.twig.parsing.TwigTokenTypes.BLOCK
 import com.fisk.twig.parsing.TwigTokenTypes.BLOCK_END_STATEMENT
 import com.fisk.twig.parsing.TwigTokenTypes.BLOCK_START_STATEMENT
@@ -121,7 +121,7 @@ class TwigParsing(private val builder: PsiBuilder) {
         }
 
         /**
-         * TODO: mark errors if else tag is used in places where it is not expected - see [TwigTagUtil.allowsInverseTag]
+         * TODO: mark errors if else tag is used in places where it is not expected - see [TwigTagUtils.allowsInverseTag]
          */
 
         // If an inverse marker is discovered in the block, we need to break out of the block
@@ -152,7 +152,7 @@ class TwigParsing(private val builder: PsiBuilder) {
 
         val closeMarker = builder.mark()
 
-        if (parseCloseStatement(builder, openTag.normalisedTagName).match || TwigTagUtil.isDefaultBlockTag(openTag.normalisedTagName)) {
+        if (parseCloseStatement(builder, openTag.normalisedTagName).match || TwigTagUtils.isDefaultBlockTag(openTag.normalisedTagName)) {
             blockStatementMarker.drop()
             closeMarker.drop()
             statementMarker.done(BLOCK_WRAPPER)
@@ -179,28 +179,28 @@ class TwigParsing(private val builder: PsiBuilder) {
      * Will parse any statement that does not contain an end tag (/^end/)
      */
     private fun parseOpenStatement(builder: PsiBuilder): StatementResult {
-        return parseStatement(builder, BLOCK_START_STATEMENT, { tag -> !TwigTagUtil.isEndTag(tag) /* && !elseTags.contains(tag)*/ }) // todo -- this will currently break parsing
+        return parseStatement(builder, BLOCK_START_STATEMENT, { tag -> !TwigTagUtils.isEndTag(tag) /* && !elseTags.contains(tag)*/ }) // todo -- this will currently break parsing
     }
 
     /**
      * Will parse a statement which is an end block statement for the given openTag
      */
     private fun parseCloseStatement(builder: PsiBuilder, openTag: String): StatementResult {
-        return parseStatement(builder, BLOCK_END_STATEMENT, { tag -> TwigTagUtil.normaliseTag(tag) == openTag })
+        return parseStatement(builder, BLOCK_END_STATEMENT, { tag -> TwigTagUtils.normaliseTag(tag) == openTag })
     }
 
     /**
      * Will parse any close statement; this is used to gracefully handle unexpected tag errors
      */
     private fun parseAnyCloseStatement(builder: PsiBuilder): StatementResult {
-        return parseStatement(builder, BLOCK_END_STATEMENT, { tag -> TwigTagUtil.isEndTag(tag) })
+        return parseStatement(builder, BLOCK_END_STATEMENT, { tag -> TwigTagUtils.isEndTag(tag) })
     }
 
     /**
      * Will parse inverse statements, i.e. else and elseif tags
      */
     private fun parseInverseStatement(builder: PsiBuilder): StatementResult {
-        return parseStatement(builder, INVERSE_STATEMENT, { tag -> TwigTagUtil.isInverseTag(tag) })
+        return parseStatement(builder, INVERSE_STATEMENT, { tag -> TwigTagUtils.isInverseTag(tag) })
     }
 
     private fun parseStatement(builder: PsiBuilder, type: TwigCompositeElementType, strategy: (String) -> Boolean): StatementResult {

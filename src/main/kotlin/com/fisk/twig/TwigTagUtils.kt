@@ -1,7 +1,10 @@
 package com.fisk.twig
 
-object TwigTagUtil {
-    val DEFAULT_BLOCK_TAGS = setOf("if", "for", "block", "embed", "spaceless")
+object TwigTagUtils {
+    /**
+     * The base set of block tags that will be used to preemptively add PSI block nodes for unclosed tags
+     */
+    val BASE_BLOCK_TAGS = setOf("if", "for", "block", "embed", "spaceless", "verbatim", "sandbox", "autoescape", "filter", "macro")
     val INVERSE_TAGS = setOf("else", "elseif")
     val INVERSE_ALLOWED = setOf("if", "for")
 
@@ -22,17 +25,17 @@ object TwigTagUtil {
     }
 
     fun isDefaultBlockTag(tag: String): Boolean {
-        return TwigTagUtil.DEFAULT_BLOCK_TAGS.contains(tag)
+        return TwigTagUtils.BASE_BLOCK_TAGS.contains(tag)
     }
 
     fun isInverseTag(tag: String): Boolean {
-        return TwigTagUtil.INVERSE_TAGS.contains(tag)
+        return TwigTagUtils.INVERSE_TAGS.contains(tag)
     }
 
     /**
      * Returns true if an inverse statement can be used for this tag
      */
     fun allowsInverseTag(tag: String): Boolean {
-        return TwigTagUtil.INVERSE_ALLOWED.contains(tag)
+        return TwigTagUtils.INVERSE_ALLOWED.contains(tag)
     }
 }

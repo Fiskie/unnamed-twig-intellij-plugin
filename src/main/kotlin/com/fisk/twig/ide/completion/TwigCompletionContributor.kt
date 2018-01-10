@@ -1,4 +1,4 @@
-package com.fisk.twig.completion
+package com.fisk.twig.ide.completion
 
 import com.fisk.twig.parsing.TwigTokenTypes
 import com.intellij.codeInsight.completion.*

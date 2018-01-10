@@ -21,10 +21,10 @@ class TwigFormattingModelBuilder : TemplateLanguageFormattingModelBuilder() {
         val model = FormattingDocumentModelImpl.createOn(node.psi.containingFile)
         val policy = HtmlPolicy(codeStyleSettings, model)
 
-        if (TwigTokenTypes.TAGS.contains(node.elementType)) {
-            return TwigTagLanguageBlock(node, wrap, alignment, this, codeStyleSettings, foreignChildren, policy)
+        return if (TwigTokenTypes.TAGS.contains(node.elementType)) {
+            TwigTagLanguageBlock(node, wrap, alignment, this, codeStyleSettings, foreignChildren, policy)
         } else {
-            return TwigBlockLanguageBlock(node, wrap, alignment, this, codeStyleSettings, foreignChildren, policy)
+            TwigBlockLanguageBlock(node, wrap, alignment, this, codeStyleSettings, foreignChildren, policy)
         }
     }
 

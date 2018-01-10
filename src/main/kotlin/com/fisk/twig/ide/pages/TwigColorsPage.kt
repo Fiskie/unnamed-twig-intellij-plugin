@@ -1,10 +1,8 @@
-package com.fisk.twig.pages
+package com.fisk.twig.ide.pages
 
 import com.fisk.twig.TwigBundle
 import com.fisk.twig.TwigHighlighter
 import com.fisk.twig.config.TwigIcons
-import com.intellij.openapi.editor.colors.TextAttributesKey
-import com.intellij.openapi.fileTypes.SyntaxHighlighter
 import com.intellij.openapi.options.colors.AttributesDescriptor
 import com.intellij.openapi.options.colors.ColorDescriptor
 import com.intellij.openapi.options.colors.ColorSettingsPage

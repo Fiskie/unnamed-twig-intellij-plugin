@@ -1,5 +1,6 @@
 package com.fisk.twig.format
 
+import com.fisk.twig.TwigLanguage
 import com.fisk.twig.config.TwigConfig
 import com.intellij.openapi.fileTypes.StdFileTypes
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager
@@ -29,8 +30,8 @@ class TwigFormatterIndentTest : TwigFormatterTest() {
     /**
      * Sanity check that we respect non-default (i.e. 4) indent sizes
      */
-    fun testNonDefaultIndentSize() {
-        val previousHtmlIndent = CodeStyleSettingsManager.getSettings(project).getIndentOptions(StdFileTypes.HTML).INDENT_SIZE
+    fun testHTMLHonorsNonDefaultIndentSize() {
+        val prevTwigIndent = CodeStyleSettingsManager.getSettings(project).getCommonSettings(TwigLanguage.INSTANCE).indentOptions?.INDENT_SIZE
         CodeStyleSettingsManager.getSettings(project).getIndentOptions(StdFileTypes.HTML).INDENT_SIZE = 2
 
         doStringBasedTest(
@@ -47,7 +48,7 @@ class TwigFormatterIndentTest : TwigFormatterTest() {
                         "{% endif %}"
         )
 
-        CodeStyleSettingsManager.getSettings(project).getIndentOptions(StdFileTypes.HTML).INDENT_SIZE = previousHtmlIndent
+        CodeStyleSettingsManager.getSettings(project).getCommonSettings(TwigLanguage.INSTANCE).indentOptions?.INDENT_SIZE = prevTwigIndent
     }
 
     fun testTagSpacingFix() {

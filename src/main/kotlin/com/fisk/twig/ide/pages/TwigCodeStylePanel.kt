@@ -1,4 +1,4 @@
-package com.fisk.twig.pages
+package com.fisk.twig.ide.pages
 
 import com.fisk.twig.TwigLanguage
 import com.intellij.application.options.TabbedLanguageCodeStylePanel
@@ -10,5 +10,7 @@ class TwigCodeStylePanel(
 ) : TabbedLanguageCodeStylePanel(TwigLanguage.INSTANCE, currentSettings, settings) {
     override fun initTabs(settings: CodeStyleSettings?) {
         addIndentOptionsTab(settings)
+        addSpacesTab(settings)
+        addBlankLinesTab(settings)
     }
 }

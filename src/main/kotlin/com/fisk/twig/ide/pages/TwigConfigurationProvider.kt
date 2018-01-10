@@ -1,6 +1,5 @@
-package com.fisk.twig.pages
+package com.fisk.twig.ide.pages
 
-import com.intellij.openapi.options.Configurable
 import com.intellij.openapi.options.ConfigurableProvider
 import com.intellij.openapi.project.Project
 

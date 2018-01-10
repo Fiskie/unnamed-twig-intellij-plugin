@@ -14,36 +14,38 @@ such as support for Find Usages and named element refactors.
 - [x] Composite Twig/HTML structure view
 - [x] Live templates
 - [x] Code folding
-- [x] Statement block indenting
 - [ ] Multi-line expression hash indenting
 - [ ] Prioritise end tag hinting for close statements
 - [ ] Remove additional whitespace in code cleanup
-- [ ] Code style configuration page
+- [ ] Formatting/code style configuration
+    - [ ] Make sure HTML content honors template language indent rules
+    - [x] Statement block indenting
     - [ ] Hard wrap
     - [ ] Wrap on typing
     - [ ] Visual guides
     - [ ] Spaces inside statement braces toggle
     - [ ] Spaces inside expression braces toggle
-- [ ] Reindent lines on line move up/down
 
 ### Milestone 2: Supplementary PSI features
 
 - [x] Breadcrumbs
 - [ ] Line mover: Move entire statement block if caret on start/end tag (add StatementUpDownMover)
-- [ ] Update whitespace control modifier on paired brace
+- [ ] Whitespace control modifier (`{{-`) paired brace autocomplete
+    - [x] Working implementation
     - [ ] Improve removal - currently only works on backspace press (where is the delete handler?)
 - [ ] Annotations/Inspections
-    - [ ] Expected end block tag -- protection against coalescence is desired, but tricky
+    - [ ] Expected end block tag -- has a coalescence problem and may need to be implemented as an annotation
     - [ ] Declared child blocks not found in the parent template
     - [ ] Unclosed comment inspection
 - [ ] Reference support - Find usages and name refactor for the following:
-    - [x] Variables - basic, unstable -- matches to property names right now, expression PSI needs improving.
+    - [x] Variables - basic, unstable -- matches to property names right now; expression PSI needs improving.
     - [ ] Macro names
     - [ ] Scoped variables in a `for` block
     - [ ] Scoped variables in a `macro`
     - [ ] Add tests
 - [ ] Automatic matching tag rename on type a la HTML plugin
 - [ ] Add the special `loop` object when in `for` context
+- [x] Auto-collapse Twig blocks as a folding option
 
 ### Milestone 3: Feature parity with community Symfony plugin Twig extensions
 

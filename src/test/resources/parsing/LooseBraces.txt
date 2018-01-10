@@ -9,4 +9,5 @@ Twig: LooseBraces.twig
           PsiElement(Twig:LABEL)('foo')
       PsiWhiteSpace(' ')
       PsiElement(Twig:EXPRESSION_CLOSE)('}}')
-    PsiElement(Twig:CONTENT)(' { { } }')
+    PsiWhiteSpace(' ')
+    PsiElement(Twig:CONTENT)('{ { } }')

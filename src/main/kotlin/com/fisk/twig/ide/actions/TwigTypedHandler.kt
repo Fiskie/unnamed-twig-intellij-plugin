@@ -1,7 +1,7 @@
 package com.fisk.twig.ide.actions
 
 import com.fisk.twig.TwigLanguage
-import com.fisk.twig.TwigTagUtil
+import com.fisk.twig.TwigTagUtils
 import com.fisk.twig.config.TwigConfig
 import com.fisk.twig.parsing.TwigTokenTypes
 import com.fisk.twig.psi.TwigStatement
@@ -155,7 +155,7 @@ class TwigTypedHandler : TypedHandlerDelegate() {
         val tagName = getOpenTagForBlock(psi)
 
         tagName?.let {
-            if (TwigTagUtil.isDefaultBlockTag(tagName.text)) {
+            if (TwigTagUtils.isDefaultBlockTag(tagName.text)) {
                 return true
             }
 

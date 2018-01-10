@@ -1,4 +1,4 @@
-package com.fisk.twig.pages
+package com.fisk.twig.ide.pages
 
 import com.fisk.twig.TwigLanguage
 import com.intellij.application.options.SmartIndentOptionsEditor
@@ -13,13 +13,17 @@ class TwigLanguageCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvider(
     override fun getIndentOptionsEditor() = SmartIndentOptionsEditor()
 
     override fun getDefaultCommonSettings(): CommonCodeStyleSettings? {
-        val defaultSettings = CommonCodeStyleSettings(language)
-        val indentOptions = defaultSettings.initIndentOptions()
-        indentOptions.INDENT_SIZE = 4
-        indentOptions.CONTINUATION_INDENT_SIZE = 8
-        indentOptions.TAB_SIZE = 4
-        defaultSettings.RIGHT_MARGIN = 80
-        return defaultSettings
+        return CommonCodeStyleSettings(language).apply {
+            val indentOptions = initIndentOptions()
+
+            indentOptions.apply {
+                INDENT_SIZE = 4
+                CONTINUATION_INDENT_SIZE = 8
+                TAB_SIZE = 4
+            }
+
+            RIGHT_MARGIN = 120
+        }
     }
 
     companion object {
@@ -27,7 +31,12 @@ class TwigLanguageCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvider(
                 "    {% include 'include.twig' with {foo: 'bar'} %}\n" +
                 "    {% block header %}\n" +
                 "         <div>\n" +
-                "             Sample\n" +
+                "             <h4>Items</h4>\n" +
+                "             {% for item in items %}\n" +
+                "                 <ul>\n" +
+                "                     <li>Items</li>\n" +
+                "                 </ul>\n" +
+                "             {% endfor %}\n" +
                 "         </div>\n" +
                 "    {% endblock %}\n" +
                 "{% endembed %}"

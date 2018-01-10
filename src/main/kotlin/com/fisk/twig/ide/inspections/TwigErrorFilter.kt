@@ -1,4 +1,4 @@
-package com.fisk.twig.inspections
+package com.fisk.twig.ide.inspections
 
 
 import com.fisk.twig.file.TwigFileViewProvider

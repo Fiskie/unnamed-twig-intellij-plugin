@@ -1,4 +1,4 @@
-package com.fisk.twig.pages
+package com.fisk.twig.ide.pages
 
 import com.fisk.twig.TwigBundle
 import com.fisk.twig.TwigLanguage

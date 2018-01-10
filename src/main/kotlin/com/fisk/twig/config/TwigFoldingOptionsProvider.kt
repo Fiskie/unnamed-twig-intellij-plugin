@@ -1,5 +1,6 @@
 package com.fisk.twig.config
 
+import com.fisk.twig.TwigBundle
 import com.intellij.application.options.editor.CodeFoldingOptionsProvider
 import com.intellij.openapi.options.BeanConfigurable
 
@@ -13,6 +14,9 @@ class TwigFoldingOptionsProvider : BeanConfigurable<TwigFoldingOptionsProvider.T
     }
 
     init {
-//        checkBox(TwigBundle.message("twig.pages.folding.auto.collapse.blocks"), instance.isAutoCollapseBlocks())
+        val getter: () -> Boolean = { instance.isAutoCollapseBlocks() }
+        val setter: (Boolean) -> Unit = { v -> instance.setAutoCollapseBlocks(v) }
+
+        checkBox(TwigBundle.message("twig.pages.folding.auto.collapse.blocks"), getter, setter)
     }
 }
