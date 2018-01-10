@@ -19,10 +19,11 @@ class TwigFileType private constructor(lang: Language) : LanguageFileType(lang),
     private constructor() : this(TwigLanguage.INSTANCE)
 
     init {
-        FileTypeEditorHighlighterProviders.INSTANCE.addExplicitExtension(this) { project,
-                                                                                 fileType,
-                                                                                 virtualFile,
-                                                                                 editorColorsScheme ->
+        val inst = FileTypeEditorHighlighterProviders.INSTANCE
+        inst.addExplicitExtension(this) { project,
+                                          fileType,
+                                          virtualFile,
+                                          editorColorsScheme ->
             TwigTemplateHighlighter(project, virtualFile, editorColorsScheme)
         }
     }

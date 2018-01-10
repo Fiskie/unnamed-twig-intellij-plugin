@@ -9,7 +9,6 @@ class TwigCodeStylePanel(
         settings: CodeStyleSettings?
 ) : TabbedLanguageCodeStylePanel(TwigLanguage.INSTANCE, currentSettings, settings) {
     override fun initTabs(settings: CodeStyleSettings?) {
-        addIndentOptionsTab(settings)
         addSpacesTab(settings)
         addBlankLinesTab(settings)
     }

@@ -1,7 +1,11 @@
 # (WIP) idea-community-twig ![Travis](https://api.travis-ci.org/fiskie/idea-community-twig.svg?branch=master)
 
 (WIP) A plugin to replace the official closed-source Twig plugin found in IntelliJ IDEA/PhpStorm, adding enhanced functionality
-such as support for Find Usages and named element refactors. 
+such as support for Find Usages and named element refactors.
+
+## Differences with the official plugin
+
+* Code style is extended from the current HTML code style settings.
 
 ## TODO
 
@@ -18,7 +22,6 @@ such as support for Find Usages and named element refactors.
 - [ ] Prioritise end tag hinting for close statements
 - [ ] Remove additional whitespace in code cleanup
 - [ ] Formatting/code style configuration
-    - [ ] Make sure HTML content honors template language indent rules
     - [x] Statement block indenting
     - [ ] Hard wrap
     - [ ] Wrap on typing

@@ -14,15 +14,8 @@ class TwigLanguageCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvider(
 
     override fun getDefaultCommonSettings(): CommonCodeStyleSettings? {
         return CommonCodeStyleSettings(language).apply {
-            val indentOptions = initIndentOptions()
-
-            indentOptions.apply {
-                INDENT_SIZE = 4
-                CONTINUATION_INDENT_SIZE = 8
-                TAB_SIZE = 4
-            }
-
-            RIGHT_MARGIN = 120
+            initIndentOptions()
+            SPACE_AROUND_LOGICAL_OPERATORS = true
         }
     }
 
