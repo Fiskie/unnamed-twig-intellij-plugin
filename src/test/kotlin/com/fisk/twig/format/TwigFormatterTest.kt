@@ -116,33 +116,7 @@ abstract class TwigFormatterTest : LightPlatformCodeInsightFixtureTestCase(), Tw
             }
         }
 
-        // define action to run "Adjust line indent" on every line in the "file" defined by beforeText
-        val lineFormatRunnableFactory = object : FormatRunnableFactory() {
-            override fun createFormatRunnable(file: PsiFile?): Runnable {
-                return Runnable {
-                    try {
-                        val manager = PsiDocumentManager.getInstance(project)
-                        val document = manager.getDocument(file!!)!!
-
-                        for (lineNum in 0 until document.lineCount) {
-                            val codeStyleManager = CodeStyleManager.getInstance(project)
-                            val offset = document.getLineStartOffset(lineNum)
-                            val lineToBeIndented = codeStyleManager.isLineToBeIndented(file, offset)// if this breaks at some point, we should
-                            // refactor to invoke AutoIndentLinesAction
-                            // instead of doing the indent directly
-                            if (lineToBeIndented) {
-                                codeStyleManager.adjustLineIndent(file, offset)
-                            }
-                        }
-                    } catch (e: IncorrectOperationException) {
-                        assertTrue(e.localizedMessage, false)
-                    }
-                }
-            }
-        }
-
         doFormatterActionTest(fullFormatRunnableFactory, beforeText, textAfter, templateDataLanguageType)
-        doFormatterActionTest(lineFormatRunnableFactory, beforeText, textAfter, templateDataLanguageType)
     }
 
     private fun doFormatterActionTest(formatAction: FormatRunnableFactory,

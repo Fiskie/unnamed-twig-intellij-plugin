@@ -17,10 +17,10 @@ such as support for Find Usages and named element refactors.
     - [x] Comments (`{% %}`)
 - [x] Composite Twig/HTML structure view
 - [x] Live templates
+- [x] Remove additional whitespace around braces
 - [x] Code folding
 - [ ] Multi-line expression hash indenting
 - [ ] Prioritise end tag hinting for close statements
-- [ ] Remove additional whitespace in code cleanup
 - [ ] Formatting/code style configuration
     - [x] Statement block indenting
     - [ ] Hard wrap
