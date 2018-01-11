@@ -103,14 +103,6 @@ class TwigParsing(private val builder: PsiBuilder) {
             return true
         }
 
-        if (builder.tokenType == UNCLOSED_COMMENT) {
-            val unclosedCommentMarker = builder.mark()
-            parseLeafToken(builder, UNCLOSED_COMMENT)
-            // todo: not being marked at all? merge seems to not pass this token
-            unclosedCommentMarker.error(TwigBundle.message("twig.parsing.comment.unclosed"))
-            return true
-        }
-
         return false
     }
 

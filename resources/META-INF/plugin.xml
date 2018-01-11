@@ -46,6 +46,7 @@
     <psi.referenceContributor implementation="com.fisk.twig.psi.reference.ReferenceContributor" />
     <!--<statementUpDownMover implementation="com.fisk.twig.ide.actions.TwigStatementUpDownMover" />-->
     <typedHandler implementation="com.fisk.twig.ide.actions.TwigTypedHandler" order="before xmlSlash"/>
+    <annotator language="Twig" implementationClass="com.fisk.twig.ide.inspections.TwigUnclosedCommentAnnotator"/>
   </extensions>
 
   <actions>
