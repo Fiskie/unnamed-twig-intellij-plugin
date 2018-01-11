@@ -19,8 +19,8 @@ such as support for Find Usages and named element refactors.
 - [x] Live templates
 - [x] Remove additional whitespace around braces during code cleanup
 - [x] Code folding
+- [x] Prioritise end tag hinting for close statements
 - [ ] Continuation indent for expressions
-- [ ] Prioritise end tag hinting for close statements
 - [ ] Formatting/code style configuration
     - [x] Statement block indenting
     - [ ] Hard wrap
@@ -59,8 +59,9 @@ such as support for Find Usages and named element refactors.
 
 ## Development
 
-Contributing to this project will require an environment ready to develop IntelliJ plugins. [Read the guide](https://www.jetbrains.com/help/idea/configuring-intellij-platform-plugin-sdk.html)
+Contributing to this project will require an environment ready to develop IDEA plugins. [Read the guide](https://www.jetbrains.com/help/idea/configuring-intellij-platform-plugin-sdk.html)
 
 This is a Gradle project, so import `gradle.build` and it should do everything for you without additional configuration. 
 
-Make sure tests pass, then make a pull request. If Travis fails to build your PR, please make additional changes.
+Make sure all tests pass, then make a pull request. If Travis fails to build your PR, please rectify any problems.
+If you are writing a new feature, it is vital that you add sufficient tests! 

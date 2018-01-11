@@ -1,9 +1,7 @@
 package com.fisk.twig.psi.util
 
 import com.fisk.twig.file.TwigFileType
-import com.fisk.twig.psi.TwigBlock
-import com.fisk.twig.psi.TwigLabel
-import com.fisk.twig.psi.TwigPsiFile
+import com.fisk.twig.psi.*
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
@@ -48,5 +46,21 @@ object TwigPsiUtil {
                 .mapNotNull { PsiTreeUtil.getChildrenOfType(it, TwigLabel::class.java) }
                 .forEach { result.addAll(it) }
         return result
+    }
+
+    fun findStartStatementForBlock(block: TwigBlockWrapper): TwigBlockStartStatement? {
+        return block.firstChild as? TwigBlockStartStatement
+    }
+
+    fun findEndStatementForBlock(block: TwigBlockWrapper): TwigBlockEndStatement? {
+        return block.lastChild as? TwigBlockEndStatement
+    }
+
+    fun findOpposingEndStatement(statement: TwigBlockStartStatement): TwigBlockEndStatement? {
+        return statement.parent.lastChild as? TwigBlockEndStatement
+    }
+
+    fun findOpposingStartStatement(statement: TwigBlockEndStatement): TwigBlockStartStatement? {
+        return statement.parent.firstChild as? TwigBlockStartStatement
     }
 }
