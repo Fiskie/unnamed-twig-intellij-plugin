@@ -1,0 +1,15 @@
+<script>
+    {% if should_be_indented_once %}
+        alert("yay");
+    {% endif %}
+</script>
+
+{% if foo %}
+    <script>
+        function () {
+            {% if should_foo %}
+                console.log({{ foo }})
+            {% endif %}
+        }
+    </script>
+{% endif %}
