@@ -1,0 +1,13 @@
+{% extends 'parent.twig' %}<error descr="Content cannot be inserted directly into a child template. Did you forget to add a block tag?">
+
+foo
+
+</error><error descr="Content cannot be inserted directly into a child template. Did you forget to add a block tag?">{{ bar }}</error>
+
+{% set foo %}
+    Content is allowed in a set, though
+{% endset %}
+
+{% block foo %}
+    content ok
+{% endblock %}

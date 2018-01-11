@@ -6,11 +6,11 @@ import com.intellij.lang.ASTNode
 import com.intellij.psi.util.PsiTreeUtil
 
 abstract class TwigStatementImpl(node: ASTNode) : TwigPsiElementImpl(node), TwigStatement {
-    private fun getTagName(): TwigTag? {
-        return PsiTreeUtil.findChildOfType(this, TwigTag::class.java)
+    override fun getName(): String? {
+        return getTag()?.name
     }
 
-    override fun getName(): String? {
-        return getTagName()?.getName()
+    override fun getTag(): TwigTag? {
+        return PsiTreeUtil.findChildOfType(this, TwigTag::class.java)
     }
 }

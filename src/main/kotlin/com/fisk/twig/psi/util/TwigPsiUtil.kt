@@ -48,19 +48,7 @@ object TwigPsiUtil {
         return result
     }
 
-    fun findStartStatementForBlock(block: TwigBlockWrapper): TwigBlockStartStatement? {
-        return block.firstChild as? TwigBlockStartStatement
-    }
-
-    fun findEndStatementForBlock(block: TwigBlockWrapper): TwigBlockEndStatement? {
-        return block.lastChild as? TwigBlockEndStatement
-    }
-
     fun findOpposingEndStatement(statement: TwigBlockStartStatement): TwigBlockEndStatement? {
         return statement.parent.lastChild as? TwigBlockEndStatement
-    }
-
-    fun findOpposingStartStatement(statement: TwigBlockEndStatement): TwigBlockStartStatement? {
-        return statement.parent.firstChild as? TwigBlockStartStatement
     }
 }

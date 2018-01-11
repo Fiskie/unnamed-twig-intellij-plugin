@@ -35,12 +35,12 @@ such as support for Find Usages and named element refactors.
 - [ ] Line mover: Move entire statement block if caret on start/end tag (add StatementUpDownMover)
 - [x] Whitespace control modifier (`{{-`) paired brace autocomplete -- currently only removes on backspace press, where is the delete handler?
 - [ ] Annotations/Inspections
-    - [ ] Expected end block tag -- has a coalescence problem and should probably be implemented as an annotation
+    - [ ] Expected end block tag -- doing while parsing has a coalescence problem and should probably be implemented as an annotation
     - [ ] Declared child blocks not found in the parent template
-    - [ ] Unclosed comment inspection
-    - [ ] Anything other than a `block` in an `embed`
+    - [x] Unclosed comment inspection
+    - [x] Anything other than a `block` in an `embed`/`extends`
 - [ ] Reference support - Find usages and name refactor for the following:
-    - [x] Variables - basic, unstable -- matches to property names right now; expression PSI needs improving.
+    - [x] Variables - basic, unstable -- matches to property and block names right now; expression PSI needs improving.
     - [ ] Macro names
     - [ ] Scoped variables in a `for` block
     - [ ] Scoped variables in a `macro`

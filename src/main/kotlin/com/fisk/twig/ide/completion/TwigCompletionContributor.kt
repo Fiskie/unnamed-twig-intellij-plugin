@@ -50,7 +50,7 @@ class TwigCompletionContributor : CompletionContributor() {
                     val statement = it.parent
 
                     if (statement is TwigBlockStartStatement) {
-                        val end = TwigPsiUtil.findOpposingEndStatement(statement)
+                        val end = statement.getMatchingEndStatement()
                         end == null
                     } else {
                         // fall through for single statements

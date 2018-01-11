@@ -27,4 +27,20 @@ class TwigBlockWrapperImpl(node: ASTNode) : TwigPsiElementImpl(node), TwigBlockW
     override fun getIcon(flags: Int): Icon {
         return TwigIcons.Elements.statement_brace
     }
+
+    override fun getStartStatement(): TwigBlockStartStatement? {
+        return firstChild as? TwigBlockStartStatement
+    }
+
+    override fun getContents(): TwigBlock? {
+        return if (children.size > 1) {
+            children[1] as? TwigBlock
+        } else {
+            null
+        }
+    }
+
+    override fun getEndStatement(): TwigBlockEndStatement? {
+        return lastChild as? TwigBlockEndStatement
+    }
 }

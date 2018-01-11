@@ -1,0 +1,16 @@
+{% embed 'parent.twig' %}<error descr="Content cannot be inserted directly into a child template. Did you forget to add a block tag?">
+    raw content is not allowed. </error><error descr="Content cannot be inserted directly into a child template. Did you forget to add a block tag?">{{ foo }}</error>
+
+    {# Comments are allowed, whitespace is allowed #}
+
+    {% block is_definitely %}
+        content and expressions are only allowed in here
+    {% endblock %}
+
+    {% if any_non_content_producing_tags_are_allowed %}<error descr="Content cannot be inserted directly into a child template. Did you forget to add a block tag?">
+        but not raw content still not within a block. </error><error descr="Content cannot be inserted directly into a child template. Did you forget to add a block tag?">{{ bar }}</error>
+
+        {% block foo %}
+        {% endblock %}
+    {% endif %}
+{% endembed %}

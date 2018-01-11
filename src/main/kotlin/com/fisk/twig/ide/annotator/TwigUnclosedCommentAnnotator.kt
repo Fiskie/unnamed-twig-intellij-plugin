@@ -1,4 +1,4 @@
-package com.fisk.twig.ide.inspections
+package com.fisk.twig.ide.annotator
 
 import com.fisk.twig.TwigBundle
 import com.fisk.twig.parsing.TwigTokenTypes.UNCLOSED_COMMENT

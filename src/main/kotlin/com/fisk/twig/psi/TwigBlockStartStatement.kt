@@ -1,3 +1,5 @@
 package com.fisk.twig.psi
 
-interface TwigBlockStartStatement : TwigStatement
+interface TwigBlockStartStatement : TwigStatement {
+    fun getMatchingEndStatement(): TwigBlockEndStatement?
+}

@@ -1,3 +1,5 @@
 package com.fisk.twig.psi
 
-interface TwigStatement : TwigPsiElement
+interface TwigStatement : TwigPsiElement {
+    fun getTag(): TwigTag?
+}

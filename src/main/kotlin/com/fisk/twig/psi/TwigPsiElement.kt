@@ -4,4 +4,5 @@ import com.intellij.psi.PsiElement
 
 interface TwigPsiElement : PsiElement {
     fun getName(): String?
+    fun getAllChildren(): Array<PsiElement>
 }
