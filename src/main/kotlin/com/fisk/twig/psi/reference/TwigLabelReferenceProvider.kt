@@ -1,7 +1,7 @@
 package com.fisk.twig.psi.reference
 
 import com.fisk.twig.parsing.TwigTokenTypes
-import com.fisk.twig.psi.impl.TwigLabelImpl
+import com.fisk.twig.psi.impl.TwigVariableImpl
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
 import com.intellij.psi.PsiReferenceProvider
@@ -10,7 +10,7 @@ import com.intellij.util.ProcessingContext
 
 class TwigLabelReferenceProvider : PsiReferenceProvider() {
     override fun getReferencesByElement(element: PsiElement, context: ProcessingContext): Array<PsiReference> {
-        if (element !is TwigLabelImpl) {
+        if (element !is TwigVariableImpl) {
             return PsiReference.EMPTY_ARRAY
         }
 
@@ -22,7 +22,7 @@ class TwigLabelReferenceProvider : PsiReferenceProvider() {
             while (textNode != null && labelSet.contains(textNode.elementType)) {
                 textNode = textNode.treeNext
             }
-            val reference = TwigLabelReference(element)
+            val reference = TwigVariableReference(element)
             return arrayOf(reference)
         }
 

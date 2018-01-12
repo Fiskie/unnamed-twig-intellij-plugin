@@ -8,7 +8,7 @@ Twig: UnclosedIfElse.twig
           PsiElement(Twig:TAG)('if')
         PsiWhiteSpace(' ')
         TwigExpressionImpl(Twig:EXPRESSION)
-          TwigLabelImpl(Twig:LABEL)
+          TwigVariableImpl(Twig:VARIABLE)
             PsiElement(Twig:LABEL)('foo')
         PsiWhiteSpace(' ')
         PsiElement(Twig:STATEMENT_CLOSE)('%}')

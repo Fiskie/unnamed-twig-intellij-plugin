@@ -14,7 +14,7 @@ class TwigTagImpl(node: ASTNode) : TwigPsiElementImpl(node), TwigTag {
     override fun setName(newName: String): PsiElement {
         val keyNode = firstChild.node
         if (keyNode != null) {
-            val property = TwigElementFactory.createProperty(project, newName)
+            val property = TwigElementFactory.createVariable(project, newName)
             val newKeyNode = property.firstChild.node
             node.replaceChild(keyNode, newKeyNode)
         }

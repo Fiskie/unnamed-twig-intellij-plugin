@@ -1,10 +1,6 @@
 package com.fisk.twig.parsing
 
 class TwigParserFreeFormTest : TwigParserTest() {
-    fun testSimpleExpression() {
-        doTest(true)
-    }
-
     fun testComment() {
         doTest(true)
     }
@@ -17,7 +13,7 @@ class TwigParserFreeFormTest : TwigParserTest() {
         doTest(true)
     }
 
-    fun testEmptyIfBlock() {
+    fun testEmptyBlock() {
         doTest(true)
     }
 

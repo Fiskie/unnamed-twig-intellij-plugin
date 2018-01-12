@@ -128,7 +128,7 @@ Label = [A-Za-z_]\w*
     }
 
     // in the order of operator precedence (except for 'not', which is a negator)
-    "with" | "not" |
+    "as" | "with" | "not" |
     "b-and" | "b-xor" | "b-or" |
     "or" | "and" |
     "==" | "!=" | "<" | ">" | ">=" | "<=" |

@@ -23,6 +23,7 @@ import com.fisk.twig.parsing.TwigTokenTypes.LBRACKET
 import com.fisk.twig.parsing.TwigTokenTypes.LPARENTH
 import com.fisk.twig.parsing.TwigTokenTypes.NUMBER
 import com.fisk.twig.parsing.TwigTokenTypes.OPERATOR
+import com.fisk.twig.parsing.TwigTokenTypes.PROPERTY
 import com.fisk.twig.parsing.TwigTokenTypes.RBRACE
 import com.fisk.twig.parsing.TwigTokenTypes.RBRACKET
 import com.fisk.twig.parsing.TwigTokenTypes.RPARENTH
@@ -32,6 +33,7 @@ import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_CLOSE
 import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_OPEN
 import com.fisk.twig.parsing.TwigTokenTypes.STRING
 import com.fisk.twig.parsing.TwigTokenTypes.TAG
+import com.fisk.twig.parsing.TwigTokenTypes.VARIABLE
 import com.intellij.lang.PsiBuilder
 import com.intellij.psi.tree.IElementType
 
@@ -289,13 +291,21 @@ class TwigParsing(private val builder: PsiBuilder) {
 
                 parseLeafToken(builder, TAG)
             } else {
-                val expressionMarker = builder.mark()
-
-                if (parseExpression(builder)) {
-                    expressionMarker.drop()
-                } else {
-                    expressionMarker.rollbackTo()
+                if (tagName == "block" && builder.tokenType == LABEL) {
+                    // make sure block labels are never parsed as expressions
                     builder.advanceLexer()
+                } else if (tagName == "macro" && builder.tokenType == LABEL) {
+                    // make sure macro labels are never parsed as expressions
+                    builder.advanceLexer()
+                } else {
+                    val expressionMarker = builder.mark()
+
+                    if (parseExpression(builder)) {
+                        expressionMarker.drop()
+                    } else {
+                        expressionMarker.rollbackTo()
+                        builder.advanceLexer()
+                    }
                 }
             }
 
@@ -382,9 +392,58 @@ class TwigParsing(private val builder: PsiBuilder) {
      * Starting with a LABEL, look ahead for the following:
      * dot-notation
      * parentheses
-     * etc
+     * brackets
+     *
+     * the goal is to work out the context of a reference, whether it is a
+     * - variable
+     * - property
+     * - function/method name
+     *
+     * This will help the reference parser identify the context of each label.
+     *
+     * TODO: this currently will only parse var/property
      */
-    private fun parseLabel(builder: PsiBuilder): Boolean {
+    private fun parseReference(builder: PsiBuilder): Boolean {
+        val varMarker = builder.mark()
+        builder.advanceLexer()
+        varMarker.done(VARIABLE)
+        var previousTokenWasValue = false
+
+        while (true) {
+            val optionalExprMarker = builder.mark()
+
+            if (builder.tokenType == SEP) {
+                builder.advanceLexer()
+                previousTokenWasValue = false
+                optionalExprMarker.drop()
+            } else if (!previousTokenWasValue && builder.tokenType == LABEL) {
+                val propMarker = builder.mark()
+                builder.advanceLexer()
+                propMarker.done(PROPERTY)
+                previousTokenWasValue = true
+                optionalExprMarker.drop()
+            } else {
+                optionalExprMarker.rollbackTo()
+                break
+            }
+        }
+
+        return true
+    }
+
+    /**
+     * Return true if the current token might be a reference, and not a simple label
+     */
+    private fun tokenMayBeReference(builder: PsiBuilder): Boolean {
+        if (builder.tokenType != LABEL) {
+            return false
+        }
+
+        // lookahead for colon: prevent hash keys from being read as expressions, these are simple labels
+        if (builder.lookAhead(1) == COLON) {
+            return false
+        }
+
         return true
     }
 
@@ -396,31 +455,36 @@ class TwigParsing(private val builder: PsiBuilder) {
      */
     private fun parseExpression(builder: PsiBuilder): Boolean {
         val expressionMarker = builder.mark()
+        // NB: An expression is only marked if any tokens were parsed
         var any = false
         // two values in a row isn't a valid expr, they must be tag arguments
         // so we make sure this doesn't show up as a single expr in PSI
         var previousTokenWasValue = false
 
         while (true) {
-            val optionalStatementMarker = builder.mark()
+            val optionalExprMarker = builder.mark()
 
-            if (!previousTokenWasValue && LITERAL_OR_LABEL.contains(builder.tokenType)) {
-                parseLeafToken(builder, builder.tokenType!!)
-                optionalStatementMarker.drop()
+            if (tokenMayBeReference(builder)) {
+                parseReference(builder)
                 any = true
                 previousTokenWasValue = true
+                optionalExprMarker.drop()
+            } else if (!previousTokenWasValue && LITERAL_OR_LABEL.contains(builder.tokenType)) {
+                parseLeafToken(builder, builder.tokenType!!)
+                any = true
+                previousTokenWasValue = true
+                optionalExprMarker.drop()
             } else if (ALLOWED_EXPR_PSI.contains(builder.tokenType)) {
                 builder.advanceLexer()
-                optionalStatementMarker.drop()
                 any = true
                 previousTokenWasValue = false
+                optionalExprMarker.drop()
             } else {
-                optionalStatementMarker.rollbackTo()
+                optionalExprMarker.rollbackTo()
                 break
             }
         }
 
-        // NB: An expression is only marked if any tokens were parsed
         if (any) {
             expressionMarker.done(EXPRESSION)
         } else {

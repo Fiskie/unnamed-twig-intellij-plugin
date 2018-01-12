@@ -1,12 +1,12 @@
 package com.fisk.twig.psi.impl
 
-import com.fisk.twig.psi.TwigLabel
+import com.fisk.twig.psi.TwigVariable
 import com.fisk.twig.psi.reference.TwigVariableReference
 import com.fisk.twig.psi.util.TwigElementFactory
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 
-class TwigLabelImpl(node: ASTNode) : TwigPsiElementImpl(node), TwigLabel {
+class TwigVariableImpl(node: ASTNode) : TwigPsiElementImpl(node), TwigVariable {
     override fun getName(): String = text
 
     override fun setName(newName: String): PsiElement {

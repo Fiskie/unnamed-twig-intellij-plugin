@@ -709,7 +709,7 @@ final class _TwigLexer implements FlexLexer {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1: 
-            { return TwigTokenTypes.CONTENT;
+            { return handleContent();
             } 
             // fall through
           case 35: break;

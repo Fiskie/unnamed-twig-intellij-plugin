@@ -45,6 +45,8 @@ class TwigParserDefinition : ParserDefinition {
         TwigTokenTypes.INVERSE_STATEMENT -> TwigInverseStatementImpl(node)
         TwigTokenTypes.SIMPLE_STATEMENT -> TwigSimpleStatementImpl(node)
         TwigTokenTypes.EXPRESSION_BLOCK -> TwigExpressionBlockImpl(node)
+        TwigTokenTypes.VARIABLE -> TwigVariableImpl(node)
+        TwigTokenTypes.PROPERTY -> TwigPropertyImpl(node)
         else -> TwigPsiElementImpl(node!!)
     }
 }

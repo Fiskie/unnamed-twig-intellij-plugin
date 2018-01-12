@@ -40,7 +40,8 @@ such as support for Find Usages and named element refactors.
     - [x] Unclosed comment inspection
     - [x] Anything other than a `block` in an `embed`/`extends`
 - [ ] Reference support - Find usages and name refactor for the following:
-    - [x] Variables - basic, unstable -- matches to property and block names right now; expression PSI needs improving.
+    - [x] Variables
+    - [ ] Block names
     - [ ] Macro names
     - [ ] Scoped variables in a `for` block
     - [ ] Scoped variables in a `macro`

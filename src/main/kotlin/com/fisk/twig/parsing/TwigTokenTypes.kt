@@ -76,6 +76,11 @@ object TwigTokenTypes {
     val EXPRESSION = TwigCompositeElementType("EXPRESSION")
     val SUBEXPRESSION = TwigCompositeElementType("SUBEXPRESSION")
 
+    val VARIABLE = TwigCompositeElementType("VARIABLE")
+    val PROPERTY = TwigCompositeElementType("PROPERTY")
+    val FUNCTION = TwigCompositeElementType("FUNCTION")
+    val METHOD = TwigCompositeElementType("METHOD")
+
     val HASH = TwigCompositeElementType("HASH")
 
     val IDENTIFIERS = TokenSet.create(LABEL)
