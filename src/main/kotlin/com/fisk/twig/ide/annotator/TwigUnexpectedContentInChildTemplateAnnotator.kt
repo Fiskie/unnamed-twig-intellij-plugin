@@ -35,7 +35,15 @@ class TwigUnexpectedContentInChildTemplateAnnotator : Annotator {
     private fun markInvalidTokens(root: TwigPsiElement, holder: AnnotationHolder) {
         root.getAllChildren().forEach {
             if (it is TwigBlockWrapper) {
-                // if blocks and whatever else are allowed inside embed, so recurse
+                /*
+                 * we can expect CONTENT within a block or set within an embed/extends,
+                 * however we need to recurse through other statement blocks and
+                 * check the CONTENT in those.
+                 *
+                 * This makes sure errors like {% embed %}{% if foo %}CONTENT...
+                 * are flagged correctly.
+                 */
+
                 if (!ALLOWED_CONTENT_TAGS.contains(it.getStartStatement()?.getTag()?.name)) {
                     val content = it.getContents()
 

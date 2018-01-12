@@ -1,20 +1,19 @@
 package com.fisk.twig.ide.annotator
 
-import com.fisk.twig.TwigFixtureTestBase
-
-abstract class TwigAnnotatorTest: TwigFixtureTestBase() {
-    protected fun checkInfo() {
-        myFixture.configureByFile("annotator/${fileName}")
-        myFixture.testHighlighting(false, true, false)
+class TwigAnnotatorTest : TwigAnnotatorTestBase() {
+    fun testInvalidEmbed() {
+        checkErrors()
     }
 
-    protected fun checkWarnings() {
-        myFixture.configureByFile("annotator/${fileName}")
-        myFixture.testHighlighting(true, false, true)
+    fun testInvalidExtends() {
+        checkErrors()
     }
 
-    protected fun checkErrors() {
-        myFixture.configureByFile("annotator/${fileName}")
-        myFixture.testHighlighting(false, false, false)
+    fun testMismatchedCloseBlock() {
+        checkErrors()
+    }
+
+    fun testBadElementInSandbox() {
+        checkErrors()
     }
 }

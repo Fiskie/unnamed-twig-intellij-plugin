@@ -18,8 +18,10 @@
   <idea-version since-build="145.0"/>
 
   <extensions defaultExtensionNs="com.intellij">
+    <annotator language="Twig" implementationClass="com.fisk.twig.ide.annotator.TwigMismatchedTagAnnotator"/>
     <annotator language="Twig" implementationClass="com.fisk.twig.ide.annotator.TwigUnclosedCommentAnnotator"/>
     <annotator language="Twig" implementationClass="com.fisk.twig.ide.annotator.TwigUnexpectedContentInChildTemplateAnnotator"/>
+    <annotator language="Twig" implementationClass="com.fisk.twig.ide.annotator.TwigUnexpectedElementInSandboxTagAnnotator"/>
 
     <backspaceHandlerDelegate implementation="com.fisk.twig.ide.actions.TwigBackspaceHandler" order="before xmlSlash"/>
     <braceMatcher filetype="Twig" implementationClass="com.fisk.twig.ide.braces.TwigBraceMatcher"/>

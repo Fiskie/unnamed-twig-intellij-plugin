@@ -15,11 +15,10 @@ Twig: PrematureEndTag.twig
       PsiWhiteSpace('\n')
       TwigBlockImpl(Twig:BLOCK)
         <empty list>
-  PsiErrorElement:Mismatched close block
-    TwigBlockEndStatementImpl(Twig:BLOCK_END_STATEMENT)
-      PsiElement(Twig:STATEMENT_OPEN)('{%')
-      PsiWhiteSpace(' ')
-      TwigTagImpl(Twig:TAG)
-        PsiElement(Twig:TAG)('endfor')
-      PsiWhiteSpace(' ')
-      PsiElement(Twig:STATEMENT_CLOSE)('%}')
+      TwigBlockEndStatementImpl(Twig:BLOCK_END_STATEMENT)
+        PsiElement(Twig:STATEMENT_OPEN)('{%')
+        PsiWhiteSpace(' ')
+        TwigTagImpl(Twig:TAG)
+          PsiElement(Twig:TAG)('endfor')
+        PsiWhiteSpace(' ')
+        PsiElement(Twig:STATEMENT_CLOSE)('%}')

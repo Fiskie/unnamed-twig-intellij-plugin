@@ -61,7 +61,6 @@ class TwigParsing(private val builder: PsiBuilder) {
             val tokenType = builder.tokenType
             val problemOffset = builder.currentOffset
 
-            // TODO mark this error when looking for a matching close tag, so the error does not propagate down the tree
             if (tokenType === STATEMENT_OPEN) {
                 val problemMark = builder.mark()
 
@@ -213,7 +212,8 @@ class TwigParsing(private val builder: PsiBuilder) {
 
             val closeMarker = builder.mark()
 
-            if (parseCloseStatement(builder, tagName) || TwigTagUtils.isDefaultBlockTag(tagName)) {
+            // Doesn't matter if the close statement is mismatched -- this is handled by the annotator to prevent error coalescence
+            if (parseAnyCloseStatement(builder) || TwigTagUtils.isDefaultBlockTag(tagName)) {
                 blockStatementMarker.drop()
                 closeMarker.drop()
                 statementMarker.done(BLOCK_WRAPPER)

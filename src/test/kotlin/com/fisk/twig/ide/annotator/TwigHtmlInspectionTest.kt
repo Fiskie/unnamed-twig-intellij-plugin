@@ -1,10 +1,8 @@
 package com.fisk.twig.ide.annotator
 
-import com.fisk.twig.util.TwigTestUtils
 import com.intellij.codeInspection.htmlInspections.HtmlUnknownTagInspection
-import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
 
-class TwigHtmlInspectionTest : TwigAnnotatorTest() {
+class TwigHtmlInspectionTest : TwigAnnotatorTestBase() {
     @Throws(Exception::class)
     override fun setUp() {
         super.setUp()

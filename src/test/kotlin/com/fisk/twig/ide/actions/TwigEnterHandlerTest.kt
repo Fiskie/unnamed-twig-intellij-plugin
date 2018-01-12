@@ -38,7 +38,7 @@ class TwigEnterHandlerTest : TwigActionHandlerTest() {
         doEnterTest(
                 "{% if foo %}<caret>{% endfor %}" + "stuff",
                 "{% if foo %}\n" +
-                        "<caret>\n" +
+                        "    <caret>\n" +
                         "{% endfor %}" +
                         "stuff"
         )

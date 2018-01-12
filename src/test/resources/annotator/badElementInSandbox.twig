@@ -1,0 +1,4 @@
+{% sandbox %}
+    {% include 'foo' %}
+    <error descr="A sandbox tag may only contain includes.">{% set foo = "bar" %}</error>
+{% endsandbox %}

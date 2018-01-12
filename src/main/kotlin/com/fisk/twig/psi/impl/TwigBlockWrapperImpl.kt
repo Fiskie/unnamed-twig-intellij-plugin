@@ -8,7 +8,7 @@ import javax.swing.Icon
 
 class TwigBlockWrapperImpl(node: ASTNode) : TwigPsiElementImpl(node), TwigBlockWrapper {
     override fun getName(): String? {
-        val openTag = getBlockOpenStatement()
+        val openTag = getStartStatement()
 
         openTag?.let {
             // todo: ugly, but will work (?) (not with non-spaced tags it won't)
@@ -18,18 +18,12 @@ class TwigBlockWrapperImpl(node: ASTNode) : TwigPsiElementImpl(node), TwigBlockW
         return null
     }
 
-    fun getBlockOpenStatement(): TwigStatement? {
-        return PsiTreeUtil.findChildOfType(this, TwigBlockStartStatement::class.java) ?:
-                PsiTreeUtil.findChildOfType(this, TwigSimpleStatement::class.java) ?:
-                PsiTreeUtil.findChildOfType(this, TwigInverseStatement::class.java)
-    }
-
     override fun getIcon(flags: Int): Icon {
         return TwigIcons.Elements.statement_brace
     }
 
-    override fun getStartStatement(): TwigBlockStartStatement? {
-        return firstChild as? TwigBlockStartStatement
+    override fun getStartStatement(): TwigStatement? {
+        return firstChild as? TwigBlockStartStatement ?: firstChild as? TwigSimpleStatement
     }
 
     override fun getContents(): TwigBlock? {

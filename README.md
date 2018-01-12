@@ -20,6 +20,8 @@ such as support for Find Usages and named element refactors.
 - [x] Formatting/code style configuration 
 - [ ] Allow a closing brace for a hash to be automatically inserted if not expecting an expression brace
 - [ ] Continuation indent for expressions
+- [ ] File path referencing
+- [ ] `for` `if` filter keyword recognition
 
 ### Milestone 2: Supplementary PSI features
 
@@ -27,10 +29,11 @@ such as support for Find Usages and named element refactors.
 - [ ] Line mover: Move entire statement block if caret on start/end tag (add StatementUpDownMover)
 - [x] Whitespace control modifier (`{{-`) paired brace autocomplete -- currently only removes on backspace press, where is the delete handler?
 - [ ] Annotations/Inspections
-    - [ ] Expected end block tag -- doing while parsing has a coalescence problem and should probably be implemented as an annotation
+    - [x] Mismatched end block tag
     - [ ] Declared child blocks not found in the parent template
     - [x] Unclosed comment inspection
     - [x] Anything other than a `block` in an `embed`/`extends`
+    - [x] Anything other than a `include` in a `sandbox`
 - [ ] Reference support - Find usages and name refactor for the following:
     - [x] Local variables
     - [ ] Block names
@@ -50,8 +53,8 @@ such as support for Find Usages and named element refactors.
 
 ### Milestone 3: Feature parity with community Symfony plugin Twig extensions
 
-- [ ] Goto parent block
-- [ ] Template include/extends/block resolution goto
+- [ ] Goto parent/use block
+- [ ] Template include/extends/use block resolution goto
 - [ ] Parent block implements/extends goto on line marker
 - [ ] Macro goto on line marker
 - [ ] PHPDoc annotation support ({# @var thing \Core\Thing #})
