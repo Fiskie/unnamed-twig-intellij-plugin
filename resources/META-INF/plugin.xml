@@ -25,7 +25,7 @@
     <braceMatcher filetype="Twig" implementationClass="com.fisk.twig.ide.braces.TwigBraceMatcher"/>
     <breadcrumbsInfoProvider implementation="com.fisk.twig.ide.breadcrumbs.TwigBreadcrumbsInfoProvider" />
     <codeFoldingOptionsProvider instance="com.fisk.twig.config.TwigFoldingOptionsProvider"/>
-    <!--<codeStyleSettingsProvider implementation="com.fisk.twig.ide.pages.TwigCodeStyleSettingsProvider"/>-->
+    <codeStyleSettingsProvider implementation="com.fisk.twig.ide.pages.TwigCodeStyleSettingsProvider"/>
 
     <colorSettingsPage implementation="com.fisk.twig.ide.pages.TwigColorsPage"/>
     <completion.contributor language="Twig" implementationClass="com.fisk.twig.ide.completion.TwigCompletionContributor" />
@@ -35,7 +35,7 @@
     <fileTypeFactory implementation="com.fisk.twig.file.TwigFileTypeFactory"/>
     <highlightErrorFilter implementation="com.fisk.twig.ide.annotator.TwigErrorFilter"/>
     <html.scriptContentProvider language="Twig" implementationClass="com.fisk.twig.TwigScriptContentProvider"/>
-    <!--<langCodeStyleSettingsProvider implementation="com.fisk.twig.ide.pages.TwigLanguageCodeStyleSettingsProvider"/>-->
+    <langCodeStyleSettingsProvider implementation="com.fisk.twig.ide.pages.TwigLanguageCodeStyleSettingsProvider"/>
     <lang.commenter language="Twig" implementationClass="com.fisk.twig.ide.comments.TwigCommenterManager"/>
     <lang.fileViewProviderFactory language="Twig" implementationClass="com.fisk.twig.file.TwigFileViewProviderFactory"/>
     <lang.findUsagesProvider language="Twig" implementationClass="com.fisk.twig.ide.TwigFindUsagesProvider"/>

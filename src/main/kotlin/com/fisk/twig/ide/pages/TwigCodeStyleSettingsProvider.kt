@@ -7,6 +7,7 @@ import com.intellij.application.options.CodeStyleAbstractPanel
 import com.intellij.openapi.options.Configurable
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.codeStyle.CodeStyleSettingsProvider
+import com.intellij.psi.codeStyle.CustomCodeStyleSettings
 
 class TwigCodeStyleSettingsProvider : CodeStyleSettingsProvider() {
     override fun createSettingsPage(settings: CodeStyleSettings, originalSettings: CodeStyleSettings?): Configurable {
@@ -16,6 +17,8 @@ class TwigCodeStyleSettingsProvider : CodeStyleSettingsProvider() {
             override fun getHelpTopic() = TwigBundle.message("twig.page.code_style.help")
         }
     }
+
+    override fun createCustomSettings(settings: CodeStyleSettings) = TwigCodeStyleSettings(settings)
 
     override fun getLanguage() = TwigLanguage.INSTANCE
 

@@ -11,5 +11,6 @@ class TwigCodeStylePanel(
     override fun initTabs(settings: CodeStyleSettings?) {
         addSpacesTab(settings)
         addBlankLinesTab(settings)
+        addWrappingAndBracesTab(settings)
     }
 }

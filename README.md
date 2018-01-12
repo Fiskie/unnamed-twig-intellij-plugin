@@ -20,12 +20,13 @@ such as support for Find Usages and named element refactors.
 - [x] Remove additional whitespace around braces during code cleanup
 - [x] Code folding
 - [x] Prioritise end tag hinting for close statements
+- [ ] Allow a closing brace for a hash to be automatically inserted if not expecting an expression brace
 - [ ] Continuation indent for expressions
 - [ ] Formatting/code style configuration
     - [x] Statement block indenting
-    - [ ] Hard wrap
-    - [ ] Wrap on typing
-    - [ ] Visual guides
+    - [x] Hard wrap
+    - [x] Wrap on typing
+    - [x] Visual guides
     - [ ] Spaces inside statement braces toggle
     - [ ] Spaces inside expression braces toggle
 
@@ -40,16 +41,19 @@ such as support for Find Usages and named element refactors.
     - [x] Unclosed comment inspection
     - [x] Anything other than a `block` in an `embed`/`extends`
 - [ ] Reference support - Find usages and name refactor for the following:
-    - [x] Variables
+    - [x] Local variables
     - [ ] Block names
     - [ ] Macro names
     - [ ] Scoped variables in a `for` block
     - [ ] Scoped variables in a `macro`
     - [ ] Add tests
+    - [ ] Variables declared in a parent block, recursively
 - [ ] Automatic matching tag rename on type a la HTML plugin
 - [ ] Add the special `loop` object when in `for` context
 - [x] Auto-collapse Twig blocks as a folding option
-- [ ] String iterpolation (`#{foo}, #{1 + 2}`)
+- [ ] String interpolation (`#{foo}, #{1 + 2}`)
+- [ ] Additional formatting/code style configuration
+    - [ ] Spacing around operators 
 
 ### Milestone 3: Feature parity with community Symfony plugin Twig extensions
 
