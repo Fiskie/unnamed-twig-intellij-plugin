@@ -74,6 +74,9 @@ object TwigTokenTypes {
     val SIMPLE_STATEMENT = TwigCompositeElementType("SIMPLE_STATEMENT")
     val BLOCK = TwigCompositeElementType("BLOCK")
     val EXPRESSION = TwigCompositeElementType("EXPRESSION")
+    val SUBEXPRESSION = TwigCompositeElementType("SUBEXPRESSION")
+
+    val HASH = TwigCompositeElementType("HASH")
 
     val IDENTIFIERS = TokenSet.create(LABEL)
     val STRING_LITERALS = TokenSet.create(STRING)

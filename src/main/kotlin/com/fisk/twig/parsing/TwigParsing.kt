@@ -7,25 +7,40 @@ import com.fisk.twig.parsing.TwigTokenTypes.BLOCK_END_STATEMENT
 import com.fisk.twig.parsing.TwigTokenTypes.BLOCK_START_STATEMENT
 import com.fisk.twig.parsing.TwigTokenTypes.BLOCK_WRAPPER
 import com.fisk.twig.parsing.TwigTokenTypes.BOOLEAN
+import com.fisk.twig.parsing.TwigTokenTypes.COLON
+import com.fisk.twig.parsing.TwigTokenTypes.COMMA
 import com.fisk.twig.parsing.TwigTokenTypes.COMMENT
 import com.fisk.twig.parsing.TwigTokenTypes.CONTENT
 import com.fisk.twig.parsing.TwigTokenTypes.EXPRESSION
 import com.fisk.twig.parsing.TwigTokenTypes.EXPRESSION_CLOSE
 import com.fisk.twig.parsing.TwigTokenTypes.EXPRESSION_OPEN
+import com.fisk.twig.parsing.TwigTokenTypes.FILTER_SEP
 import com.fisk.twig.parsing.TwigTokenTypes.INVALID
 import com.fisk.twig.parsing.TwigTokenTypes.INVERSE_STATEMENT
 import com.fisk.twig.parsing.TwigTokenTypes.LABEL
+import com.fisk.twig.parsing.TwigTokenTypes.LBRACE
+import com.fisk.twig.parsing.TwigTokenTypes.LBRACKET
+import com.fisk.twig.parsing.TwigTokenTypes.LPARENTH
 import com.fisk.twig.parsing.TwigTokenTypes.NUMBER
+import com.fisk.twig.parsing.TwigTokenTypes.OPERATOR
+import com.fisk.twig.parsing.TwigTokenTypes.RBRACE
+import com.fisk.twig.parsing.TwigTokenTypes.RBRACKET
+import com.fisk.twig.parsing.TwigTokenTypes.RPARENTH
+import com.fisk.twig.parsing.TwigTokenTypes.SEP
 import com.fisk.twig.parsing.TwigTokenTypes.SIMPLE_STATEMENT
 import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_CLOSE
 import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_OPEN
 import com.fisk.twig.parsing.TwigTokenTypes.STRING
 import com.fisk.twig.parsing.TwigTokenTypes.TAG
-import com.fisk.twig.parsing.TwigTokenTypes.UNCLOSED_COMMENT
 import com.intellij.lang.PsiBuilder
 import com.intellij.psi.tree.IElementType
 
 class TwigParsing(private val builder: PsiBuilder) {
+    companion object {
+        val LITERAL_OR_LABEL = setOf(LABEL, STRING, NUMBER, BOOLEAN)
+        val ALLOWED_EXPR_PSI = setOf(FILTER_SEP, SEP, OPERATOR, LPARENTH, RPARENTH, LBRACE, RBRACE, LBRACKET, RBRACKET, COLON, COMMA)
+    }
+
     fun parse() {
         builder.setDebugMode(true)
 
@@ -364,42 +379,54 @@ class TwigParsing(private val builder: PsiBuilder) {
     }
 
     /**
+     * Starting with a LABEL, look ahead for the following:
+     * dot-notation
+     * parentheses
+     * etc
+     */
+    private fun parseLabel(builder: PsiBuilder): Boolean {
+        return true
+    }
+
+    /**
      * Parses an expression. An expression can be as simple as a single label (e.g. the foo in {{ foo }}),
      * or as complex as "foo" ~ func(bar) ~ baz.val['arr']|default("str")
      *
-     * TODO: operators
-     * TODO: array access
-     * TODO: filter pipe
-     * TODO: property access
-     * TODO: functions
+     * TODO: improve depth
      */
     private fun parseExpression(builder: PsiBuilder): Boolean {
         val expressionMarker = builder.mark()
+        var any = false
+        // two values in a row isn't a valid expr, they must be tag arguments
+        // so we make sure this doesn't show up as a single expr in PSI
+        var previousTokenWasValue = false
 
-        when (builder.tokenType) {
-            LABEL -> {
-                parseLeafToken(builder, LABEL)
-                expressionMarker.done(EXPRESSION)
-                return true
-            }
-            STRING -> {
-                parseLeafToken(builder, STRING)
-                expressionMarker.done(EXPRESSION)
-                return true
-            }
-            NUMBER -> {
-                parseLeafToken(builder, NUMBER)
-                expressionMarker.done(EXPRESSION)
-                return true
-            }
-            BOOLEAN -> {
-                parseLeafToken(builder, BOOLEAN)
-                expressionMarker.done(EXPRESSION)
-                return true
+        while (true) {
+            val optionalStatementMarker = builder.mark()
+
+            if (!previousTokenWasValue && LITERAL_OR_LABEL.contains(builder.tokenType)) {
+                parseLeafToken(builder, builder.tokenType!!)
+                optionalStatementMarker.drop()
+                any = true
+                previousTokenWasValue = true
+            } else if (ALLOWED_EXPR_PSI.contains(builder.tokenType)) {
+                builder.advanceLexer()
+                optionalStatementMarker.drop()
+                any = true
+                previousTokenWasValue = false
+            } else {
+                optionalStatementMarker.rollbackTo()
+                break
             }
         }
 
-        expressionMarker.error(TwigBundle.message("twig.parsing.expected.path.or.data"))
-        return false
+        // NB: An expression is only marked if any tokens were parsed
+        if (any) {
+            expressionMarker.done(EXPRESSION)
+        } else {
+            expressionMarker.rollbackTo()
+        }
+
+        return any
     }
 }

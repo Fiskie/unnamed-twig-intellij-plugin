@@ -48,6 +48,7 @@ such as support for Find Usages and named element refactors.
 - [ ] Automatic matching tag rename on type a la HTML plugin
 - [ ] Add the special `loop` object when in `for` context
 - [x] Auto-collapse Twig blocks as a folding option
+- [ ] String iterpolation (`#{foo}, #{1 + 2}`)
 
 ### Milestone 3: Feature parity with community Symfony plugin Twig extensions
 

@@ -68,7 +68,7 @@ class TwigParserFreeFormTest : TwigParserTest() {
         doTest(true)
     }
 
-    fun testFilterChains() {
+    fun testExpressions() {
         doTest(true)
     }
 
@@ -106,6 +106,10 @@ class TwigParserFreeFormTest : TwigParserTest() {
     }
 
     fun testCustomTag() {
+        doTest(true)
+    }
+
+    fun testNamedArguments() {
         doTest(true)
     }
 }
