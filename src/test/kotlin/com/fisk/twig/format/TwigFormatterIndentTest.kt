@@ -2,16 +2,25 @@ package com.fisk.twig.format
 
 import com.fisk.twig.TwigLanguage
 import com.fisk.twig.config.TwigConfig
+import com.fisk.twig.ide.pages.TwigCodeStyleSettings
+import com.intellij.lang.html.HTMLLanguage
 import com.intellij.openapi.fileTypes.StdFileTypes
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager
+import com.intellij.psi.codeStyle.CommonCodeStyleSettings
 
 class TwigFormatterIndentTest : TwigFormatterTest() {
+    val twigSettings: TwigCodeStyleSettings
+        get() = CodeStyleSettingsManager.getSettings(project).getCustomSettings(TwigCodeStyleSettings::class.java)
+
+    val htmlSettings: CommonCodeStyleSettings
+        get() = CodeStyleSettingsManager.getSettings(project).getCommonSettings(HTMLLanguage.INSTANCE)
+
     /**
      * Sanity check that we respect non-default (i.e. 4) indent sizes
      */
     fun testHTMLHonorsNonDefaultIndentSize() {
-        val prevTwigIndent = CodeStyleSettingsManager.getSettings(project).getCommonSettings(TwigLanguage.INSTANCE).indentOptions?.INDENT_SIZE
-        CodeStyleSettingsManager.getSettings(project).getIndentOptions(StdFileTypes.HTML).INDENT_SIZE = 2
+        val prevIndent = htmlSettings.indentOptions?.INDENT_SIZE
+        htmlSettings.indentOptions?.INDENT_SIZE = 2
 
         doStringBasedTest(
                 "{% if foo %}\n" +
@@ -27,7 +36,7 @@ class TwigFormatterIndentTest : TwigFormatterTest() {
                         "{% endif %}"
         )
 
-        CodeStyleSettingsManager.getSettings(project).getCommonSettings(TwigLanguage.INSTANCE).indentOptions?.INDENT_SIZE = prevTwigIndent
+        htmlSettings.indentOptions?.INDENT_SIZE = prevIndent
     }
 
     fun testTagSpacingFix() {
@@ -55,6 +64,21 @@ class TwigFormatterIndentTest : TwigFormatterTest() {
                 "{%-if foo-%}",
                 "{%- if foo -%}"
         )
+    }
+
+    fun testDisabledTagSpacing() {
+        val prevExprSetting = twigSettings.SPACES_IN_EXPRESSION_TAGS
+        twigSettings.SPACES_IN_EXPRESSION_TAGS = false
+        doStringBasedTest("{{ foo }}", "{{foo}}")
+        doStringBasedTest("{{foo}}", "{{foo}}")
+        twigSettings.SPACES_IN_EXPRESSION_TAGS = prevExprSetting
+
+
+        val prevStatementSetting = twigSettings.SPACES_IN_STATEMENT_TAGS
+        twigSettings.SPACES_IN_STATEMENT_TAGS = false
+        doStringBasedTest("{% if foo %}", "{%if foo%}")
+        doStringBasedTest("{%if foo%}", "{%if foo%}")
+        twigSettings.SPACES_IN_STATEMENT_TAGS = prevStatementSetting
     }
 
     fun testSimpleExpression() {

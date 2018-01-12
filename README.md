@@ -17,7 +17,7 @@ such as support for Find Usages and named element refactors.
 - [x] Remove additional whitespace around braces during code cleanup
 - [x] Code folding
 - [x] Prioritise end tag hinting for close statements
-- [x] Formatting/code style configuration
+- [ ] Formatting/code style configuration 
 - [ ] Allow a closing brace for a hash to be automatically inserted if not expecting an expression brace
 - [ ] Continuation indent for expressions
 
@@ -43,6 +43,7 @@ such as support for Find Usages and named element refactors.
 - [ ] Add the special `loop` object when in `for` context
 - [x] Auto-collapse Twig blocks as a folding option
 - [ ] String interpolation (`#{foo}, #{1 + 2}`)
+- [ ] Safe delete for parent templates
 - [ ] Additional formatting/code style configuration
     - [ ] Spacing around operators 
 
