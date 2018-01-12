@@ -3,7 +3,7 @@
 (WIP) A plugin to replace the official closed-source Twig plugin found in IntelliJ IDEA/PhpStorm, adding enhanced functionality
 such as support for Find Usages and named element refactors.
 
-## Differences with the official plugin
+## Current functional differences with the official plugin
 
 * Code style is extended from the current HTML code style settings. This means your indents will be determined by the HTML indent settings.
 
@@ -17,7 +17,7 @@ such as support for Find Usages and named element refactors.
 - [x] Remove additional whitespace around braces during code cleanup
 - [x] Code folding
 - [x] Prioritise end tag hinting for close statements
-- [ ] Formatting/code style configuration 
+- [x] Formatting/code style configuration 
 - [ ] Allow a closing brace for a hash to be automatically inserted if not expecting an expression brace
 - [ ] Continuation indent for expressions
 
@@ -39,6 +39,7 @@ such as support for Find Usages and named element refactors.
     - [ ] Scoped variables in a `macro`
     - [ ] Add tests
     - [ ] Variables declared in a parent block, recursively
+- [x] More color scheme options 
 - [ ] Automatic matching tag rename on type a la HTML plugin
 - [ ] Add the special `loop` object when in `for` context
 - [x] Auto-collapse Twig blocks as a folding option

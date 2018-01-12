@@ -17,6 +17,7 @@ import com.fisk.twig.parsing.TwigTokenTypes.EXPRESSION_OPEN
 import com.fisk.twig.parsing.TwigTokenTypes.FILTER_SEP
 import com.fisk.twig.parsing.TwigTokenTypes.INVALID
 import com.fisk.twig.parsing.TwigTokenTypes.INVERSE_STATEMENT
+import com.fisk.twig.parsing.TwigTokenTypes.KEYWORD_OPERATOR
 import com.fisk.twig.parsing.TwigTokenTypes.LABEL
 import com.fisk.twig.parsing.TwigTokenTypes.LBRACE
 import com.fisk.twig.parsing.TwigTokenTypes.LBRACKET
@@ -40,7 +41,7 @@ import com.intellij.psi.tree.IElementType
 class TwigParsing(private val builder: PsiBuilder) {
     companion object {
         val LITERAL_OR_LABEL = setOf(LABEL, STRING, NUMBER, BOOLEAN)
-        val ALLOWED_EXPR_PSI = setOf(FILTER_SEP, SEP, OPERATOR, LPARENTH, RPARENTH, LBRACE, RBRACE, LBRACKET, RBRACKET, COLON, COMMA)
+        val ALLOWED_EXPR_PSI = setOf(FILTER_SEP, SEP, OPERATOR, KEYWORD_OPERATOR, LPARENTH, RPARENTH, LBRACE, RBRACE, LBRACKET, RBRACKET, COLON, COMMA)
     }
 
     fun parse() {

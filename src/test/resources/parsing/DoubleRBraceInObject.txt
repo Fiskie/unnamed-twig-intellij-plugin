@@ -11,7 +11,7 @@ Twig: DoubleRBraceInObject.twig
           TwigStringImpl(Twig:STRING)
             PsiElement(Twig:STRING)(''embeds/panel.twig'')
           PsiWhiteSpace(' ')
-          PsiElement(Twig:OPERATOR)('with')
+          PsiElement(Twig:KEYWORD_OPERATOR)('with')
           PsiWhiteSpace(' ')
           PsiElement(Twig:LBRACE)('{')
           TwigLabelImpl(Twig:LABEL)

@@ -46,6 +46,8 @@ object TwigTokenTypes {
     @JvmField
     val OPERATOR = TwigElementType("OPERATOR", "twig.parsing.element.expected.operator")
     @JvmField
+    val KEYWORD_OPERATOR = TwigElementType("KEYWORD_OPERATOR", "twig.parsing.element.expected.operator")
+    @JvmField
     val NUMBER = TwigElementType("NUMBER", "twig.parsing.element.expected.integer")
     @JvmField
     val STRING = TwigElementType("STRING", "twig.parsing.element.expected.string")
