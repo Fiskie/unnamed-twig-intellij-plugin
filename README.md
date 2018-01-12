@@ -12,23 +12,14 @@ such as support for Find Usages and named element refactors.
 ### Milestone 1: Feature parity with the official Twig plugin
 
 - [x] Autocompletion for end braces
-    - [x] Statements (`{% %}`)
-    - [x] Expressions (`{{ }}`)
-    - [x] Comments (`{% %}`)
 - [x] Composite Twig/HTML structure view
 - [x] Live templates
 - [x] Remove additional whitespace around braces during code cleanup
 - [x] Code folding
 - [x] Prioritise end tag hinting for close statements
+- [x] Formatting/code style configuration
 - [ ] Allow a closing brace for a hash to be automatically inserted if not expecting an expression brace
 - [ ] Continuation indent for expressions
-- [ ] Formatting/code style configuration
-    - [x] Statement block indenting
-    - [x] Hard wrap
-    - [x] Wrap on typing
-    - [x] Visual guides
-    - [ ] Spaces inside statement braces toggle
-    - [ ] Spaces inside expression braces toggle
 
 ### Milestone 2: Supplementary PSI features
 
