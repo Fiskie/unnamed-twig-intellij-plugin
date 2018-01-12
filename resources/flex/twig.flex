@@ -128,17 +128,20 @@ Label = [A-Za-z_]\w*
     }
 
     // in the order of operator precedence (except for 'not', which is a negator)
-    "with" | "not" |
-    "b-and" | "b-xor" | "b-or" |
-    "or" | "and" |
     "==" | "!=" | "<" | ">" | ">=" | "<=" |
-    "in" |
-    "matches" |
-    "starts with" | "ends with" |
     ".." |
-    "+" | "-" | "~" | "*" | "/" | "//" | "%" | "is" | "**" |
+    "+" | "-" | "~" | "*" | "/" | "//" | "%" | "**" |
     "??" | "?:" {
         return TwigTokenTypes.OPERATOR;
+    }
+
+    // in the order of operator precedence (except for 'not', which is a negator)
+    "as" | "with" | "not" |
+    "b-and" | "b-xor" | "b-or" |
+    "or" | "and" | "in" |
+    "matches" |
+    "starts with" | "ends with" | "is" {
+        return TwigTokenTypes.KEYWORD_OPERATOR;
     }
 
     "," { return TwigTokenTypes.COMMA; }

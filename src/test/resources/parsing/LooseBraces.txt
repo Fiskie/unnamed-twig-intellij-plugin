@@ -5,7 +5,7 @@ Twig: LooseBraces.twig
       PsiElement(Twig:EXPRESSION_OPEN)('{{')
       PsiWhiteSpace(' ')
       TwigExpressionImpl(Twig:EXPRESSION)
-        TwigLabelImpl(Twig:LABEL)
+        TwigVariableImpl(Twig:VARIABLE)
           PsiElement(Twig:LABEL)('foo')
       PsiWhiteSpace(' ')
       PsiElement(Twig:EXPRESSION_CLOSE)('}}')

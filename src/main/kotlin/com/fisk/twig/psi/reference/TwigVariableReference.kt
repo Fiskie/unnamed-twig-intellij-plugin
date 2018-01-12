@@ -1,12 +1,13 @@
 package com.fisk.twig.psi.reference
 
 import com.fisk.twig.psi.TwigPsiElement
+import com.fisk.twig.psi.TwigVariable
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import com.intellij.psi.PsiReference
 
-class TwigLabelReference(val el: TwigPsiElement) : PsiReference {
+class TwigVariableReference(val el: TwigPsiElement) : PsiReference {
     override fun getElement() = el
 
     override fun resolve() = el
@@ -35,6 +36,10 @@ class TwigLabelReference(val el: TwigPsiElement) : PsiReference {
         }
 
         if (other.containingFile != el.containingFile) {
+            return false
+        }
+
+        if (el !is TwigVariable || other !is TwigVariable) {
             return false
         }
 

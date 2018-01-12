@@ -46,6 +46,8 @@ object TwigTokenTypes {
     @JvmField
     val OPERATOR = TwigElementType("OPERATOR", "twig.parsing.element.expected.operator")
     @JvmField
+    val KEYWORD_OPERATOR = TwigElementType("KEYWORD_OPERATOR", "twig.parsing.element.expected.operator")
+    @JvmField
     val NUMBER = TwigElementType("NUMBER", "twig.parsing.element.expected.integer")
     @JvmField
     val STRING = TwigElementType("STRING", "twig.parsing.element.expected.string")
@@ -74,6 +76,14 @@ object TwigTokenTypes {
     val SIMPLE_STATEMENT = TwigCompositeElementType("SIMPLE_STATEMENT")
     val BLOCK = TwigCompositeElementType("BLOCK")
     val EXPRESSION = TwigCompositeElementType("EXPRESSION")
+    val SUBEXPRESSION = TwigCompositeElementType("SUBEXPRESSION")
+
+    val VARIABLE = TwigCompositeElementType("VARIABLE")
+    val PROPERTY = TwigCompositeElementType("PROPERTY")
+    val FUNCTION = TwigCompositeElementType("FUNCTION")
+    val METHOD = TwigCompositeElementType("METHOD")
+
+    val HASH = TwigCompositeElementType("HASH")
 
     val IDENTIFIERS = TokenSet.create(LABEL)
     val STRING_LITERALS = TokenSet.create(STRING)

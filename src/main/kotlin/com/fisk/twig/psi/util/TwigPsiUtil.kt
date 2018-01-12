@@ -47,8 +47,4 @@ object TwigPsiUtil {
                 .forEach { result.addAll(it) }
         return result
     }
-
-    fun findOpposingEndStatement(statement: TwigBlockStartStatement): TwigBlockEndStatement? {
-        return statement.parent.lastChild as? TwigBlockEndStatement
-    }
 }

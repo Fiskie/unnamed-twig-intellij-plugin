@@ -21,6 +21,19 @@ class TwigCompletionContributor : CompletionContributor() {
     )
 
     init {
+        extend(CompletionType.BASIC, psiElement(TwigTokenTypes.LABEL), object : CompletionProvider<CompletionParameters>() {
+            override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext?, result: CompletionResultSet) {
+                if (isInLoopContext()) {
+                    // todo: add the loop object properties
+                    result.addElement(LookupElementBuilder.create("loop"))
+                }
+            }
+
+            private fun isInLoopContext(): Boolean {
+                return true
+            }
+        })
+
         extend(CompletionType.BASIC, psiElement(TwigTokenTypes.TAG), object : CompletionProvider<CompletionParameters>() {
             override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext?, result: CompletionResultSet) {
                 val prevTags = findUnclosedStartTags(parameters.originalFile, parameters.offset)

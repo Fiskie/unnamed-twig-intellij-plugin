@@ -3,7 +3,7 @@
 (WIP) A plugin to replace the official closed-source Twig plugin found in IntelliJ IDEA/PhpStorm, adding enhanced functionality
 such as support for Find Usages and named element refactors.
 
-## Differences with the official plugin
+## Current functional differences with the official plugin
 
 * Code style is extended from the current HTML code style settings. This means your indents will be determined by the HTML indent settings.
 
@@ -12,22 +12,14 @@ such as support for Find Usages and named element refactors.
 ### Milestone 1: Feature parity with the official Twig plugin
 
 - [x] Autocompletion for end braces
-    - [x] Statements (`{% %}`)
-    - [x] Expressions (`{{ }}`)
-    - [x] Comments (`{% %}`)
 - [x] Composite Twig/HTML structure view
 - [x] Live templates
 - [x] Remove additional whitespace around braces during code cleanup
 - [x] Code folding
 - [x] Prioritise end tag hinting for close statements
+- [x] Formatting/code style configuration 
+- [ ] Allow a closing brace for a hash to be automatically inserted if not expecting an expression brace
 - [ ] Continuation indent for expressions
-- [ ] Formatting/code style configuration
-    - [x] Statement block indenting
-    - [ ] Hard wrap
-    - [ ] Wrap on typing
-    - [ ] Visual guides
-    - [ ] Spaces inside statement braces toggle
-    - [ ] Spaces inside expression braces toggle
 
 ### Milestone 2: Supplementary PSI features
 
@@ -40,14 +32,21 @@ such as support for Find Usages and named element refactors.
     - [x] Unclosed comment inspection
     - [x] Anything other than a `block` in an `embed`/`extends`
 - [ ] Reference support - Find usages and name refactor for the following:
-    - [x] Variables - basic, unstable -- matches to property and block names right now; expression PSI needs improving.
+    - [x] Local variables
+    - [ ] Block names
     - [ ] Macro names
     - [ ] Scoped variables in a `for` block
     - [ ] Scoped variables in a `macro`
     - [ ] Add tests
+    - [ ] Variables declared in a parent block, recursively
+- [x] More color scheme options 
 - [ ] Automatic matching tag rename on type a la HTML plugin
 - [ ] Add the special `loop` object when in `for` context
 - [x] Auto-collapse Twig blocks as a folding option
+- [ ] String interpolation (`#{foo}, #{1 + 2}`)
+- [ ] Safe delete for parent templates
+- [ ] Additional formatting/code style configuration
+    - [ ] Spacing around operators 
 
 ### Milestone 3: Feature parity with community Symfony plugin Twig extensions
 
