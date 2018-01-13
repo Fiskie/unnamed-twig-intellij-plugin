@@ -46,6 +46,8 @@ class TwigParserDefinition : ParserDefinition {
         TwigTokenTypes.EXPRESSION_BLOCK -> TwigExpressionBlockImpl(node)
         TwigTokenTypes.VARIABLE -> TwigVariableImpl(node)
         TwigTokenTypes.PROPERTY -> TwigPropertyImpl(node)
+        TwigTokenTypes.MACRO_DECLARATION -> TwigMacroDeclarationImpl(node)
+        TwigTokenTypes.BLOCK_LABEL -> TwigBlockLabelImpl(node)
         else -> TwigPsiElementImpl(node!!)
     }
 }

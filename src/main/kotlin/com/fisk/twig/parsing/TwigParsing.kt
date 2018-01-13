@@ -1,11 +1,12 @@
 package com.fisk.twig.parsing
 
 import com.fisk.twig.TwigBundle
-import com.fisk.twig.TwigTagUtils
+import com.fisk.twig.util.TwigTagUtil
 import com.fisk.twig.parsing.TwigTokenTypes.ARRAY
 import com.fisk.twig.parsing.TwigTokenTypes.ARRAY_ACCESS
 import com.fisk.twig.parsing.TwigTokenTypes.BLOCK
 import com.fisk.twig.parsing.TwigTokenTypes.BLOCK_END_STATEMENT
+import com.fisk.twig.parsing.TwigTokenTypes.BLOCK_LABEL
 import com.fisk.twig.parsing.TwigTokenTypes.BLOCK_START_STATEMENT
 import com.fisk.twig.parsing.TwigTokenTypes.BLOCK_WRAPPER
 import com.fisk.twig.parsing.TwigTokenTypes.BOOLEAN
@@ -17,7 +18,7 @@ import com.fisk.twig.parsing.TwigTokenTypes.EQUALS
 import com.fisk.twig.parsing.TwigTokenTypes.EXPRESSION
 import com.fisk.twig.parsing.TwigTokenTypes.EXPRESSION_CLOSE
 import com.fisk.twig.parsing.TwigTokenTypes.EXPRESSION_OPEN
-import com.fisk.twig.parsing.TwigTokenTypes.FILTER_SEP
+import com.fisk.twig.parsing.TwigTokenTypes.FILTER_PIPE
 import com.fisk.twig.parsing.TwigTokenTypes.FUNCTION
 import com.fisk.twig.parsing.TwigTokenTypes.HASH
 import com.fisk.twig.parsing.TwigTokenTypes.INVALID
@@ -27,6 +28,7 @@ import com.fisk.twig.parsing.TwigTokenTypes.LABEL
 import com.fisk.twig.parsing.TwigTokenTypes.LBRACE
 import com.fisk.twig.parsing.TwigTokenTypes.LBRACKET
 import com.fisk.twig.parsing.TwigTokenTypes.LPARENTH
+import com.fisk.twig.parsing.TwigTokenTypes.MACRO_DECLARATION
 import com.fisk.twig.parsing.TwigTokenTypes.METHOD
 import com.fisk.twig.parsing.TwigTokenTypes.NULL
 import com.fisk.twig.parsing.TwigTokenTypes.NUMBER
@@ -35,7 +37,7 @@ import com.fisk.twig.parsing.TwigTokenTypes.PROPERTY
 import com.fisk.twig.parsing.TwigTokenTypes.RBRACE
 import com.fisk.twig.parsing.TwigTokenTypes.RBRACKET
 import com.fisk.twig.parsing.TwigTokenTypes.RPARENTH
-import com.fisk.twig.parsing.TwigTokenTypes.SEP
+import com.fisk.twig.parsing.TwigTokenTypes.DOT
 import com.fisk.twig.parsing.TwigTokenTypes.SIMPLE_STATEMENT
 import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_CLOSE
 import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_OPEN
@@ -49,7 +51,7 @@ import com.intellij.psi.tree.IElementType
 class TwigParsing(private val builder: PsiBuilder) {
     companion object {
         val LITERAL_OR_LABEL = setOf(LABEL, STRING, NUMBER, BOOLEAN, NULL)
-        val ALLOWED_EXPR_PSI = setOf(FILTER_SEP, OPERATOR, KEYWORD_OPERATOR)
+        val ALLOWED_EXPR_PSI = setOf(FILTER_PIPE, OPERATOR, KEYWORD_OPERATOR)
     }
 
     fun parse() {
@@ -159,7 +161,7 @@ class TwigParsing(private val builder: PsiBuilder) {
     private fun nextStatementIsInverse(builder: PsiBuilder): Boolean {
         val prematureInverseMarker = builder.mark()
         builder.advanceLexer()
-        val isInverse = builder.tokenType == TAG && TwigTagUtils.isInverseTag(builder.tokenText!!)
+        val isInverse = builder.tokenType == TAG && TwigTagUtil.isInverseTag(builder.tokenText!!)
         prematureInverseMarker.rollbackTo()
         return isInverse
     }
@@ -203,7 +205,7 @@ class TwigParsing(private val builder: PsiBuilder) {
 
         if (tagName == null) {
             // do nothing
-        } else if (hasMatchingEndTagAhead(builder, tagName) || TwigTagUtils.isEndTag(tagName) || TwigTagUtils.isDefaultBlockTag(tagName)) {
+        } else if (hasMatchingEndTagAhead(builder, tagName) || TwigTagUtil.isEndTag(tagName) || TwigTagUtil.isDefaultBlockTag(tagName)) {
             val blockStatementMarker = builder.mark()
             val openTag = parseOpenStatement(builder)
 
@@ -221,7 +223,7 @@ class TwigParsing(private val builder: PsiBuilder) {
             val closeMarker = builder.mark()
 
             // Doesn't matter if the close statement is mismatched -- this is handled by the annotator to prevent error coalescence
-            if (parseAnyCloseStatement(builder) || TwigTagUtils.isDefaultBlockTag(tagName)) {
+            if (parseAnyCloseStatement(builder) || TwigTagUtil.isDefaultBlockTag(tagName)) {
                 blockStatementMarker.drop()
                 closeMarker.drop()
                 statementMarker.done(BLOCK_WRAPPER)
@@ -249,21 +251,21 @@ class TwigParsing(private val builder: PsiBuilder) {
      * Will parse any statement that does not contain an end tag (/^end/)
      */
     private fun parseOpenStatement(builder: PsiBuilder): Boolean {
-        return parseStatement(builder, BLOCK_START_STATEMENT, { tag -> !TwigTagUtils.isEndTag(tag) /* && !elseTags.contains(tag)*/ }) // todo -- this will currently break parsing
+        return parseStatement(builder, BLOCK_START_STATEMENT, { tag -> !TwigTagUtil.isEndTag(tag) /* && !elseTags.contains(tag)*/ }) // todo -- this will currently break parsing
     }
 
     /**
      * Will parse any close statement; this is used to gracefully handle unexpected tag errors
      */
     private fun parseAnyCloseStatement(builder: PsiBuilder): Boolean {
-        return parseStatement(builder, BLOCK_END_STATEMENT, { tag -> TwigTagUtils.isEndTag(tag) })
+        return parseStatement(builder, BLOCK_END_STATEMENT, { tag -> TwigTagUtil.isEndTag(tag) })
     }
 
     /**
      * Will parse inverse statements, i.e. else and elseif tags
      */
     private fun parseInverseStatement(builder: PsiBuilder): Boolean {
-        return parseStatement(builder, INVERSE_STATEMENT, { tag -> TwigTagUtils.isInverseTag(tag) })
+        return parseStatement(builder, INVERSE_STATEMENT, { tag -> TwigTagUtil.isInverseTag(tag) })
     }
 
     private fun parseStatement(builder: PsiBuilder, type: TwigCompositeElementType, strategy: (String) -> Boolean): Boolean {
@@ -296,11 +298,10 @@ class TwigParsing(private val builder: PsiBuilder) {
                 when {
                     tagName == "block" && builder.tokenType == LABEL -> {
                         // make sure block labels are never parsed as expressions
-                        builder.advanceLexer()
+                        parseBlockLabel(builder)
                     }
                     tagName == "macro" && builder.tokenType == LABEL -> {
-                        // make sure macro labels are never parsed as expressions
-                        builder.advanceLexer()
+                        parseMacroDeclaration(builder)
                     }
                     else -> {
                         val expressionMarker = builder.mark()
@@ -328,6 +329,30 @@ class TwigParsing(private val builder: PsiBuilder) {
             marker.rollbackTo()
             return false
         }
+    }
+
+    private fun parseBlockLabel(builder: PsiBuilder): Boolean {
+        if (builder.tokenType != LABEL) {
+            return false
+        }
+
+        val macroMarker = builder.mark()
+        builder.advanceLexer()
+        macroMarker.done(BLOCK_LABEL)
+        return true
+    }
+
+    private fun parseMacroDeclaration(builder: PsiBuilder): Boolean {
+        if (builder.tokenType != LABEL) {
+            return false
+        }
+
+        val macroMarker = builder.mark()
+        builder.advanceLexer()
+        parseFunctionCallParams(builder)
+        macroMarker.done(MACRO_DECLARATION)
+
+        return true
     }
 
     private fun parseExpressionBlock(builder: PsiBuilder): Boolean {
@@ -427,7 +452,7 @@ class TwigParsing(private val builder: PsiBuilder) {
             val optionalExprMarker = builder.mark()
 
             when {
-                builder.tokenType == SEP -> {
+                builder.tokenType == DOT -> {
                     builder.advanceLexer()
                     previousTokenWasValue = false
                     optionalExprMarker.drop()

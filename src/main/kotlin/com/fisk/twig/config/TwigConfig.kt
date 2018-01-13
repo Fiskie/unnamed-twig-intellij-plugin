@@ -9,28 +9,12 @@ import com.intellij.lang.html.HTMLLanguage
 import com.intellij.openapi.project.Project
 
 object TwigConfig {
-    var isAutoGenerateCloseTagEnabled: Boolean
-        get() = getBooleanPropertyValue(AUTO_GENERATE_CLOSE_TAG)
-        set(enabled) = setBooleanPropertyValue(AUTO_GENERATE_CLOSE_TAG, enabled)
-
-    var isAutocompleteEndBracesEnabled: Boolean
-        get() = getBooleanPropertyValue(AUTOCOMPLETE_STATEMENTS)
-        set(enabled) = setBooleanPropertyValue(AUTOCOMPLETE_STATEMENTS, enabled)
-
     val isAutoCollapseBlocksEnabled: Boolean
         get() = getBooleanPropertyValue(AUTO_COLLAPSE_BLOCKS)
 
     fun setAutoCollapseBlocks(enabled: Boolean) {
         setBooleanPropertyValue(AUTO_COLLAPSE_BLOCKS, enabled)
     }
-
-    var commenterLanguage: Language?
-        get() = Language.findLanguageByID(getStringPropertyValue(COMMENTER_LANGUAGE_ID)) ?: HTMLLanguage.INSTANCE
-        set(language) = setStringPropertyValue(COMMENTER_LANGUAGE_ID, language?.id)
-
-    var braceEditingModel: String?
-        get() = getStringPropertyValue(BRACE_EDITING_MODEL)
-        set(model) = setStringPropertyValue(BRACE_EDITING_MODEL, model)
 
     private fun getStringPropertyValue(property: Property, project: Project? = null): String {
         return PropertyAccessor(getProperties(project)).getPropertyValue(property)

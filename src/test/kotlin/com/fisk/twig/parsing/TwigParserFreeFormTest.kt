@@ -128,4 +128,8 @@ class TwigParserFreeFormTest : TwigParserTest() {
     fun testTestOperator() {
         doTest(true)
     }
+
+    fun testMacroDeclaration() {
+        doTest(true)
+    }
 }

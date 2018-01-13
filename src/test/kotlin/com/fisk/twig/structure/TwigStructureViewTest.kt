@@ -43,12 +43,16 @@ class TwigStructureViewTest : LightPlatformCodeInsightFixtureTestCase() {
         }
     }
 
+    /**
+     * This also tests with various tags and whitespaces to
+     * make sure tag content is extracted correctly
+     */
     fun testNestedBlocks() {
         doStructureViewTest(
 
-                "{% if foo %}\n" +
-                        "    {% block bar %}\n" +
-                        "        {{ baz }}<caret>\n" +
+                "{%-if foo-%}\n" +
+                        "    {%block bar%}\n" +
+                        "        {{- baz -}}<caret>\n" +
                         "    {% endblock %}\n" +
                         "{% endif %}\n",
 

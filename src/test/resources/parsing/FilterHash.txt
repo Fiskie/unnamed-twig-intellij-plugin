@@ -81,7 +81,7 @@ Twig: FilterHash.twig
       TwigExpressionImpl(Twig:EXPRESSION)
         TwigVariableImpl(Twig:VARIABLE)
           PsiElement(Twig:LABEL)('foo')
-        PsiElement(Twig:FILTER_SEP)('|')
+        PsiElement(Twig:FILTER_PIPE)('|')
         TwigPsiElementImpl(Twig:FUNCTION)
           PsiElement(Twig:LABEL)('filter')
           PsiElement(Twig:LPARENTH)('(')

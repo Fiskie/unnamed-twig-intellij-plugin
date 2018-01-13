@@ -1,5 +1,6 @@
 package com.fisk.twig.psi
 
 interface TwigStatement : TwigPsiElement {
-    fun getTag(): TwigTag?
+    val tag: TwigTag?
+    fun getStatementContents(): String
 }

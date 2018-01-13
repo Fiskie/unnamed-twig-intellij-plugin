@@ -12,7 +12,6 @@ import com.intellij.psi.PsiManager
 import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.psi.util.parentOfType
 import com.intellij.util.indexing.FileBasedIndex
 import java.util.*
 
@@ -29,7 +28,7 @@ object TwigPsiUtil {
 
     fun isInLoopContext(element: PsiElement): Boolean {
         val parent = PsiTreeUtil.findFirstParent(element, {
-            el -> el is TwigBlockWrapper && el.getStartStatement()?.getTag()?.name == "for"
+            el -> el is TwigBlockWrapper && el.getStartStatement()?.tag?.name == "for"
         })
 
         return parent != null

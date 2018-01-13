@@ -7,14 +7,7 @@ import javax.swing.Icon
 
 class TwigBlockWrapperImpl(node: ASTNode) : TwigPsiElementImpl(node), TwigBlockWrapper {
     override fun getName(): String? {
-        val openTag = getStartStatement()
-
-        openTag?.let {
-            // todo: ugly, but will work (?) (not with non-spaced tags it won't)
-            return openTag.text.substring(3, openTag.text.length - 3).trim()
-        }
-
-        return null
+        return getStartStatement()?.getStatementContents()
     }
 
     override fun getIcon(flags: Int): Icon {

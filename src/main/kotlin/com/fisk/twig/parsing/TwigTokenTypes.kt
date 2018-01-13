@@ -42,7 +42,7 @@ object TwigTokenTypes {
     @JvmField
     val EQUALS = TwigElementType("EQUALS", "twig.parsing.element.expected.equals")
     @JvmField
-    val SEP = TwigElementType("SEP", "twig.parsing.element.expected.sep")
+    val DOT = TwigElementType("DOT", "twig.parsing.element.expected.sep")
     @JvmField
     val OPERATOR = TwigElementType("OPERATOR", "twig.parsing.element.expected.operator")
     @JvmField
@@ -58,7 +58,7 @@ object TwigTokenTypes {
     @JvmField
     val INVALID = TwigElementType("INVALID", "twig.parsing.element.expected.invalid")
     @JvmField
-    val FILTER_SEP = TwigElementType("FILTER_SEP", "twig.parsing.element.expected.filter_sep")
+    val FILTER_PIPE = TwigElementType("FILTER_PIPE", "twig.parsing.element.expected.FILTER_PIPE")
     @JvmField
     val TEST = TwigElementType("TEST", "twig.parsing.element.expected.test")
     @JvmField
@@ -90,6 +90,9 @@ object TwigTokenTypes {
 
     val HASH = TwigCompositeElementType("HASH")
     val ARRAY = TwigCompositeElementType("ARRAY")
+
+    val BLOCK_LABEL = TwigCompositeElementType("BLOCK_LABEL")
+    val MACRO_DECLARATION = TwigCompositeElementType("MACRO_DECLARATION")
 
     val IDENTIFIERS = TokenSet.create(LABEL)
     val STRING_LITERALS = TokenSet.create(STRING)

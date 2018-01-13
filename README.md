@@ -21,7 +21,8 @@ such as support for Find Usages and named element refactors.
 - [ ] Allow a closing brace for a hash to be automatically inserted if not expecting an expression brace
 - [ ] Continuation indent for expressions
 - [ ] File path referencing
-- [ ] `for` `if` filter keyword recognition
+- [x] `for` `if` filter keyword recognition
+- [ ] ~~Block ctrl-click goto~~ - will use line markers instead
 
 ### Milestone 2: Supplementary PSI features
 
@@ -34,16 +35,18 @@ such as support for Find Usages and named element refactors.
     - [x] Unclosed comment inspection
     - [x] Anything other than a `block` in an `embed`/`extends`
     - [x] Anything other than a `include` in a `sandbox`
+    - [x] Unexpected inverse tags
 - [x] Annotation fixes
     - [x] Mismatched twig tag
 - [ ] Reference support - Find usages and name refactor for the following:
     - [x] Local variables
+    - [ ] Tags - rename matching tag
     - [ ] Block names
     - [ ] Macro names
     - [ ] Scoped variables in a `for` block
     - [ ] Scoped variables in a `macro`
-    - [ ] Add tests
     - [ ] Variables declared in a parent block, recursively
+    - [ ] Add tests
 - [x] More color scheme options 
 - [ ] Automatic matching tag rename on type a la HTML plugin
 - [x] Add the special `loop` object when in `for` context

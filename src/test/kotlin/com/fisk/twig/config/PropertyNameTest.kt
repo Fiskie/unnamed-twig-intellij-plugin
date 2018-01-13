@@ -25,11 +25,7 @@ class PropertyNameTest(val propertyTestDefinition: PropertyTestDefinition) {
     companion object {
 
         internal val PROPERTY_TEST_DEFINITIONS = Arrays.asList(
-                PropertyTestDefinition(Property.AUTO_GENERATE_CLOSE_TAG, "TwigEnableAutoGenerateCloseTag"),
-                PropertyTestDefinition(Property.BRACE_EDITING_MODEL, "TwigBraceEditingModel"),
-                PropertyTestDefinition(Property.AUTO_COLLAPSE_BLOCKS, "TwigAutoCollapseBlocks"),
-                PropertyTestDefinition(Property.COMMENTER_LANGUAGE_ID, "TwigCommenterLanguageId"),
-                PropertyTestDefinition(Property.AUTOCOMPLETE_STATEMENTS, "TwigAutocompleteStatements"))
+                PropertyTestDefinition(Property.AUTO_COLLAPSE_BLOCKS, "TwigAutoCollapseBlocks"))
 
         @Parameterized.Parameters
         @JvmStatic
