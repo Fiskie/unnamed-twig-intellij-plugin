@@ -3,33 +3,44 @@ package com.fisk.twig.ide.completion
 import com.fisk.twig.TwigTagUtils
 import com.fisk.twig.parsing.TwigTokenTypes
 import com.fisk.twig.psi.TwigBlockStartStatement
+import com.fisk.twig.psi.TwigExpression
 import com.fisk.twig.psi.TwigTag
+import com.fisk.twig.psi.util.TwigPsiUtil
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.patterns.PlatformPatterns.psiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.ProcessingContext
+import kotlin.math.exp
 
 class TwigCompletionContributor : CompletionContributor() {
-    // todo: detect and suggest closing tag?
     val tags = setOf(
             "if", "for", "include", "extends", "with", "block", "embed", "else",
             "sandbox", "spaceless", "verbatim", "import",
             "macro", "set", "flush", "autoescape"
     )
 
+    val loopProperties = setOf("index", "index0", "revindex", "revindex0", "first", "last", "length", "parent")
+
     init {
         extend(CompletionType.BASIC, psiElement(TwigTokenTypes.LABEL), object : CompletionProvider<CompletionParameters>() {
             override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext?, result: CompletionResultSet) {
-                if (isInLoopContext()) {
-                    // todo: add the loop object properties
-                    result.addElement(LookupElementBuilder.create("loop"))
-                }
-            }
+                // adds the special loop variable to loop contexts
+                if (TwigPsiUtil.isInLoopContext(parameters.position)) {
+                    val expr = PsiTreeUtil.findFirstParent(parameters.position, { el -> el is TwigExpression })
 
-            private fun isInLoopContext(): Boolean {
-                return true
+                    expr?.let {
+                        if (expr.children.size == 1) {
+                            // must be the first label in the expression, so show loop properties
+                            result.addAllElements(loopProperties.map {
+                                LookupElementBuilder.create("loop.$it")
+                            })
+                        }
+                    }
+                }
+
+                result.stopHere()
             }
         })
 

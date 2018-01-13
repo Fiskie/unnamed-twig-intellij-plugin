@@ -16,7 +16,7 @@ class TwigUnexpectedElementInSandboxTagAnnotator : Annotator {
             return
         }
 
-        if (element.getStartStatement()?.getTag()?.name!! != "sandbox") {
+        if (element.getStartStatement()?.getTag()?.name != "sandbox") {
             return
         }
 
