@@ -404,6 +404,10 @@ class TwigParsing(private val builder: PsiBuilder) {
      * TODO: this currently will only parse var/property
      */
     private fun parseReference(builder: PsiBuilder): Boolean {
+        if (builder.tokenType != LABEL) {
+            return false
+        }
+
         val refMarker = builder.mark()
         builder.advanceLexer()
 
@@ -570,22 +574,6 @@ class TwigParsing(private val builder: PsiBuilder) {
         return true
     }
 
-    /**
-     * Return true if the current token might be a reference, and not a simple label
-     */
-    private fun tokenMayBeReference(builder: PsiBuilder): Boolean {
-        if (builder.tokenType != LABEL) {
-            return false
-        }
-
-        // lookahead for colon: prevent hash keys from being read as expressions, these are simple labels
-        if (builder.lookAhead(1) == COLON) {
-            return false
-        }
-
-        return true
-    }
-
     private fun parseSubexpression(builder: PsiBuilder): Boolean {
         if (builder.tokenType != LPARENTH) {
             return false
@@ -626,8 +614,7 @@ class TwigParsing(private val builder: PsiBuilder) {
         while (true) {
             val optionalExprMarker = builder.mark()
 
-            if (tokenMayBeReference(builder)) {
-                parseReference(builder)
+            if (parseReference(builder)) {
                 any = true
                 previousTokenWasValue = true
                 optionalExprMarker.drop()
