@@ -32,6 +32,7 @@ class TwigColorsPage : ColorSettingsPage {
                 "            </p>\n" +
                 "        {% endif %}\n" +
                 "    {% endfor %}\n" +
+                "    {% set nothing = none %}\n" +
                 "{% endblock %}\n"
     }
 

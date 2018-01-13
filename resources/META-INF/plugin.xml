@@ -49,7 +49,6 @@
     <liveTemplateContext implementation="com.fisk.twig.ide.templates.TwigTemplateContextType"/>
     <!--<projectConfigurable groupId="language" provider="com.fisk.twig.ide.pages.TwigConfigurationProvider" />-->
     <psi.referenceContributor implementation="com.fisk.twig.psi.reference.ReferenceContributor" />
-    <!--<statementUpDownMover implementation="com.fisk.twig.ide.actions.TwigStatementUpDownMover" />-->
     <typedHandler implementation="com.fisk.twig.ide.actions.TwigTypedHandler" order="before xmlSlash"/>
   </extensions>
 

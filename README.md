@@ -26,7 +26,7 @@ such as support for Find Usages and named element refactors.
 ### Milestone 2: Supplementary PSI features
 
 - [x] Breadcrumbs
-- [ ] Line mover: Move entire statement block if caret on start/end tag (add StatementUpDownMover)
+- [ ] Line mover: Move entire statement block if caret on start/end tag (add own StatementMover)
 - [x] Whitespace control modifier (`{{-`) paired brace autocomplete -- currently only removes on backspace press, where is the delete handler?
 - [ ] Annotations/Inspections
     - [x] Mismatched end block tag

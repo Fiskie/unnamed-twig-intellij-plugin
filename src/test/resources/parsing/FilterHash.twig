@@ -1,0 +1,17 @@
+{% set foo = {
+    label1: value1,
+    string2: "value2",
+    hash3: {
+        label1: value1,
+        array2: [1, 2, 3]
+    }
+} %}
+
+{{ foo|filter({
+    label1: value1,
+    string2: "value2",
+    hash3: {
+        label1: value1,
+        array2: [1, 2, 3]
+    }
+}) }}

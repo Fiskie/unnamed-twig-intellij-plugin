@@ -67,6 +67,8 @@ object TwigTokenTypes {
     val COLON = TwigElementType("COLON", "twig.parsing.element.expected.colon")
     @JvmField
     val COMMENT = TwigElementType("COMMENT", "twig.parsing.element.expected.comment")
+    @JvmField
+    val NULL = TwigElementType("NULL", "twig.parsing.element.expected.null")
 
     val EXPRESSION_BLOCK = TwigCompositeElementType("EXPRESSION_BLOCK")
     val BLOCK_WRAPPER = TwigCompositeElementType("BLOCK_WRAPPER")
@@ -82,8 +84,10 @@ object TwigTokenTypes {
     val PROPERTY = TwigCompositeElementType("PROPERTY")
     val FUNCTION = TwigCompositeElementType("FUNCTION")
     val METHOD = TwigCompositeElementType("METHOD")
+    val ARRAY_ACCESS = TwigCompositeElementType("ARRAY_ACCESS")
 
     val HASH = TwigCompositeElementType("HASH")
+    val ARRAY = TwigCompositeElementType("ARRAY")
 
     val IDENTIFIERS = TokenSet.create(LABEL)
     val STRING_LITERALS = TokenSet.create(STRING)

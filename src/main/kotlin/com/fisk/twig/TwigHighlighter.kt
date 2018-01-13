@@ -128,6 +128,7 @@ class TwigHighlighter : SyntaxHighlighterBase() {
             keys1.put(TwigTokenTypes.BOOLEAN, VALUES)
             keys1.put(TwigTokenTypes.NUMBER, VALUES)
             keys1.put(TwigTokenTypes.LABEL, VARIABLES)
+            keys1.put(TwigTokenTypes.NULL, KEYWORD_OPERATORS)
 
             DISPLAY_NAMES.put(ACCESSORS, Pair<String, HighlightSeverity>(TwigBundle.message("twig.page.colors.descriptor.accessors.key"), null))
             DISPLAY_NAMES.put(BLOCKS, Pair<String, HighlightSeverity>(TwigBundle.message("twig.page.colors.descriptor.blocks.key"), null))

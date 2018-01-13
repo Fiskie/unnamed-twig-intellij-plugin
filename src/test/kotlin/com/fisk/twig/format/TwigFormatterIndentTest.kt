@@ -73,7 +73,6 @@ class TwigFormatterIndentTest : TwigFormatterTest() {
         doStringBasedTest("{{foo}}", "{{foo}}")
         twigSettings.SPACES_IN_EXPRESSION_TAGS = prevExprSetting
 
-
         val prevStatementSetting = twigSettings.SPACES_IN_STATEMENT_TAGS
         twigSettings.SPACES_IN_STATEMENT_TAGS = false
         doStringBasedTest("{% if foo %}", "{%if foo%}")

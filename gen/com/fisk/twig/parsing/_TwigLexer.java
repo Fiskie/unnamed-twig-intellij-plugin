@@ -124,8 +124,8 @@ final class _TwigLexer implements FlexLexer {
   static final char ZZ_CMAP_A[] = zzUnpackCMap(
     "\11\0\1\2\4\1\22\0\1\61\1\44\1\34\1\7\1\0\1\6\1\0\1\37\1\12\1\13\1\50\1\46"+
     "\1\62\1\4\1\30\1\32\12\27\1\16\1\0\1\45\1\33\1\45\1\51\1\0\32\10\1\14\1\35"+
-    "\1\15\1\0\1\10\1\0\1\24\1\55\1\60\1\41\1\22\1\23\1\10\1\54\1\53\2\10\1\25"+
-    "\1\57\1\43\1\40\2\10\1\20\1\26\1\17\1\21\1\42\1\52\1\56\2\10\1\3\1\31\1\5"+
+    "\1\15\1\0\1\10\1\0\1\24\1\55\1\60\1\42\1\22\1\23\1\10\1\54\1\53\2\10\1\25"+
+    "\1\57\1\40\1\41\2\10\1\20\1\26\1\17\1\21\1\43\1\52\1\56\2\10\1\3\1\31\1\5"+
     "\1\47\6\0\1\36\24\0\1\11\12\0\1\11\4\0\1\11\5\0\27\11\1\0\12\11\4\0\14\11"+
     "\16\0\5\11\7\0\1\11\1\0\1\11\1\0\5\11\1\0\2\11\2\0\4\11\1\0\1\11\6\0\1\11"+
     "\1\0\3\11\1\0\1\11\1\0\4\11\1\0\23\11\1\0\11\11\1\0\26\11\2\0\1\11\6\0\10"+
@@ -183,17 +183,17 @@ final class _TwigLexer implements FlexLexer {
   private static final String ZZ_ACTION_PACKED_0 =
     "\1\1\3\0\1\2\2\0\1\3\1\4\1\5\2\4"+
     "\1\6\2\4\3\2\1\7\1\10\1\11\1\10\1\12"+
-    "\1\13\1\14\1\15\1\16\1\17\5\12\1\4\1\20"+
-    "\1\21\1\20\1\22\2\4\2\12\1\4\3\10\1\4"+
-    "\4\12\1\23\1\10\1\24\1\0\1\25\1\0\1\26"+
-    "\1\27\1\30\1\31\1\2\1\32\3\0\1\33\1\34"+
-    "\4\12\1\35\2\12\1\36\2\0\1\37\3\0\3\12"+
-    "\1\0\1\12\1\27\1\30\1\31\1\40\5\12\1\0"+
-    "\1\41\1\12\3\0\5\12\1\0\1\35\1\12\1\42"+
-    "\1\0\2\12\1\0\1\43\1\12\2\0";
+    "\1\13\1\14\1\15\1\16\1\17\5\12\1\20\1\21"+
+    "\1\22\1\21\1\23\2\4\2\12\1\4\3\10\1\4"+
+    "\4\12\1\24\1\10\1\25\1\0\1\26\1\0\1\27"+
+    "\1\30\1\31\1\32\1\2\1\33\2\0\1\34\1\35"+
+    "\4\12\1\36\2\12\2\0\1\37\3\0\4\12\1\0"+
+    "\1\12\1\30\1\31\1\32\1\40\5\12\1\20\2\12"+
+    "\1\41\1\12\3\0\5\12\1\42\1\0\1\36\1\12"+
+    "\1\43\1\0\2\12\1\0\1\44\1\12\2\0";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[119];
+    int [] result = new int[121];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -226,16 +226,17 @@ final class _TwigLexer implements FlexLexer {
     "\0\u0660\0\u0693\0\u05c7\0\u05c7\0\u0165\0\u06c6\0\u06f9\0\u072c"+
     "\0\u075f\0\u0792\0\u07c5\0\u0165\0\u07f8\0\u0165\0\u01fe\0\u0165"+
     "\0\u01cb\0\u082b\0\u085e\0\u0891\0\u08c4\0\u08f7\0\u0165\0\u0396"+
-    "\0\u03c9\0\u052e\0\u0165\0\u0165\0\u092a\0\u095d\0\u0990\0\u09c3"+
-    "\0\u03fc\0\u09f6\0\u0a29\0\u0165\0\u0a5c\0\u05fa\0\u0165\0\u0a8f"+
-    "\0\u062d\0\u0ac2\0\u0af5\0\u0b28\0\u0b5b\0\u0b8e\0\u0bc1\0\u0165"+
-    "\0\u0165\0\u0165\0\u0165\0\u0bf4\0\u0c27\0\u0c5a\0\u0c8d\0\u0cc0"+
-    "\0\u0cf3\0\u03fc\0\u0d26\0\u0d59\0\u0d8c\0\u0dbf\0\u0df2\0\u0e25"+
-    "\0\u0e58\0\u0e8b\0\u0ebe\0\u0ef1\0\u0165\0\u0f24\0\u0165\0\u0f57"+
-    "\0\u0f8a\0\u0fbd\0\u0ff0\0\u0165\0\u1023\0\u1056\0\u1089";
+    "\0\u03c9\0\u0165\0\u0165\0\u092a\0\u095d\0\u0990\0\u09c3\0\u03fc"+
+    "\0\u09f6\0\u0a29\0\u0a5c\0\u05fa\0\u0165\0\u0a8f\0\u062d\0\u0ac2"+
+    "\0\u0af5\0\u0b28\0\u0b5b\0\u0b8e\0\u0bc1\0\u0bf4\0\u0165\0\u0165"+
+    "\0\u0165\0\u0165\0\u0c27\0\u0c5a\0\u0c8d\0\u0cc0\0\u0cf3\0\u0a5c"+
+    "\0\u0d26\0\u0d59\0\u03fc\0\u0d8c\0\u0dbf\0\u0df2\0\u0e25\0\u0e58"+
+    "\0\u0e8b\0\u0ebe\0\u0ef1\0\u0f24\0\u03fc\0\u0f57\0\u0165\0\u0f8a"+
+    "\0\u0165\0\u0fbd\0\u0ff0\0\u1023\0\u1056\0\u0165\0\u1089\0\u10bc"+
+    "\0\u10ef";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[119];
+    int [] result = new int[121];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -267,82 +268,84 @@ final class _TwigLexer implements FlexLexer {
     "\1\27\1\11\1\30\1\31\1\32\1\33\1\34\1\35"+
     "\2\27\1\36\1\37\1\40\1\27\1\41\1\42\1\43"+
     "\1\44\1\45\1\46\1\47\1\11\1\0\1\50\1\51"+
-    "\2\27\1\52\1\53\1\54\2\55\1\56\1\57\1\60"+
+    "\1\52\2\27\1\53\1\54\2\55\1\56\1\57\1\60"+
     "\1\61\1\27\1\62\1\27\1\63\1\27\1\12\1\64"+
     "\1\11\2\12\1\23\1\65\1\66\1\55\1\11\1\27"+
     "\1\11\1\30\1\31\1\32\1\33\1\34\1\35\2\27"+
     "\1\36\1\37\1\40\1\27\1\41\1\42\1\43\1\44"+
-    "\1\45\1\46\1\47\1\11\1\0\1\50\1\51\2\27"+
-    "\1\52\1\53\1\54\2\55\1\56\1\57\1\60\1\61"+
+    "\1\45\1\46\1\47\1\11\1\0\1\50\1\51\1\52"+
+    "\2\27\1\53\1\54\2\55\1\56\1\57\1\60\1\61"+
     "\1\27\1\62\1\27\1\63\1\27\1\12\1\64\64\0"+
     "\2\12\56\0\1\12\7\0\1\67\61\0\1\70\65\0"+
     "\2\15\5\0\11\15\10\0\4\15\6\0\7\15\6\0"+
     "\1\71\1\0\1\67\54\0\3\72\1\73\2\72\1\74"+
     "\1\75\53\72\7\20\1\76\62\20\1\22\60\20\1\77"+
-    "\1\20\1\76\53\20\5\0\1\100\1\101\20\0\1\102"+
-    "\40\0\1\103\62\0\1\104\65\0\2\27\5\0\11\27"+
+    "\1\20\1\76\53\20\5\0\1\100\1\101\20\0\1\42"+
+    "\40\0\1\102\62\0\1\103\65\0\2\27\5\0\11\27"+
     "\10\0\4\27\6\0\7\27\12\0\2\27\5\0\1\27"+
-    "\1\105\7\27\10\0\4\27\6\0\7\27\12\0\2\27"+
-    "\5\0\11\27\10\0\2\27\1\106\1\107\6\0\7\27"+
-    "\12\0\2\27\5\0\5\27\1\110\3\27\10\0\4\27"+
-    "\6\0\7\27\12\0\2\27\5\0\7\27\1\111\1\27"+
-    "\10\0\3\27\1\112\6\0\7\27\12\0\2\27\5\0"+
-    "\1\113\10\27\10\0\4\27\6\0\7\27\3\0\2\114"+
-    "\2\0\1\114\5\0\1\114\13\0\1\102\1\115\30\0"+
-    "\1\114\31\0\1\55\64\0\1\55\63\0\1\55\27\0"+
-    "\34\116\1\117\1\120\25\116\35\121\1\122\1\121\1\117"+
-    "\23\121\10\0\2\27\5\0\1\27\1\111\7\27\10\0"+
-    "\1\27\1\123\2\27\6\0\7\27\12\0\2\27\5\0"+
-    "\11\27\10\0\1\124\3\27\6\0\7\27\52\0\1\55"+
-    "\30\0\1\55\32\0\1\55\21\0\2\27\5\0\11\27"+
-    "\10\0\4\27\6\0\1\27\1\125\5\27\12\0\2\27"+
-    "\5\0\7\27\1\111\1\27\10\0\3\27\1\111\6\0"+
-    "\7\27\6\0\1\126\3\0\2\27\5\0\11\27\10\0"+
-    "\4\27\6\0\7\27\12\0\2\27\5\0\5\27\1\127"+
-    "\3\27\10\0\4\27\6\0\7\27\31\0\1\102\33\0"+
-    "\3\72\1\0\2\72\2\0\53\72\4\0\1\130\62\0"+
-    "\1\131\62\0\1\132\56\0\5\20\1\133\1\20\1\76"+
-    "\53\20\10\0\2\27\5\0\2\27\1\134\6\27\10\0"+
-    "\4\27\6\0\7\27\12\0\2\27\5\0\3\27\1\135"+
+    "\1\104\7\27\10\0\4\27\6\0\7\27\12\0\2\27"+
+    "\5\0\11\27\10\0\1\105\2\27\1\106\6\0\7\27"+
+    "\12\0\2\27\5\0\5\27\1\107\3\27\10\0\4\27"+
+    "\6\0\7\27\12\0\2\27\5\0\7\27\1\110\1\27"+
+    "\10\0\1\111\3\27\6\0\7\27\12\0\2\27\5\0"+
+    "\1\112\10\27\10\0\4\27\6\0\7\27\31\0\1\42"+
+    "\1\113\62\0\1\55\64\0\1\55\63\0\1\55\27\0"+
+    "\34\114\1\115\1\116\25\114\35\117\1\120\1\117\1\115"+
+    "\23\117\10\0\2\27\5\0\2\27\1\121\6\27\10\0"+
+    "\1\27\1\122\2\27\6\0\7\27\12\0\2\27\5\0"+
+    "\1\27\1\110\7\27\10\0\2\27\1\123\1\27\6\0"+
+    "\7\27\52\0\1\55\30\0\1\55\32\0\1\55\21\0"+
+    "\2\27\5\0\11\27\10\0\4\27\6\0\1\27\1\124"+
+    "\5\27\12\0\2\27\5\0\7\27\1\110\1\27\10\0"+
+    "\1\110\3\27\6\0\7\27\6\0\1\125\3\0\2\27"+
+    "\5\0\11\27\10\0\4\27\6\0\7\27\12\0\2\27"+
+    "\5\0\5\27\1\126\3\27\10\0\4\27\6\0\7\27"+
+    "\31\0\1\42\33\0\3\72\1\0\2\72\2\0\53\72"+
+    "\4\0\1\127\62\0\1\130\62\0\1\131\56\0\5\20"+
+    "\1\132\1\20\1\76\53\20\10\0\2\27\5\0\2\27"+
+    "\1\133\6\27\10\0\4\27\6\0\7\27\12\0\2\27"+
+    "\5\0\11\27\10\0\2\27\1\134\1\27\6\0\7\27"+
+    "\12\0\2\27\5\0\3\27\1\135\5\27\10\0\4\27"+
+    "\6\0\7\27\12\0\2\27\5\0\6\27\1\136\2\27"+
+    "\10\0\4\27\6\0\7\27\12\0\2\27\5\0\11\27"+
+    "\10\0\2\27\1\110\1\27\6\0\7\27\12\0\2\27"+
+    "\5\0\5\27\1\137\3\27\10\0\4\27\6\0\7\27"+
+    "\31\0\1\140\33\0\1\114\1\0\34\114\1\0\24\114"+
+    "\1\117\1\0\34\117\1\0\24\117\10\0\2\27\5\0"+
+    "\6\27\1\141\2\27\10\0\4\27\6\0\7\27\12\0"+
+    "\2\27\5\0\1\110\10\27\10\0\1\142\3\27\6\0"+
+    "\7\27\12\0\2\27\5\0\11\27\10\0\2\27\1\143"+
+    "\1\27\6\0\7\27\12\0\2\27\5\0\1\144\10\27"+
+    "\10\0\4\27\6\0\7\27\26\0\1\145\14\0\1\146"+
+    "\14\0\1\147\14\0\2\27\5\0\1\150\10\27\10\0"+
+    "\4\27\6\0\7\27\12\0\2\27\5\0\3\27\1\151"+
     "\5\27\10\0\4\27\6\0\7\27\12\0\2\27\5\0"+
-    "\11\27\10\0\1\27\1\136\2\27\6\0\7\27\12\0"+
-    "\2\27\5\0\6\27\1\137\2\27\10\0\4\27\6\0"+
-    "\7\27\12\0\2\27\5\0\11\27\10\0\1\27\1\111"+
-    "\2\27\6\0\7\27\12\0\2\27\5\0\5\27\1\140"+
-    "\3\27\10\0\4\27\6\0\7\27\31\0\1\141\33\0"+
-    "\1\116\1\0\34\116\1\0\24\116\1\121\1\0\34\121"+
-    "\1\0\24\121\10\0\2\27\5\0\11\27\10\0\1\27"+
-    "\1\142\2\27\6\0\7\27\12\0\2\27\5\0\1\111"+
-    "\10\27\10\0\4\27\6\0\7\27\12\0\2\27\5\0"+
-    "\1\143\10\27\10\0\4\27\6\0\7\27\26\0\1\144"+
-    "\13\0\1\145\15\0\1\146\14\0\2\27\5\0\1\147"+
-    "\10\27\10\0\4\27\6\0\7\27\12\0\2\27\5\0"+
-    "\3\27\1\150\5\27\10\0\4\27\6\0\7\27\12\0"+
-    "\2\27\5\0\11\27\10\0\3\27\1\142\6\0\7\27"+
-    "\12\0\2\27\5\0\7\27\1\151\1\27\10\0\4\27"+
-    "\6\0\7\27\12\0\2\27\5\0\7\27\1\152\1\27"+
-    "\10\0\4\27\6\0\7\27\12\0\2\27\5\0\1\27"+
-    "\1\153\7\27\10\0\4\27\6\0\7\27\3\0\2\114"+
-    "\2\0\1\114\5\0\1\114\13\0\1\141\31\0\1\114"+
-    "\11\0\2\27\5\0\11\27\10\0\4\27\6\0\2\27"+
-    "\1\111\4\27\45\0\1\154\37\0\1\155\102\0\1\145"+
-    "\32\0\2\27\5\0\11\27\10\0\4\27\6\0\6\27"+
-    "\1\156\3\0\2\157\2\0\1\157\2\0\2\27\1\0"+
-    "\1\157\3\0\11\27\10\0\4\27\6\0\7\27\1\157"+
+    "\7\27\1\152\1\27\10\0\4\27\6\0\7\27\12\0"+
+    "\2\27\5\0\11\27\10\0\1\143\3\27\6\0\7\27"+
+    "\12\0\2\27\5\0\7\27\1\153\1\27\10\0\4\27"+
+    "\6\0\7\27\12\0\2\27\5\0\1\27\1\154\7\27"+
+    "\10\0\4\27\6\0\7\27\12\0\2\27\5\0\6\27"+
+    "\1\155\2\27\10\0\4\27\6\0\7\27\12\0\2\27"+
+    "\5\0\3\27\1\155\5\27\10\0\4\27\6\0\7\27"+
+    "\12\0\2\27\5\0\11\27\10\0\4\27\6\0\2\27"+
+    "\1\110\4\27\42\0\1\156\42\0\1\157\103\0\1\146"+
+    "\31\0\2\27\5\0\11\27\10\0\4\27\6\0\6\27"+
+    "\1\160\3\0\2\161\2\0\1\161\2\0\2\27\1\0"+
+    "\1\161\3\0\11\27\10\0\4\27\6\0\7\27\1\161"+
     "\11\0\2\27\5\0\11\27\10\0\4\27\6\0\7\27"+
-    "\1\160\11\0\2\27\5\0\3\27\1\161\5\27\10\0"+
-    "\4\27\6\0\7\27\12\0\2\27\5\0\1\136\10\27"+
-    "\10\0\4\27\6\0\7\27\43\0\1\155\31\0\2\27"+
-    "\5\0\11\27\10\0\4\27\6\0\2\27\1\162\4\27"+
-    "\54\0\1\163\11\0\2\164\2\0\1\164\2\0\2\27"+
-    "\1\0\1\164\3\0\11\27\10\0\4\27\6\0\7\27"+
-    "\1\164\11\0\2\27\5\0\3\27\1\165\5\27\10\0"+
-    "\4\27\6\0\7\27\55\0\1\166\17\0\2\27\5\0"+
-    "\7\27\1\111\1\27\10\0\4\27\6\0\7\27\21\0"+
-    "\1\167\117\0\1\155\6\0";
+    "\1\162\11\0\2\27\5\0\3\27\1\163\5\27\10\0"+
+    "\4\27\6\0\7\27\12\0\2\27\5\0\1\134\10\27"+
+    "\10\0\4\27\6\0\7\27\44\0\1\157\30\0\2\27"+
+    "\5\0\11\27\10\0\4\27\6\0\2\27\1\164\4\27"+
+    "\54\0\1\165\11\0\2\166\2\0\1\166\2\0\2\27"+
+    "\1\0\1\166\3\0\11\27\10\0\4\27\6\0\7\27"+
+    "\1\166\11\0\2\27\5\0\3\27\1\167\5\27\10\0"+
+    "\4\27\6\0\7\27\55\0\1\170\17\0\2\27\5\0"+
+    "\7\27\1\110\1\27\10\0\4\27\6\0\7\27\21\0"+
+    "\1\171\117\0\1\157\6\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[4284];
+    int [] result = new int[4386];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -382,13 +385,13 @@ final class _TwigLexer implements FlexLexer {
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
     "\1\1\3\0\1\1\2\0\2\11\11\1\1\11\4\1"+
     "\5\11\7\1\1\11\10\1\1\11\6\1\1\11\1\1"+
-    "\1\11\1\0\1\11\1\0\5\1\1\11\3\0\2\11"+
-    "\7\1\1\11\2\0\1\11\3\0\3\1\1\0\1\1"+
-    "\4\11\5\1\1\0\2\1\3\0\5\1\1\0\1\11"+
-    "\1\1\1\11\1\0\2\1\1\0\1\11\1\1\2\0";
+    "\1\11\1\0\1\11\1\0\5\1\1\11\2\0\2\11"+
+    "\7\1\2\0\1\11\3\0\4\1\1\0\1\1\4\11"+
+    "\12\1\3\0\6\1\1\0\1\11\1\1\1\11\1\0"+
+    "\2\1\1\0\1\11\1\1\2\0";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[119];
+    int [] result = new int[121];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -712,12 +715,12 @@ final class _TwigLexer implements FlexLexer {
             { return handleContent();
             } 
             // fall through
-          case 36: break;
+          case 37: break;
           case 2: 
             { return TwigTokenTypes.UNCLOSED_COMMENT;
             } 
             // fall through
-          case 37: break;
+          case 38: break;
           case 3: 
             { // backtrack over any stache characters at the end of this string
         while (yylength() > 0 && yytext().subSequence(yylength() - 1, yylength()).toString().equals("{")) {
@@ -731,153 +734,150 @@ final class _TwigLexer implements FlexLexer {
         }
             } 
             // fall through
-          case 38: break;
+          case 39: break;
           case 4: 
             { return TwigTokenTypes.INVALID;
             } 
             // fall through
-          case 39: break;
+          case 40: break;
           case 5: 
             { return TwigTokenTypes.WHITE_SPACE;
             } 
             // fall through
-          case 40: break;
+          case 41: break;
           case 6: 
             { yypopState();
         yypushState(expression);
         return TwigTokenTypes.TAG;
             } 
             // fall through
-          case 41: break;
+          case 42: break;
           case 7: 
             { yypushState(hash); return TwigTokenTypes.LBRACE;
             } 
             // fall through
-          case 42: break;
+          case 43: break;
           case 8: 
             { return TwigTokenTypes.OPERATOR;
             } 
             // fall through
-          case 43: break;
+          case 44: break;
           case 9: 
             { return TwigTokenTypes.RBRACE;
             } 
             // fall through
-          case 44: break;
+          case 45: break;
           case 10: 
             { return TwigTokenTypes.LABEL;
             } 
             // fall through
-          case 45: break;
+          case 46: break;
           case 11: 
             { return TwigTokenTypes.LPARENTH;
             } 
             // fall through
-          case 46: break;
+          case 47: break;
           case 12: 
             { return TwigTokenTypes.RPARENTH;
             } 
             // fall through
-          case 47: break;
+          case 48: break;
           case 13: 
             { return TwigTokenTypes.LBRACKET;
             } 
             // fall through
-          case 48: break;
+          case 49: break;
           case 14: 
             { return TwigTokenTypes.RBRACKET;
             } 
             // fall through
-          case 49: break;
+          case 50: break;
           case 15: 
             { return TwigTokenTypes.COLON;
             } 
             // fall through
-          case 50: break;
-          case 16: 
-            { return TwigTokenTypes.SEP;
-            } 
-            // fall through
           case 51: break;
-          case 17: 
-            { return TwigTokenTypes.FILTER_SEP;
+          case 16: 
+            { return TwigTokenTypes.NUMBER;
             } 
             // fall through
           case 52: break;
-          case 18: 
-            { return TwigTokenTypes.EQUALS;
+          case 17: 
+            { return TwigTokenTypes.SEP;
             } 
             // fall through
           case 53: break;
-          case 19: 
-            { return TwigTokenTypes.COMMA;
+          case 18: 
+            { return TwigTokenTypes.FILTER_SEP;
             } 
             // fall through
           case 54: break;
-          case 20: 
-            { yypopState(); return TwigTokenTypes.RBRACE;
+          case 19: 
+            { return TwigTokenTypes.EQUALS;
             } 
             // fall through
           case 55: break;
+          case 20: 
+            { return TwigTokenTypes.COMMA;
+            } 
+            // fall through
+          case 56: break;
           case 21: 
+            { yypopState(); return TwigTokenTypes.RBRACE;
+            } 
+            // fall through
+          case 57: break;
+          case 22: 
             { yypopState();
         return TwigTokenTypes.STATEMENT_CLOSE;
             } 
             // fall through
-          case 56: break;
-          case 22: 
+          case 58: break;
+          case 23: 
             { yypopState(); return handleContent();
             } 
             // fall through
-          case 57: break;
-          case 23: 
+          case 59: break;
+          case 24: 
             { yypopState(); yypushState(expression); return TwigTokenTypes.EXPRESSION_OPEN;
             } 
             // fall through
-          case 58: break;
-          case 24: 
+          case 60: break;
+          case 25: 
             { yypopState(); yypushState(statement_block_tag); return TwigTokenTypes.STATEMENT_OPEN;
             } 
             // fall through
-          case 59: break;
-          case 25: 
+          case 61: break;
+          case 26: 
             { yypopState(); yypushState(comment); return TwigTokenTypes.COMMENT_OPEN;
             } 
             // fall through
-          case 60: break;
-          case 26: 
+          case 62: break;
+          case 27: 
             { yypopState(); return TwigTokenTypes.COMMENT_CLOSE;
             } 
             // fall through
-          case 61: break;
-          case 27: 
+          case 63: break;
+          case 28: 
             { yypopState(); return TwigTokenTypes.EXPRESSION_CLOSE;
             } 
             // fall through
-          case 62: break;
-          case 28: 
+          case 64: break;
+          case 29: 
             { yypopState(); return TwigTokenTypes.STATEMENT_CLOSE;
             } 
             // fall through
-          case 63: break;
-          case 29: 
+          case 65: break;
+          case 30: 
             { return TwigTokenTypes.KEYWORD_OPERATOR;
             } 
             // fall through
-          case 64: break;
-          case 30: 
-            // lookahead expression with fixed lookahead length
-            zzMarkedPos = Character.offsetByCodePoints
-                (zzBufferL/*, zzStartRead, zzEndRead - zzStartRead*/, zzMarkedPos, -1);
-            { return TwigTokenTypes.NUMBER;
-            } 
-            // fall through
-          case 65: break;
+          case 66: break;
           case 31: 
             { return TwigTokenTypes.STRING;
             } 
             // fall through
-          case 66: break;
+          case 67: break;
           case 32: 
             { // handle the extra - if it's a whitespace controlling tag
         if (yytext().subSequence(yylength() - 3, yylength() - 2).toString().equals("-")) {
@@ -888,28 +888,33 @@ final class _TwigLexer implements FlexLexer {
         return TwigTokenTypes.COMMENT_CONTENT;
             } 
             // fall through
-          case 67: break;
+          case 68: break;
           case 33: 
             { return TwigTokenTypes.TEST;
             } 
             // fall through
-          case 68: break;
+          case 69: break;
           case 34: 
+            { return TwigTokenTypes.NULL;
+            } 
+            // fall through
+          case 70: break;
+          case 35: 
             // lookahead expression with fixed base length
             zzMarkedPos = Character.offsetByCodePoints
                 (zzBufferL/*, zzStartRead, zzEndRead - zzStartRead*/, zzStartRead, 4);
             { return TwigTokenTypes.BOOLEAN;
             } 
             // fall through
-          case 69: break;
-          case 35: 
+          case 71: break;
+          case 36: 
             // lookahead expression with fixed base length
             zzMarkedPos = Character.offsetByCodePoints
                 (zzBufferL/*, zzStartRead, zzEndRead - zzStartRead*/, zzStartRead, 5);
             { return TwigTokenTypes.BOOLEAN;
             } 
             // fall through
-          case 70: break;
+          case 72: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }

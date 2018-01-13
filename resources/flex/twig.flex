@@ -115,12 +115,17 @@ Label = [A-Za-z_]\w*
     ":" { return TwigTokenTypes.COLON; }
     "true"/[}\)\t \n\x0B\f\r] { return TwigTokenTypes.BOOLEAN; }
     "false"/[}\)\t \n\x0B\f\r] { return TwigTokenTypes.BOOLEAN; }
-    \-?[0-9]+(\.[0-9]+)?/[}\)\t \n\x0B\f\r] { return TwigTokenTypes.NUMBER; }
+    \-?[0-9]+(\.[0-9]+)? { return TwigTokenTypes.NUMBER; }
     "|" { return TwigTokenTypes.FILTER_SEP; }
     [\/.] { return TwigTokenTypes.SEP; }
     "=" { return TwigTokenTypes.EQUALS; }
     \"([^\"\\]|\\.)*\" { return TwigTokenTypes.STRING; }
     '([^'\\]|\\.)*' { return TwigTokenTypes.STRING; }
+
+    "null" |
+    "none" {
+        return TwigTokenTypes.NULL;
+    }
 
     "odd" |
     "even" {
