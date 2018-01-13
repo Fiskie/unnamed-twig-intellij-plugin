@@ -1,7 +1,9 @@
 package com.fisk.twig.psi.util
 
 import com.fisk.twig.file.TwigFileType
-import com.fisk.twig.psi.*
+import com.fisk.twig.psi.TwigBlock
+import com.fisk.twig.psi.TwigLabel
+import com.fisk.twig.psi.TwigPsiFile
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement

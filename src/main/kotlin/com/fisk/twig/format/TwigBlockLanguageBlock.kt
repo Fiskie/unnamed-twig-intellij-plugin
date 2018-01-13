@@ -1,7 +1,6 @@
 package com.fisk.twig.format
 
 import com.fisk.twig.parsing.TwigTokenTypes
-import com.fisk.twig.psi.TwigPsiElement
 import com.fisk.twig.psi.util.TwigPsiUtil
 import com.intellij.formatting.Alignment
 import com.intellij.formatting.ChildAttributes
@@ -12,7 +11,6 @@ import com.intellij.formatting.templateLanguages.DataLanguageBlockWrapper
 import com.intellij.formatting.templateLanguages.TemplateLanguageBlock
 import com.intellij.formatting.templateLanguages.TemplateLanguageBlockFactory
 import com.intellij.lang.ASTNode
-import com.intellij.lang.javascript.types.JSEmbeddedContentElementType
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.codeStyle.CodeStyleSettings

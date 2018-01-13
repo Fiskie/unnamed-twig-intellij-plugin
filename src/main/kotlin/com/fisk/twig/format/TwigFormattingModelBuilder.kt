@@ -1,9 +1,9 @@
 package com.fisk.twig.format
 
-import com.fisk.twig.TwigLanguage
-import com.fisk.twig.config.TwigConfig
 import com.fisk.twig.parsing.TwigTokenTypes
-import com.intellij.formatting.*
+import com.intellij.formatting.Alignment
+import com.intellij.formatting.FormattingModel
+import com.intellij.formatting.Wrap
 import com.intellij.formatting.templateLanguages.DataLanguageBlockWrapper
 import com.intellij.formatting.templateLanguages.TemplateLanguageBlock
 import com.intellij.formatting.templateLanguages.TemplateLanguageFormattingModelBuilder
@@ -14,7 +14,6 @@ import com.intellij.psi.formatter.DocumentBasedFormattingModel
 import com.intellij.psi.formatter.FormattingDocumentModelImpl
 import com.intellij.psi.formatter.xml.HtmlPolicy
 import com.intellij.psi.templateLanguages.SimpleTemplateLanguageFormattingModelBuilder
-import com.intellij.psi.templateLanguages.TemplateLanguageFileViewProvider
 
 class TwigFormattingModelBuilder : TemplateLanguageFormattingModelBuilder() {
     override fun createTemplateLanguageBlock(node: ASTNode, wrap: Wrap?, alignment: Alignment?, foreignChildren: MutableList<DataLanguageBlockWrapper>?, codeStyleSettings: CodeStyleSettings): TemplateLanguageBlock {

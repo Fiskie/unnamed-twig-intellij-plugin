@@ -2,7 +2,6 @@ package com.fisk.twig.ide.pages
 
 import com.fisk.twig.TwigLanguage
 import com.intellij.application.options.SmartIndentOptionsEditor
-import com.intellij.openapi.application.ApplicationBundle
 import com.intellij.psi.codeStyle.CodeStyleSettingsCustomizable
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings
 import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider
@@ -25,7 +24,7 @@ class TwigLanguageCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvider(
     }
 
     override fun customizeSettings(consumer: CodeStyleSettingsCustomizable, settingsType: SettingsType) {
-        when(settingsType) {
+        when (settingsType) {
             SPACING_SETTINGS -> {
                 consumer.showStandardOptions(
                         "SPACE_AROUND_LOGICAL_OPERATORS",
@@ -61,7 +60,8 @@ class TwigLanguageCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvider(
                         "WRAP_ON_TYPING")
             }
 
-            else -> {}
+            else -> {
+            }
         }
     }
 

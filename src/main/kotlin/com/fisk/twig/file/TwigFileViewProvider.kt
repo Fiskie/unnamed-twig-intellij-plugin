@@ -5,7 +5,6 @@ import com.fisk.twig.parsing.TwigTokenTypes.CONTENT
 import com.fisk.twig.parsing.TwigTokenTypes.OUTER_ELEMENT_TYPE
 import com.intellij.lang.Language
 import com.intellij.lang.LanguageParserDefinitions
-import com.intellij.lang.ParserDefinition
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.LanguageSubstitutors
 import com.intellij.psi.MultiplePsiFilesPerDocumentFileViewProvider

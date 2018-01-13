@@ -7,7 +7,6 @@ import com.intellij.lang.ASTNode
 import com.intellij.lang.ParserDefinition
 import com.intellij.openapi.project.Project
 import com.intellij.psi.FileViewProvider
-import com.intellij.psi.PsiElement
 import com.intellij.psi.stubs.PsiFileStub
 import com.intellij.psi.tree.IStubFileElementType
 

@@ -16,7 +16,7 @@ object TwigTagUtils {
     /**
      * Truncates the "end" of an end tag (e.g. endif) to return the start tag (e.g. if)
      */
-    fun normaliseTag(tag: String) = when(isEndTag(tag)) {
+    fun normaliseTag(tag: String) = when (isEndTag(tag)) {
         true -> tag.substring(3)
         false -> tag
     }

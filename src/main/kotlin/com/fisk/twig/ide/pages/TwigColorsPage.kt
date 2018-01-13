@@ -43,7 +43,7 @@ class TwigColorsPage : ColorSettingsPage {
             val textAttributesKeys = TwigHighlighter.DISPLAY_NAMES.keys
             val keys = textAttributesKeys.toTypedArray()
 
-            ATTRS = Array(TwigHighlighter.DISPLAY_NAMES.size, {i ->
+            ATTRS = Array(TwigHighlighter.DISPLAY_NAMES.size, { i ->
                 val key = keys[i]
                 val name = TwigHighlighter.DISPLAY_NAMES[key]?.getFirst()
 

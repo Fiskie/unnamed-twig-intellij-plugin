@@ -1,0 +1,11 @@
+Twig: InterpolatedString.twig
+  PsiComment(Twig:COMMENT)('{# string interpolation isn't in yet, but test case is here anyway to monitor PSI changes #}')
+  PsiWhiteSpace('\n')
+  TwigBlockImpl(Twig:BLOCK)
+    TwigExpressionBlockImpl(Twig:EXPRESSION_BLOCK)
+      PsiElement(Twig:EXPRESSION_OPEN)('{{')
+      PsiWhiteSpace(' ')
+      TwigExpressionImpl(Twig:EXPRESSION)
+        TwigStringImpl(Twig:STRING)
+          PsiElement(Twig:STRING)('"INTERPOLATED#{foo}STRING#{1 + 2}CONTENT"')
+      PsiElement(Twig:EXPRESSION_CLOSE)('}}')

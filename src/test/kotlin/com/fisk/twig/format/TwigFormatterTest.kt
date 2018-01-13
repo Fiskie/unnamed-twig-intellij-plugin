@@ -9,7 +9,6 @@ import com.intellij.openapi.editor.impl.DocumentImpl
 import com.intellij.openapi.fileTypes.LanguageFileType
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.util.text.StringUtil
-import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
 import com.intellij.psi.codeStyle.CodeStyleManager

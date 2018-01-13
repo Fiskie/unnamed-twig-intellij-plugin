@@ -2,11 +2,13 @@ package com.fisk.twig.ide.annotator
 
 import com.fisk.twig.TwigBundle
 import com.fisk.twig.parsing.TwigTokenTypes
-import com.fisk.twig.psi.*
+import com.fisk.twig.psi.TwigBlockWrapper
+import com.fisk.twig.psi.TwigExpressionBlock
+import com.fisk.twig.psi.TwigPsiElement
+import com.fisk.twig.psi.TwigSimpleStatement
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiFile
 
 class TwigUnexpectedContentInChildTemplateAnnotator : Annotator {
     val ALLOWED_CONTENT_TAGS = setOf("block", "set")

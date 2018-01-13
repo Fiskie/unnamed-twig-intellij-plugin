@@ -80,6 +80,8 @@ object TwigTokenTypes {
     val EXPRESSION = TwigCompositeElementType("EXPRESSION")
     val SUBEXPRESSION = TwigCompositeElementType("SUBEXPRESSION")
 
+    val DOUBLE_QUOTED_STRING = TwigCompositeElementType("DOUBLE_QUOTED_STRING")
+
     val VARIABLE = TwigCompositeElementType("VARIABLE")
     val PROPERTY = TwigCompositeElementType("PROPERTY")
     val FUNCTION = TwigCompositeElementType("FUNCTION")

@@ -1,10 +1,7 @@
 package com.fisk.twig.format
 
-import com.fisk.twig.TwigLanguage
-import com.fisk.twig.config.TwigConfig
 import com.fisk.twig.ide.pages.TwigCodeStyleSettings
 import com.intellij.lang.html.HTMLLanguage
-import com.intellij.openapi.fileTypes.StdFileTypes
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings
 

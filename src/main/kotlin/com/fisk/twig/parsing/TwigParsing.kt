@@ -49,7 +49,7 @@ import com.intellij.psi.tree.IElementType
 class TwigParsing(private val builder: PsiBuilder) {
     companion object {
         val LITERAL_OR_LABEL = setOf(LABEL, STRING, NUMBER, BOOLEAN, NULL)
-        val ALLOWED_EXPR_PSI = setOf(FILTER_SEP, SEP, OPERATOR, KEYWORD_OPERATOR)
+        val ALLOWED_EXPR_PSI = setOf(FILTER_SEP, OPERATOR, KEYWORD_OPERATOR)
     }
 
     fun parse() {
@@ -293,20 +293,24 @@ class TwigParsing(private val builder: PsiBuilder) {
 
                 parseLeafToken(builder, TAG)
             } else {
-                if (tagName == "block" && builder.tokenType == LABEL) {
-                    // make sure block labels are never parsed as expressions
-                    builder.advanceLexer()
-                } else if (tagName == "macro" && builder.tokenType == LABEL) {
-                    // make sure macro labels are never parsed as expressions
-                    builder.advanceLexer()
-                } else {
-                    val expressionMarker = builder.mark()
-
-                    if (parseExpression(builder)) {
-                        expressionMarker.drop()
-                    } else {
-                        expressionMarker.rollbackTo()
+                when {
+                    tagName == "block" && builder.tokenType == LABEL -> {
+                        // make sure block labels are never parsed as expressions
                         builder.advanceLexer()
+                    }
+                    tagName == "macro" && builder.tokenType == LABEL -> {
+                        // make sure macro labels are never parsed as expressions
+                        builder.advanceLexer()
+                    }
+                    else -> {
+                        val expressionMarker = builder.mark()
+
+                        if (parseExpression(builder)) {
+                            expressionMarker.drop()
+                        } else {
+                            expressionMarker.rollbackTo()
+                            builder.advanceLexer()
+                        }
                     }
                 }
             }
@@ -400,8 +404,6 @@ class TwigParsing(private val builder: PsiBuilder) {
      * - function/method name
      *
      * This will help the reference parser identify the context of each label.
-     *
-     * TODO: this currently will only parse var/property
      */
     private fun parseReference(builder: PsiBuilder): Boolean {
         if (builder.tokenType != LABEL) {
@@ -421,32 +423,37 @@ class TwigParsing(private val builder: PsiBuilder) {
 
         var previousTokenWasValue = false
 
-        while (true) {
+        loop@ while (true) {
             val optionalExprMarker = builder.mark()
 
-            if (builder.tokenType == SEP) {
-                builder.advanceLexer()
-                previousTokenWasValue = false
-                optionalExprMarker.drop()
-            } else if (!previousTokenWasValue && builder.tokenType == LABEL) {
-                val propMarker = builder.mark()
-                builder.advanceLexer()
-
-                if (builder.tokenType == LPARENTH) {
-                    parseFunctionCallParams(builder)
-                    propMarker.done(METHOD)
-                } else {
-                    // is a simple var
-                    propMarker.done(PROPERTY)
+            when {
+                builder.tokenType == SEP -> {
+                    builder.advanceLexer()
+                    previousTokenWasValue = false
+                    optionalExprMarker.drop()
                 }
+                !previousTokenWasValue && builder.tokenType == LABEL -> {
+                    val propMarker = builder.mark()
+                    builder.advanceLexer()
 
-                previousTokenWasValue = true
-                optionalExprMarker.drop()
-            } else if (parseArrayAccessor(builder)) {
-                optionalExprMarker.drop()
-            } else {
-                optionalExprMarker.rollbackTo()
-                break
+                    if (builder.tokenType == LPARENTH) {
+                        parseFunctionCallParams(builder)
+                        propMarker.done(METHOD)
+                    } else {
+                        // is a simple var
+                        propMarker.done(PROPERTY)
+                    }
+
+                    previousTokenWasValue = true
+                    optionalExprMarker.drop()
+                }
+                parseArrayAccessor(builder) -> {
+                    optionalExprMarker.drop()
+                }
+                else -> {
+                    optionalExprMarker.rollbackTo()
+                    break@loop
+                }
             }
         }
 
@@ -468,24 +475,28 @@ class TwigParsing(private val builder: PsiBuilder) {
 
         var lastWasExpr = false
 
-        while (true) {
-            if (builder.tokenType == LABEL && builder.lookAhead(1) == EQUALS) {
-                // we are looking at a named argument. Skip past this for now.
-                // TODO add a highlighter for named arguments, make it nice and blue
-                builder.advanceLexer()
-                builder.advanceLexer()
-                lastWasExpr = false
-            } else if (builder.tokenType == RPARENTH) {
-                builder.advanceLexer()
-                break
-            } else if (builder.tokenType == COMMA) {
-                builder.advanceLexer()
-                lastWasExpr = false
-            } else if (!lastWasExpr && parseExpression(builder)) {
-                lastWasExpr = true
-            } else {
-                paramsMarker.rollbackTo()
-                return false
+        loop@ while (true) {
+            when {
+                builder.tokenType == LABEL && builder.lookAhead(1) == EQUALS -> {
+                    // we are looking at a named argument. Skip past this for now.
+                    // TODO add a highlighter for named arguments, make it nice and blue
+                    builder.advanceLexer()
+                    builder.advanceLexer()
+                    lastWasExpr = false
+                }
+                builder.tokenType == RPARENTH -> {
+                    builder.advanceLexer()
+                    break@loop
+                }
+                builder.tokenType == COMMA -> {
+                    builder.advanceLexer()
+                    lastWasExpr = false
+                }
+                !lastWasExpr && parseExpression(builder) -> lastWasExpr = true
+                else -> {
+                    paramsMarker.rollbackTo()
+                    return false
+                }
             }
         }
 
@@ -527,21 +538,26 @@ class TwigParsing(private val builder: PsiBuilder) {
         val hashMarker = builder.mark()
         builder.advanceLexer()
 
-        while (true) {
-            if (builder.lookAhead(1) == COLON) {
-                // parsing a hash key, which we don't want to reference
-                // (*yet*, we could possibly set up hash keys for referencing later on in plugin development)
-                builder.advanceLexer()
-                // advance the lexer over the colon too
-                builder.advanceLexer()
-            } else if (builder.tokenType == RBRACE) {
-                builder.advanceLexer() // consume closing brace
-                break
-            } else if (builder.tokenType == COMMA) {
-                builder.advanceLexer() // consume closing brace
-            } else if (!parseExpression(builder)) {
-                hashMarker.rollbackTo()
-                return false // if an expr can't be parsed, it's likely a syntax error
+        loop@ while (true) {
+            when {
+                builder.lookAhead(1) == COLON -> {
+                    // parsing a hash key, which we don't want to reference
+                    // (*yet*, we could possibly set up hash keys for referencing later on in plugin development)
+                    builder.advanceLexer()
+                    // advance the lexer over the colon too
+                    builder.advanceLexer()
+                }
+                builder.tokenType == RBRACE -> {
+                    builder.advanceLexer() // consume closing brace
+                    break@loop
+                }
+                builder.tokenType == COMMA -> {
+                    builder.advanceLexer() // consume closing brace
+                }
+                !parseExpression(builder) -> {
+                    hashMarker.rollbackTo()
+                    return false // if an expr can't be parsed, it's likely a syntax error
+                }
             }
         }
 
@@ -557,15 +573,20 @@ class TwigParsing(private val builder: PsiBuilder) {
         val arrayMarker = builder.mark()
         builder.advanceLexer()
 
-        while (true) {
-            if (builder.tokenType == RBRACKET) {
-                builder.advanceLexer() // consume closing bracket
-                break
-            } else if (builder.tokenType == COMMA) {
-                builder.advanceLexer()
-            } else if (!parseExpression(builder)) {
-                arrayMarker.rollbackTo()
-                return false // if an expr can't be parsed, it's likely a syntax error
+        loop@ while (true) {
+            when {
+                builder.tokenType == RBRACKET -> {
+                    builder.advanceLexer() // consume closing bracket
+                    break@loop
+                }
+                builder.tokenType == COMMA -> {
+                    builder.advanceLexer()
+                }
+                !parseExpression(builder) -> {
+                    // if an expr can't be parsed, it's likely a syntax error
+                    arrayMarker.rollbackTo()
+                    return false
+                }
             }
         }
 
@@ -582,13 +603,17 @@ class TwigParsing(private val builder: PsiBuilder) {
         val subexprMarker = builder.mark()
         builder.advanceLexer()
 
-        while (true) {
-            if (builder.tokenType == RPARENTH) {
-                builder.advanceLexer() // consume closing bracket
-                break
-            } else if (!parseExpression(builder)) {
-                subexprMarker.rollbackTo()
-                return false // if an expr can't be parsed, it's likely a syntax error
+        // todo: is loop needed here?
+        loop@ while (true) {
+            when {
+                builder.tokenType == RPARENTH -> {
+                    builder.advanceLexer() // consume closing bracket
+                    break@loop
+                }
+                !parseExpression(builder) -> {
+                    subexprMarker.rollbackTo()
+                    return false // if an expr can't be parsed, it's likely a syntax error
+                }
             }
         }
 
@@ -611,38 +636,46 @@ class TwigParsing(private val builder: PsiBuilder) {
         // so we make sure this doesn't show up as a single expr in PSI
         var previousTokenWasValue = false
 
-        while (true) {
+        loop@ while (true) {
             val optionalExprMarker = builder.mark()
 
-            if (parseReference(builder)) {
-                any = true
-                previousTokenWasValue = true
-                optionalExprMarker.drop()
-            } else if (!previousTokenWasValue && LITERAL_OR_LABEL.contains(builder.tokenType)) {
-                parseLeafToken(builder, builder.tokenType!!)
-                any = true
-                previousTokenWasValue = true
-                optionalExprMarker.drop()
-            } else if (parseSubexpression(builder)) {
-                any = true
-                optionalExprMarker.drop()
-                break
-            } else if (parseArray(builder)) {
-                any = true
-                optionalExprMarker.drop()
-                break
-            } else if (parseHash(builder)) {
-                any = true
-                optionalExprMarker.drop()
-                break
-            } else if (ALLOWED_EXPR_PSI.contains(builder.tokenType)) {
-                builder.advanceLexer()
-                any = true
-                previousTokenWasValue = false
-                optionalExprMarker.drop()
-            } else {
-                optionalExprMarker.rollbackTo()
-                break
+            when {
+                parseReference(builder) -> {
+                    any = true
+                    previousTokenWasValue = true
+                    optionalExprMarker.drop()
+                }
+                !previousTokenWasValue && LITERAL_OR_LABEL.contains(builder.tokenType) -> {
+                    parseLeafToken(builder, builder.tokenType!!)
+                    any = true
+                    previousTokenWasValue = true
+                    optionalExprMarker.drop()
+                }
+                parseSubexpression(builder) -> {
+                    any = true
+                    optionalExprMarker.drop()
+                    break@loop
+                }
+                parseArray(builder) -> {
+                    any = true
+                    optionalExprMarker.drop()
+                    break@loop
+                }
+                parseHash(builder) -> {
+                    any = true
+                    optionalExprMarker.drop()
+                    break@loop
+                }
+                ALLOWED_EXPR_PSI.contains(builder.tokenType) -> {
+                    builder.advanceLexer()
+                    any = true
+                    previousTokenWasValue = false
+                    optionalExprMarker.drop()
+                }
+                else -> {
+                    optionalExprMarker.rollbackTo()
+                    break@loop
+                }
             }
         }
 

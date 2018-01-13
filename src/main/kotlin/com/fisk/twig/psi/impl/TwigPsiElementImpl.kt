@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 import com.intellij.psi.util.PsiUtilCore
-import java.util.ArrayList
+import java.util.*
 
 open class TwigPsiElementImpl(astNode: ASTNode) : ASTWrapperPsiElement(astNode), TwigPsiElement {
     override fun getPresentation() = ItemPresentationProviders.getItemPresentation(this)

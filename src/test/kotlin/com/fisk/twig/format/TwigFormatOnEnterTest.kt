@@ -1,6 +1,5 @@
 package com.fisk.twig.format
 
-import com.fisk.twig.config.TwigConfig
 import com.fisk.twig.ide.actions.TwigActionHandlerTest
 
 class TwigFormatOnEnterTest : TwigActionHandlerTest(), TwigFormattingModelBuilderTest {

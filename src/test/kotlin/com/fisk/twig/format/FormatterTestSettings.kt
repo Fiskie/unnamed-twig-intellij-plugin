@@ -1,6 +1,5 @@
 package com.fisk.twig.format
 
-import com.fisk.twig.config.TwigConfig
 import com.intellij.openapi.fileTypes.StdFileTypes
 import com.intellij.psi.codeStyle.CodeStyleSettings
 

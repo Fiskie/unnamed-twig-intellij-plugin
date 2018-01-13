@@ -4,7 +4,6 @@ import com.fisk.twig.TwigTagUtils
 import com.fisk.twig.parsing.TwigTokenTypes
 import com.fisk.twig.psi.TwigBlockStartStatement
 import com.fisk.twig.psi.TwigTag
-import com.fisk.twig.psi.util.TwigPsiUtil
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.patterns.PlatformPatterns.psiElement

@@ -3,11 +3,9 @@ package com.fisk.twig.ide.pages
 import com.fisk.twig.TwigBundle
 import com.fisk.twig.TwigLanguage
 import com.intellij.application.options.CodeStyleAbstractConfigurable
-import com.intellij.application.options.CodeStyleAbstractPanel
 import com.intellij.openapi.options.Configurable
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.codeStyle.CodeStyleSettingsProvider
-import com.intellij.psi.codeStyle.CustomCodeStyleSettings
 
 class TwigCodeStyleSettingsProvider : CodeStyleSettingsProvider() {
     override fun createSettingsPage(settings: CodeStyleSettings, originalSettings: CodeStyleSettings?): Configurable {

@@ -1,7 +1,6 @@
 package com.fisk.twig.parsing
 
 import com.fisk.twig.parsing.TwigTokenTypes.CONTENT
-import org.junit.Ignore
 
 class TwigContentLexerTest : TwigLexerTest() {
     fun testContent() {

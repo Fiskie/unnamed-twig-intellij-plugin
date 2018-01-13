@@ -106,6 +106,10 @@ Label = [A-Za-z_]\w*
 }
 
 <expression, hash> {
+    // TODO: support dobule-quoted interpolated strings -- will need to be done in the lexer
+    // best way to do this is probably push a string state on seeing a double quote, and push the expr state again
+    // once #{ is seen
+
     "(" { return TwigTokenTypes.LPARENTH; }
     ")" { return TwigTokenTypes.RPARENTH; }
     "[" { return TwigTokenTypes.LBRACKET; }

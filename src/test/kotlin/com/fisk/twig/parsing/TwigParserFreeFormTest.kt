@@ -120,4 +120,8 @@ class TwigParserFreeFormTest : TwigParserTest() {
     fun testSubexpressions() {
         doTest(true)
     }
+
+    fun testInterpolatedString() {
+        doTest(true)
+    }
 }

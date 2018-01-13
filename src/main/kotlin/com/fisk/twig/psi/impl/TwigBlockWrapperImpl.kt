@@ -3,7 +3,6 @@ package com.fisk.twig.psi.impl
 import com.fisk.twig.config.TwigIcons
 import com.fisk.twig.psi.*
 import com.intellij.lang.ASTNode
-import com.intellij.psi.util.PsiTreeUtil
 import javax.swing.Icon
 
 class TwigBlockWrapperImpl(node: ASTNode) : TwigPsiElementImpl(node), TwigBlockWrapper {

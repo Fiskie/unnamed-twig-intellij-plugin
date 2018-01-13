@@ -1,7 +1,6 @@
 package com.fisk.twig.config
 
 import com.intellij.openapi.util.IconLoader
-import javax.swing.Icon
 
 object TwigIcons {
     private fun load(path: String) = IconLoader.getIcon(path, TwigIcons::class.java)
