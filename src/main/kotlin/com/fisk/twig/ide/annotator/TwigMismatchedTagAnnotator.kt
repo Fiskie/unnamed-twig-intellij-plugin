@@ -29,7 +29,9 @@ class TwigMismatchedTagAnnotator : Annotator {
                         document.getLineNumber(startTag.textOffset) + 1
                 )
 
-                holder.createErrorAnnotation(endTag, message)
+                val annotation = holder.createErrorAnnotation(endTag, message)
+                annotation.registerFix(TwigMismatchedTagFix(TwigTagUtils.normaliseTag(startTag.name!!), false))
+                annotation.registerFix(TwigMismatchedTagFix(TwigTagUtils.normaliseTag(endTag.name!!), true))
             }
         }
     }
