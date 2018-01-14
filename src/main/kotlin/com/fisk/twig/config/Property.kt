@@ -6,45 +6,12 @@ import com.intellij.lang.html.HTMLLanguage
  * Formalizes the properties which we will persist using [com.intellij.ide.util.PropertiesComponent]
  */
 enum class Property {
-    AUTO_GENERATE_CLOSE_TAG {
-        override val stringName: String
-            get() = "TwigEnableAutoGenerateCloseTag"
-
-        override val default: String
-            get() = ENABLED
-    },
-
-    AUTOCOMPLETE_STATEMENTS {
-        override val stringName: String
-            get() = "TwigAutocompleteStatements"
-
-        override val default: String
-            get() = ENABLED
-    },
-
     AUTO_COLLAPSE_BLOCKS {
         override val stringName: String
             get() = "TwigAutoCollapseBlocks"
 
         override val default: String
             get() = DISABLED
-    },
-
-    COMMENTER_LANGUAGE_ID {
-        override val stringName: String
-            get() = "TwigCommenterLanguageId"
-
-        override val default: String
-            get() = HTMLLanguage.INSTANCE.id
-
-    },
-
-    BRACE_EDITING_MODEL {
-        override val stringName: String
-            get() = "TwigBraceEditingModel"
-
-        override val default: String
-            get() = "new"
     };
 
     /**

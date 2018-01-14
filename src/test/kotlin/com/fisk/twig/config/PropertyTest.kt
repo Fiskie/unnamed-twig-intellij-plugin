@@ -17,7 +17,7 @@ class PropertyTest {
     @Test
     fun testPropertiesChange() {
         // expectedNumberOfPropertyFields represents the number of enum entries plus that static members, plus one for the $VALUES that every enum gets
-        val expectedNumberOfPropertyFields = 9
+        val expectedNumberOfPropertyFields = 5
 
         Assert.assertEquals("Declared properties in enum \"" +
                 Property::class.java.simpleName +

@@ -1,0 +1,4 @@
+{% if post.status is not constant('Post::PUBLISHED') %}
+
+{# is equivalent to #}
+{% if not (post.status is constant('Post::PUBLISHED')) %}

@@ -1,3 +1,0 @@
-package com.fisk.twig.format
-
-interface TwigFormattingModelBuilderTest

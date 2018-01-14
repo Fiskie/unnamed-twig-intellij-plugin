@@ -1,0 +1,11 @@
+{% if foo %}
+{% else %}
+{% endif %}
+
+{% for var in foo %}
+{% else %}
+{% endfor %}
+
+{% block foo %}
+{% <error descr="Only 'if' and 'for' statements may have an inverse block">else</error> %}
+{% endblock %}

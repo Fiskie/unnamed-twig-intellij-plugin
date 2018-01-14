@@ -2,7 +2,7 @@ package com.fisk.twig.file
 
 import com.fisk.twig.TwigBundle
 import com.fisk.twig.TwigLanguage
-import com.fisk.twig.TwigTemplateHighlighter
+import com.fisk.twig.highlighting.TwigTemplateHighlighter
 import com.fisk.twig.config.TwigIcons
 import com.intellij.lang.Language
 import com.intellij.openapi.fileTypes.CharsetUtil

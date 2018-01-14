@@ -106,6 +106,10 @@ Label = [A-Za-z_]\w*
 }
 
 <expression, hash> {
+    // TODO: support dobule-quoted interpolated strings -- will need to be done in the lexer
+    // best way to do this is probably push a string state on seeing a double quote, and push the expr state again
+    // once #{ is seen
+
     "(" { return TwigTokenTypes.LPARENTH; }
     ")" { return TwigTokenTypes.RPARENTH; }
     "[" { return TwigTokenTypes.LBRACKET; }
@@ -115,12 +119,17 @@ Label = [A-Za-z_]\w*
     ":" { return TwigTokenTypes.COLON; }
     "true"/[}\)\t \n\x0B\f\r] { return TwigTokenTypes.BOOLEAN; }
     "false"/[}\)\t \n\x0B\f\r] { return TwigTokenTypes.BOOLEAN; }
-    \-?[0-9]+(\.[0-9]+)?/[}\)\t \n\x0B\f\r] { return TwigTokenTypes.NUMBER; }
-    "|" { return TwigTokenTypes.FILTER_SEP; }
-    [\/.] { return TwigTokenTypes.SEP; }
+    \-?[0-9]+(\.[0-9]+)? { return TwigTokenTypes.NUMBER; }
+    "|" { return TwigTokenTypes.FILTER_PIPE; }
+    [\/.] { return TwigTokenTypes.DOT; }
     "=" { return TwigTokenTypes.EQUALS; }
     \"([^\"\\]|\\.)*\" { return TwigTokenTypes.STRING; }
     '([^'\\]|\\.)*' { return TwigTokenTypes.STRING; }
+
+    "null" |
+    "none" {
+        return TwigTokenTypes.NULL;
+    }
 
     "odd" |
     "even" {
@@ -136,7 +145,8 @@ Label = [A-Za-z_]\w*
     }
 
     // in the order of operator precedence (except for 'not', which is a negator)
-    "as" | "with" | "not" |
+    // 'if' is here too as it is used as a keyword for loop filters
+    "if" | "as" | "with" | "not" |
     "b-and" | "b-xor" | "b-or" |
     "or" | "and" | "in" |
     "matches" |

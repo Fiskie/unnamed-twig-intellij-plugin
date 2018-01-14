@@ -108,4 +108,28 @@ class TwigParserFreeFormTest : TwigParserTest() {
     fun testNamedArguments() {
         doTest(true)
     }
+
+    fun testFilteredForLoop() {
+        doTest(true)
+    }
+
+    fun testFilterHash() {
+        doTest(true)
+    }
+
+    fun testSubexpressions() {
+        doTest(true)
+    }
+
+    fun testInterpolatedString() {
+        doTest(true)
+    }
+
+    fun testTestOperator() {
+        doTest(true)
+    }
+
+    fun testMacroDeclaration() {
+        doTest(true)
+    }
 }

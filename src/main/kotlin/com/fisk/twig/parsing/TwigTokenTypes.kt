@@ -42,7 +42,7 @@ object TwigTokenTypes {
     @JvmField
     val EQUALS = TwigElementType("EQUALS", "twig.parsing.element.expected.equals")
     @JvmField
-    val SEP = TwigElementType("SEP", "twig.parsing.element.expected.sep")
+    val DOT = TwigElementType("DOT", "twig.parsing.element.expected.sep")
     @JvmField
     val OPERATOR = TwigElementType("OPERATOR", "twig.parsing.element.expected.operator")
     @JvmField
@@ -58,7 +58,7 @@ object TwigTokenTypes {
     @JvmField
     val INVALID = TwigElementType("INVALID", "twig.parsing.element.expected.invalid")
     @JvmField
-    val FILTER_SEP = TwigElementType("FILTER_SEP", "twig.parsing.element.expected.filter_sep")
+    val FILTER_PIPE = TwigElementType("FILTER_PIPE", "twig.parsing.element.expected.FILTER_PIPE")
     @JvmField
     val TEST = TwigElementType("TEST", "twig.parsing.element.expected.test")
     @JvmField
@@ -67,6 +67,8 @@ object TwigTokenTypes {
     val COLON = TwigElementType("COLON", "twig.parsing.element.expected.colon")
     @JvmField
     val COMMENT = TwigElementType("COMMENT", "twig.parsing.element.expected.comment")
+    @JvmField
+    val NULL = TwigElementType("NULL", "twig.parsing.element.expected.null")
 
     val EXPRESSION_BLOCK = TwigCompositeElementType("EXPRESSION_BLOCK")
     val BLOCK_WRAPPER = TwigCompositeElementType("BLOCK_WRAPPER")
@@ -78,12 +80,19 @@ object TwigTokenTypes {
     val EXPRESSION = TwigCompositeElementType("EXPRESSION")
     val SUBEXPRESSION = TwigCompositeElementType("SUBEXPRESSION")
 
+    val DOUBLE_QUOTED_STRING = TwigCompositeElementType("DOUBLE_QUOTED_STRING")
+
     val VARIABLE = TwigCompositeElementType("VARIABLE")
     val PROPERTY = TwigCompositeElementType("PROPERTY")
     val FUNCTION = TwigCompositeElementType("FUNCTION")
     val METHOD = TwigCompositeElementType("METHOD")
+    val ARRAY_ACCESS = TwigCompositeElementType("ARRAY_ACCESS")
 
     val HASH = TwigCompositeElementType("HASH")
+    val ARRAY = TwigCompositeElementType("ARRAY")
+
+    val BLOCK_LABEL = TwigCompositeElementType("BLOCK_LABEL")
+    val MACRO_DECLARATION = TwigCompositeElementType("MACRO_DECLARATION")
 
     val IDENTIFIERS = TokenSet.create(LABEL)
     val STRING_LITERALS = TokenSet.create(STRING)

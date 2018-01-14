@@ -1,9 +1,12 @@
 package com.fisk.twig.parsing
 
 import com.fisk.twig.TwigBundle
-import com.fisk.twig.TwigTagUtils
+import com.fisk.twig.util.TwigTagUtil
+import com.fisk.twig.parsing.TwigTokenTypes.ARRAY
+import com.fisk.twig.parsing.TwigTokenTypes.ARRAY_ACCESS
 import com.fisk.twig.parsing.TwigTokenTypes.BLOCK
 import com.fisk.twig.parsing.TwigTokenTypes.BLOCK_END_STATEMENT
+import com.fisk.twig.parsing.TwigTokenTypes.BLOCK_LABEL
 import com.fisk.twig.parsing.TwigTokenTypes.BLOCK_START_STATEMENT
 import com.fisk.twig.parsing.TwigTokenTypes.BLOCK_WRAPPER
 import com.fisk.twig.parsing.TwigTokenTypes.BOOLEAN
@@ -11,10 +14,13 @@ import com.fisk.twig.parsing.TwigTokenTypes.COLON
 import com.fisk.twig.parsing.TwigTokenTypes.COMMA
 import com.fisk.twig.parsing.TwigTokenTypes.COMMENT
 import com.fisk.twig.parsing.TwigTokenTypes.CONTENT
+import com.fisk.twig.parsing.TwigTokenTypes.EQUALS
 import com.fisk.twig.parsing.TwigTokenTypes.EXPRESSION
 import com.fisk.twig.parsing.TwigTokenTypes.EXPRESSION_CLOSE
 import com.fisk.twig.parsing.TwigTokenTypes.EXPRESSION_OPEN
-import com.fisk.twig.parsing.TwigTokenTypes.FILTER_SEP
+import com.fisk.twig.parsing.TwigTokenTypes.FILTER_PIPE
+import com.fisk.twig.parsing.TwigTokenTypes.FUNCTION
+import com.fisk.twig.parsing.TwigTokenTypes.HASH
 import com.fisk.twig.parsing.TwigTokenTypes.INVALID
 import com.fisk.twig.parsing.TwigTokenTypes.INVERSE_STATEMENT
 import com.fisk.twig.parsing.TwigTokenTypes.KEYWORD_OPERATOR
@@ -22,17 +28,21 @@ import com.fisk.twig.parsing.TwigTokenTypes.LABEL
 import com.fisk.twig.parsing.TwigTokenTypes.LBRACE
 import com.fisk.twig.parsing.TwigTokenTypes.LBRACKET
 import com.fisk.twig.parsing.TwigTokenTypes.LPARENTH
+import com.fisk.twig.parsing.TwigTokenTypes.MACRO_DECLARATION
+import com.fisk.twig.parsing.TwigTokenTypes.METHOD
+import com.fisk.twig.parsing.TwigTokenTypes.NULL
 import com.fisk.twig.parsing.TwigTokenTypes.NUMBER
 import com.fisk.twig.parsing.TwigTokenTypes.OPERATOR
 import com.fisk.twig.parsing.TwigTokenTypes.PROPERTY
 import com.fisk.twig.parsing.TwigTokenTypes.RBRACE
 import com.fisk.twig.parsing.TwigTokenTypes.RBRACKET
 import com.fisk.twig.parsing.TwigTokenTypes.RPARENTH
-import com.fisk.twig.parsing.TwigTokenTypes.SEP
+import com.fisk.twig.parsing.TwigTokenTypes.DOT
 import com.fisk.twig.parsing.TwigTokenTypes.SIMPLE_STATEMENT
 import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_CLOSE
 import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_OPEN
 import com.fisk.twig.parsing.TwigTokenTypes.STRING
+import com.fisk.twig.parsing.TwigTokenTypes.SUBEXPRESSION
 import com.fisk.twig.parsing.TwigTokenTypes.TAG
 import com.fisk.twig.parsing.TwigTokenTypes.VARIABLE
 import com.intellij.lang.PsiBuilder
@@ -40,8 +50,8 @@ import com.intellij.psi.tree.IElementType
 
 class TwigParsing(private val builder: PsiBuilder) {
     companion object {
-        val LITERAL_OR_LABEL = setOf(LABEL, STRING, NUMBER, BOOLEAN)
-        val ALLOWED_EXPR_PSI = setOf(FILTER_SEP, SEP, OPERATOR, KEYWORD_OPERATOR, LPARENTH, RPARENTH, LBRACE, RBRACE, LBRACKET, RBRACKET, COLON, COMMA)
+        val LITERAL_OR_LABEL = setOf(LABEL, STRING, NUMBER, BOOLEAN, NULL)
+        val ALLOWED_EXPR_PSI = setOf(FILTER_PIPE, OPERATOR, KEYWORD_OPERATOR)
     }
 
     fun parse() {
@@ -61,7 +71,6 @@ class TwigParsing(private val builder: PsiBuilder) {
             val tokenType = builder.tokenType
             val problemOffset = builder.currentOffset
 
-            // TODO mark this error when looking for a matching close tag, so the error does not propagate down the tree
             if (tokenType === STATEMENT_OPEN) {
                 val problemMark = builder.mark()
 
@@ -130,7 +139,7 @@ class TwigParsing(private val builder: PsiBuilder) {
      *
      * This function will look ahead to check if a matching end tag even exists.
      */
-    private fun hasMatchingEndTagAhead(builder: PsiBuilder, tag: String) : Boolean {
+    private fun hasMatchingEndTagAhead(builder: PsiBuilder, tag: String): Boolean {
         val start = builder.mark()
 
         while (!builder.eof()) {
@@ -152,7 +161,7 @@ class TwigParsing(private val builder: PsiBuilder) {
     private fun nextStatementIsInverse(builder: PsiBuilder): Boolean {
         val prematureInverseMarker = builder.mark()
         builder.advanceLexer()
-        val isInverse = builder.tokenType == TAG && TwigTagUtils.isInverseTag(builder.tokenText!!)
+        val isInverse = builder.tokenType == TAG && TwigTagUtil.isInverseTag(builder.tokenText!!)
         prematureInverseMarker.rollbackTo()
         return isInverse
     }
@@ -196,7 +205,7 @@ class TwigParsing(private val builder: PsiBuilder) {
 
         if (tagName == null) {
             // do nothing
-        } else if (hasMatchingEndTagAhead(builder, tagName) || TwigTagUtils.isEndTag(tagName) || TwigTagUtils.isDefaultBlockTag(tagName)) {
+        } else if (hasMatchingEndTagAhead(builder, tagName) || TwigTagUtil.isEndTag(tagName) || TwigTagUtil.isDefaultBlockTag(tagName)) {
             val blockStatementMarker = builder.mark()
             val openTag = parseOpenStatement(builder)
 
@@ -213,7 +222,8 @@ class TwigParsing(private val builder: PsiBuilder) {
 
             val closeMarker = builder.mark()
 
-            if (parseCloseStatement(builder, tagName) || TwigTagUtils.isDefaultBlockTag(tagName)) {
+            // Doesn't matter if the close statement is mismatched -- this is handled by the annotator to prevent error coalescence
+            if (parseAnyCloseStatement(builder) || TwigTagUtil.isDefaultBlockTag(tagName)) {
                 blockStatementMarker.drop()
                 closeMarker.drop()
                 statementMarker.done(BLOCK_WRAPPER)
@@ -241,28 +251,21 @@ class TwigParsing(private val builder: PsiBuilder) {
      * Will parse any statement that does not contain an end tag (/^end/)
      */
     private fun parseOpenStatement(builder: PsiBuilder): Boolean {
-        return parseStatement(builder, BLOCK_START_STATEMENT, { tag -> !TwigTagUtils.isEndTag(tag) /* && !elseTags.contains(tag)*/ }) // todo -- this will currently break parsing
-    }
-
-    /**
-     * Will parse a statement which is an end block statement for the given openTag
-     */
-    private fun parseCloseStatement(builder: PsiBuilder, openTag: String): Boolean {
-        return parseStatement(builder, BLOCK_END_STATEMENT, { tag -> TwigTagUtils.normaliseTag(tag) == openTag })
+        return parseStatement(builder, BLOCK_START_STATEMENT, { tag -> !TwigTagUtil.isEndTag(tag) /* && !elseTags.contains(tag)*/ }) // todo -- this will currently break parsing
     }
 
     /**
      * Will parse any close statement; this is used to gracefully handle unexpected tag errors
      */
     private fun parseAnyCloseStatement(builder: PsiBuilder): Boolean {
-        return parseStatement(builder, BLOCK_END_STATEMENT, { tag -> TwigTagUtils.isEndTag(tag) })
+        return parseStatement(builder, BLOCK_END_STATEMENT, { tag -> TwigTagUtil.isEndTag(tag) })
     }
 
     /**
      * Will parse inverse statements, i.e. else and elseif tags
      */
     private fun parseInverseStatement(builder: PsiBuilder): Boolean {
-        return parseStatement(builder, INVERSE_STATEMENT, { tag -> TwigTagUtils.isInverseTag(tag) })
+        return parseStatement(builder, INVERSE_STATEMENT, { tag -> TwigTagUtil.isInverseTag(tag) })
     }
 
     private fun parseStatement(builder: PsiBuilder, type: TwigCompositeElementType, strategy: (String) -> Boolean): Boolean {
@@ -292,30 +295,32 @@ class TwigParsing(private val builder: PsiBuilder) {
 
                 parseLeafToken(builder, TAG)
             } else {
-                if (tagName == "block" && builder.tokenType == LABEL) {
-                    // make sure block labels are never parsed as expressions
-                    builder.advanceLexer()
-                } else if (tagName == "macro" && builder.tokenType == LABEL) {
-                    // make sure macro labels are never parsed as expressions
-                    builder.advanceLexer()
-                } else {
-                    val expressionMarker = builder.mark()
+                when {
+                    tagName == "block" && builder.tokenType == LABEL -> {
+                        // make sure block labels are never parsed as expressions
+                        parseBlockLabel(builder)
+                    }
+                    tagName == "macro" && builder.tokenType == LABEL -> {
+                        parseMacroDeclaration(builder)
+                    }
+                    else -> {
+                        val expressionMarker = builder.mark()
 
-                    if (parseExpression(builder)) {
-                        expressionMarker.drop()
-                    } else {
-                        expressionMarker.rollbackTo()
-                        builder.advanceLexer()
+                        if (parseExpression(builder)) {
+                            expressionMarker.drop()
+                        } else {
+                            expressionMarker.rollbackTo()
+                            builder.advanceLexer()
+                        }
                     }
                 }
             }
 
             if (builder.tokenType == STATEMENT_CLOSE) {
+                builder.advanceLexer() // consume last STATEMENT_CLOSE
                 break
             }
         } while (!builder.eof())
-
-        builder.advanceLexer() // consume last STATEMENT_CLOSE
 
         if (strategy(tagName)) {
             marker.done(type)
@@ -324,6 +329,30 @@ class TwigParsing(private val builder: PsiBuilder) {
             marker.rollbackTo()
             return false
         }
+    }
+
+    private fun parseBlockLabel(builder: PsiBuilder): Boolean {
+        if (builder.tokenType != LABEL) {
+            return false
+        }
+
+        val macroMarker = builder.mark()
+        builder.advanceLexer()
+        macroMarker.done(BLOCK_LABEL)
+        return true
+    }
+
+    private fun parseMacroDeclaration(builder: PsiBuilder): Boolean {
+        if (builder.tokenType != LABEL) {
+            return false
+        }
+
+        val macroMarker = builder.mark()
+        builder.advanceLexer()
+        parseFunctionCallParams(builder)
+        macroMarker.done(MACRO_DECLARATION)
+
+        return true
     }
 
     private fun parseExpressionBlock(builder: PsiBuilder): Boolean {
@@ -345,11 +374,10 @@ class TwigParsing(private val builder: PsiBuilder) {
             }
 
             if (builder.tokenType == EXPRESSION_CLOSE) {
+                builder.advanceLexer() // consume last EXPRESSION_CLOSE
                 break
             }
         } while (!builder.eof())
-
-        builder.advanceLexer() // consume last EXPRESSION_CLOSE
 
         blockMarker.done(TwigTokenTypes.EXPRESSION_BLOCK)
         return true
@@ -401,31 +429,56 @@ class TwigParsing(private val builder: PsiBuilder) {
      * - function/method name
      *
      * This will help the reference parser identify the context of each label.
-     *
-     * TODO: this currently will only parse var/property
      */
     private fun parseReference(builder: PsiBuilder): Boolean {
-        val varMarker = builder.mark()
+        if (builder.tokenType != LABEL) {
+            return false
+        }
+
+        val refMarker = builder.mark()
         builder.advanceLexer()
-        varMarker.done(VARIABLE)
+
+        if (builder.tokenType == LPARENTH) {
+            parseFunctionCallParams(builder)
+            refMarker.done(FUNCTION)
+        } else {
+            // is a simple var
+            refMarker.done(VARIABLE)
+        }
+
         var previousTokenWasValue = false
 
-        while (true) {
+        loop@ while (true) {
             val optionalExprMarker = builder.mark()
 
-            if (builder.tokenType == SEP) {
-                builder.advanceLexer()
-                previousTokenWasValue = false
-                optionalExprMarker.drop()
-            } else if (!previousTokenWasValue && builder.tokenType == LABEL) {
-                val propMarker = builder.mark()
-                builder.advanceLexer()
-                propMarker.done(PROPERTY)
-                previousTokenWasValue = true
-                optionalExprMarker.drop()
-            } else {
-                optionalExprMarker.rollbackTo()
-                break
+            when {
+                builder.tokenType == DOT -> {
+                    builder.advanceLexer()
+                    previousTokenWasValue = false
+                    optionalExprMarker.drop()
+                }
+                !previousTokenWasValue && builder.tokenType == LABEL -> {
+                    val propMarker = builder.mark()
+                    builder.advanceLexer()
+
+                    if (builder.tokenType == LPARENTH) {
+                        parseFunctionCallParams(builder)
+                        propMarker.done(METHOD)
+                    } else {
+                        // is a simple var
+                        propMarker.done(PROPERTY)
+                    }
+
+                    previousTokenWasValue = true
+                    optionalExprMarker.drop()
+                }
+                parseArrayAccessor(builder) -> {
+                    optionalExprMarker.drop()
+                }
+                else -> {
+                    optionalExprMarker.rollbackTo()
+                    break@loop
+                }
             }
         }
 
@@ -433,17 +486,163 @@ class TwigParsing(private val builder: PsiBuilder) {
     }
 
     /**
-     * Return true if the current token might be a reference, and not a simple label
+     * Parse the params of a function/method call, starting from the parentheses
+     *
+     * Includes logic to deal with named arguments, etc.
      */
-    private fun tokenMayBeReference(builder: PsiBuilder): Boolean {
-        if (builder.tokenType != LABEL) {
+    private fun parseFunctionCallParams(builder: PsiBuilder): Boolean {
+        if (builder.tokenType != LPARENTH) {
             return false
         }
 
-        // lookahead for colon: prevent hash keys from being read as expressions, these are simple labels
-        if (builder.lookAhead(1) == COLON) {
+        val paramsMarker = builder.mark()
+        builder.advanceLexer()
+
+        var lastWasExpr = false
+
+        loop@ while (true) {
+            when {
+                builder.tokenType == LABEL && builder.lookAhead(1) == EQUALS -> {
+                    // we are looking at a named argument. Skip past this for now.
+                    // TODO add a highlighter for named arguments, make it nice and blue
+                    builder.advanceLexer()
+                    builder.advanceLexer()
+                    lastWasExpr = false
+                }
+                builder.tokenType == RPARENTH -> {
+                    builder.advanceLexer()
+                    break@loop
+                }
+                builder.tokenType == COMMA -> {
+                    builder.advanceLexer()
+                    lastWasExpr = false
+                }
+                !lastWasExpr && parseExpression(builder) -> lastWasExpr = true
+                else -> {
+                    paramsMarker.rollbackTo()
+                    return false
+                }
+            }
+        }
+
+        // not marking this
+        paramsMarker.drop()
+
+        return true
+    }
+
+    /**
+     * Parse a valid array accessor (e.g. foo*[123]*)
+     */
+    private fun parseArrayAccessor(builder: PsiBuilder): Boolean {
+        if (builder.tokenType != LBRACKET) {
             return false
         }
+
+        val arrayAccessMarker = builder.mark()
+        builder.advanceLexer() // LBRACKET
+        parseExpression(builder)
+
+        if (builder.tokenType != RBRACKET) {
+            // No matching ]? This isn't valid syntax
+            arrayAccessMarker.rollbackTo()
+            return false
+        }
+
+        builder.advanceLexer() // RBRACKET
+
+        arrayAccessMarker.done(ARRAY_ACCESS)
+        return true
+    }
+
+    private fun parseHash(builder: PsiBuilder): Boolean {
+        if (builder.tokenType != LBRACE) {
+            return false
+        }
+
+        val hashMarker = builder.mark()
+        builder.advanceLexer()
+
+        loop@ while (true) {
+            when {
+                builder.lookAhead(1) == COLON -> {
+                    // parsing a hash key, which we don't want to reference
+                    // (*yet*, we could possibly set up hash keys for referencing later on in plugin development)
+                    builder.advanceLexer()
+                    // advance the lexer over the colon too
+                    builder.advanceLexer()
+                }
+                builder.tokenType == RBRACE -> {
+                    builder.advanceLexer() // consume closing brace
+                    break@loop
+                }
+                builder.tokenType == COMMA -> {
+                    builder.advanceLexer() // consume closing brace
+                }
+                !parseExpression(builder) -> {
+                    hashMarker.rollbackTo()
+                    return false // if an expr can't be parsed, it's likely a syntax error
+                }
+            }
+        }
+
+        hashMarker.done(HASH)
+        return true
+    }
+
+    private fun parseArray(builder: PsiBuilder): Boolean {
+        if (builder.tokenType != LBRACKET) {
+            return false
+        }
+
+        val arrayMarker = builder.mark()
+        builder.advanceLexer()
+
+        loop@ while (true) {
+            when {
+                builder.tokenType == RBRACKET -> {
+                    builder.advanceLexer() // consume closing bracket
+                    break@loop
+                }
+                builder.tokenType == COMMA -> {
+                    builder.advanceLexer()
+                }
+                !parseExpression(builder) -> {
+                    // if an expr can't be parsed, it's likely a syntax error
+                    arrayMarker.rollbackTo()
+                    return false
+                }
+            }
+        }
+
+        arrayMarker.done(ARRAY)
+
+        return true
+    }
+
+    private fun parseSubexpression(builder: PsiBuilder): Boolean {
+        if (builder.tokenType != LPARENTH) {
+            return false
+        }
+
+        val subexprMarker = builder.mark()
+        builder.advanceLexer()
+
+        // todo: is loop needed here?
+        loop@ while (true) {
+            when {
+                builder.tokenType == RPARENTH -> {
+                    builder.advanceLexer() // consume closing bracket
+                    break@loop
+                }
+                !parseExpression(builder) -> {
+                    subexprMarker.rollbackTo()
+                    return false // if an expr can't be parsed, it's likely a syntax error
+                }
+            }
+        }
+
+        subexprMarker.done(SUBEXPRESSION)
 
         return true
     }
@@ -462,27 +661,46 @@ class TwigParsing(private val builder: PsiBuilder) {
         // so we make sure this doesn't show up as a single expr in PSI
         var previousTokenWasValue = false
 
-        while (true) {
+        loop@ while (true) {
             val optionalExprMarker = builder.mark()
 
-            if (tokenMayBeReference(builder)) {
-                parseReference(builder)
-                any = true
-                previousTokenWasValue = true
-                optionalExprMarker.drop()
-            } else if (!previousTokenWasValue && LITERAL_OR_LABEL.contains(builder.tokenType)) {
-                parseLeafToken(builder, builder.tokenType!!)
-                any = true
-                previousTokenWasValue = true
-                optionalExprMarker.drop()
-            } else if (ALLOWED_EXPR_PSI.contains(builder.tokenType)) {
-                builder.advanceLexer()
-                any = true
-                previousTokenWasValue = false
-                optionalExprMarker.drop()
-            } else {
-                optionalExprMarker.rollbackTo()
-                break
+            when {
+                parseReference(builder) -> {
+                    any = true
+                    previousTokenWasValue = true
+                    optionalExprMarker.drop()
+                }
+                !previousTokenWasValue && LITERAL_OR_LABEL.contains(builder.tokenType) -> {
+                    parseLeafToken(builder, builder.tokenType!!)
+                    any = true
+                    previousTokenWasValue = true
+                    optionalExprMarker.drop()
+                }
+                parseSubexpression(builder) -> {
+                    any = true
+                    optionalExprMarker.drop()
+                    break@loop
+                }
+                parseArray(builder) -> {
+                    any = true
+                    optionalExprMarker.drop()
+                    break@loop
+                }
+                parseHash(builder) -> {
+                    any = true
+                    optionalExprMarker.drop()
+                    break@loop
+                }
+                ALLOWED_EXPR_PSI.contains(builder.tokenType) -> {
+                    builder.advanceLexer()
+                    any = true
+                    previousTokenWasValue = false
+                    optionalExprMarker.drop()
+                }
+                else -> {
+                    optionalExprMarker.rollbackTo()
+                    break@loop
+                }
             }
         }
 

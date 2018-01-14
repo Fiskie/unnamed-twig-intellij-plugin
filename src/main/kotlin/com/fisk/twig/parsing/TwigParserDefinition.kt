@@ -7,7 +7,6 @@ import com.intellij.lang.ASTNode
 import com.intellij.lang.ParserDefinition
 import com.intellij.openapi.project.Project
 import com.intellij.psi.FileViewProvider
-import com.intellij.psi.PsiElement
 import com.intellij.psi.stubs.PsiFileStub
 import com.intellij.psi.tree.IStubFileElementType
 
@@ -47,6 +46,8 @@ class TwigParserDefinition : ParserDefinition {
         TwigTokenTypes.EXPRESSION_BLOCK -> TwigExpressionBlockImpl(node)
         TwigTokenTypes.VARIABLE -> TwigVariableImpl(node)
         TwigTokenTypes.PROPERTY -> TwigPropertyImpl(node)
+        TwigTokenTypes.MACRO_DECLARATION -> TwigMacroDeclarationImpl(node)
+        TwigTokenTypes.BLOCK_LABEL -> TwigBlockLabelImpl(node)
         else -> TwigPsiElementImpl(node!!)
     }
 }

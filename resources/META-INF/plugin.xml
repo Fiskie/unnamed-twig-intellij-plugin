@@ -18,37 +18,37 @@
   <idea-version since-build="145.0"/>
 
   <extensions defaultExtensionNs="com.intellij">
-    <annotator language="Twig" implementationClass="com.fisk.twig.ide.annotator.TwigUnclosedCommentAnnotator"/>
-    <annotator language="Twig" implementationClass="com.fisk.twig.ide.annotator.TwigUnexpectedContentInChildTemplateAnnotator"/>
+    <annotator language="Twig" implementationClass="com.fisk.twig.annotations.TwigMismatchedTagAnnotator"/>
+    <annotator language="Twig" implementationClass="com.fisk.twig.annotations.TwigUnclosedCommentAnnotator"/>
+    <annotator language="Twig" implementationClass="com.fisk.twig.annotations.TwigUnexpectedContentInChildTemplateAnnotator"/>
+    <annotator language="Twig" implementationClass="com.fisk.twig.annotations.TwigUnexpectedElementInSandboxTagAnnotator"/>
+    <annotator language="Twig" implementationClass="com.fisk.twig.annotations.TwigUnexpectedInverseTagAnnotator"/>
 
-    <backspaceHandlerDelegate implementation="com.fisk.twig.ide.actions.TwigBackspaceHandler" order="before xmlSlash"/>
-    <braceMatcher filetype="Twig" implementationClass="com.fisk.twig.ide.braces.TwigBraceMatcher"/>
-    <breadcrumbsInfoProvider implementation="com.fisk.twig.ide.breadcrumbs.TwigBreadcrumbsInfoProvider" />
+    <backspaceHandlerDelegate implementation="com.fisk.twig.actions.TwigBackspaceHandler" order="before xmlSlash"/>
+    <braceMatcher filetype="Twig" implementationClass="com.fisk.twig.braces.TwigBraceMatcher"/>
+    <breadcrumbsInfoProvider implementation="com.fisk.twig.breadcrumbs.TwigBreadcrumbsInfoProvider" />
     <codeFoldingOptionsProvider instance="com.fisk.twig.config.TwigFoldingOptionsProvider"/>
-    <codeStyleSettingsProvider implementation="com.fisk.twig.ide.pages.TwigCodeStyleSettingsProvider"/>
+    <codeStyleSettingsProvider implementation="com.fisk.twig.formatting.settings.TwigCodeStyleSettingsProvider"/>
 
-    <colorSettingsPage implementation="com.fisk.twig.ide.pages.TwigColorsPage"/>
-    <completion.contributor language="Twig" implementationClass="com.fisk.twig.ide.completion.TwigCompletionContributor" />
-    <defaultLiveTemplatesProvider implementation="com.fisk.twig.ide.templates.TwigLiveTemplatesProvider"/>
-    <enterHandlerDelegate implementation="com.fisk.twig.ide.actions.TwigEnterHandler"/>
-    <fileIndentOptionsProvider implementation="com.fisk.twig.format.TwigFileIndentOptionsProvider"/>
+    <colorSettingsPage implementation="com.fisk.twig.pages.TwigColorsPage"/>
+    <completion.contributor language="Twig" implementationClass="com.fisk.twig.completion.TwigCompletionContributor" />
+    <defaultLiveTemplatesProvider implementation="com.fisk.twig.templates.TwigLiveTemplatesProvider"/>
+    <enterHandlerDelegate implementation="com.fisk.twig.actions.TwigEnterHandler"/>
+    <fileIndentOptionsProvider implementation="com.fisk.twig.formatting.TwigFileIndentOptionsProvider"/>
     <fileTypeFactory implementation="com.fisk.twig.file.TwigFileTypeFactory"/>
-    <highlightErrorFilter implementation="com.fisk.twig.ide.annotator.TwigErrorFilter"/>
-    <html.scriptContentProvider language="Twig" implementationClass="com.fisk.twig.TwigScriptContentProvider"/>
-    <langCodeStyleSettingsProvider implementation="com.fisk.twig.ide.pages.TwigLanguageCodeStyleSettingsProvider"/>
-    <lang.commenter language="Twig" implementationClass="com.fisk.twig.ide.comments.TwigCommenterManager"/>
+    <highlightErrorFilter implementation="com.fisk.twig.annotations.TwigErrorFilter"/>
+    <langCodeStyleSettingsProvider implementation="com.fisk.twig.formatting.settings.TwigLanguageCodeStyleSettingsProvider"/>
+    <lang.commenter language="Twig" implementationClass="com.fisk.twig.comments.TwigCommenter"/>
     <lang.fileViewProviderFactory language="Twig" implementationClass="com.fisk.twig.file.TwigFileViewProviderFactory"/>
-    <lang.findUsagesProvider language="Twig" implementationClass="com.fisk.twig.ide.TwigFindUsagesProvider"/>
-    <lang.foldingBuilder language="Twig" implementationClass="com.fisk.twig.ide.folding.TwigFoldingBuilder"/>
-    <lang.formatter language="Twig" implementationClass="com.fisk.twig.format.TwigFormattingModelBuilder"/>
+    <lang.findUsagesProvider language="Twig" implementationClass="com.fisk.twig.reference.TwigFindUsagesProvider"/>
+    <lang.foldingBuilder language="Twig" implementationClass="com.fisk.twig.folding.TwigFoldingBuilder"/>
+    <lang.formatter language="Twig" implementationClass="com.fisk.twig.formatting.TwigFormattingModelBuilder"/>
     <lang.parserDefinition language="Twig" implementationClass="com.fisk.twig.parsing.TwigParserDefinition" />
     <lang.psiStructureViewFactory language="Twig" implementationClass="com.fisk.twig.structure.TwigStructureViewFactory" />
-    <lang.syntaxHighlighterFactory language="Twig" implementationClass="com.fisk.twig.TwigHighlighterFactory"/>
-    <liveTemplateContext implementation="com.fisk.twig.ide.templates.TwigTemplateContextType"/>
-    <!--<projectConfigurable groupId="language" provider="com.fisk.twig.ide.pages.TwigConfigurationProvider" />-->
-    <psi.referenceContributor implementation="com.fisk.twig.psi.reference.ReferenceContributor" />
-    <!--<statementUpDownMover implementation="com.fisk.twig.ide.actions.TwigStatementUpDownMover" />-->
-    <typedHandler implementation="com.fisk.twig.ide.actions.TwigTypedHandler" order="before xmlSlash"/>
+    <lang.syntaxHighlighterFactory language="Twig" implementationClass="com.fisk.twig.highlighting.TwigHighlighterFactory"/>
+    <liveTemplateContext implementation="com.fisk.twig.templates.TwigTemplateContextType"/>
+    <psi.referenceContributor implementation="com.fisk.twig.reference.ReferenceContributor" />
+    <typedHandler implementation="com.fisk.twig.actions.TwigTypedHandler" order="before xmlSlash"/>
   </extensions>
 
   <actions>

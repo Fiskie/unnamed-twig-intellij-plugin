@@ -1,7 +1,10 @@
 package com.fisk.twig.psi.util
 
 import com.fisk.twig.file.TwigFileType
-import com.fisk.twig.psi.*
+import com.fisk.twig.psi.TwigBlock
+import com.fisk.twig.psi.TwigBlockWrapper
+import com.fisk.twig.psi.TwigLabel
+import com.fisk.twig.psi.TwigPsiFile
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
@@ -21,6 +24,14 @@ object TwigPsiUtil {
 
         // we're a non-root statements if we're of type statements, and we have a statements parent
         return element is TwigBlock && statementsParent != null
+    }
+
+    fun isInLoopContext(element: PsiElement): Boolean {
+        val parent = PsiTreeUtil.findFirstParent(element, {
+            el -> el is TwigBlockWrapper && el.getStartStatement()?.tag?.name == "for"
+        })
+
+        return parent != null
     }
 
     fun findLabels(project: Project, key: String): List<TwigLabel> {

@@ -1,12 +1,6 @@
 package com.fisk.twig.util
 
-import com.fisk.twig.config.TwigConfig
-import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.PathManager
-import com.intellij.openapi.project.Project
-import com.intellij.openapi.util.Disposer
-import org.jetbrains.annotations.TestOnly
-
 import java.io.File
 
 object TwigTestUtils {

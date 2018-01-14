@@ -20,28 +20,36 @@ such as support for Find Usages and named element refactors.
 - [x] Formatting/code style configuration 
 - [ ] Allow a closing brace for a hash to be automatically inserted if not expecting an expression brace
 - [ ] Continuation indent for expressions
+- [ ] File path referencing
+- [x] `for` `if` filter keyword recognition
+- [ ] ~~Block ctrl-click goto~~ - will use line markers instead
 
 ### Milestone 2: Supplementary PSI features
 
 - [x] Breadcrumbs
-- [ ] Line mover: Move entire statement block if caret on start/end tag (add StatementUpDownMover)
+- [ ] Line mover: Move entire statement block if caret on start/end tag (add own StatementMover)
 - [x] Whitespace control modifier (`{{-`) paired brace autocomplete -- currently only removes on backspace press, where is the delete handler?
 - [ ] Annotations/Inspections
-    - [ ] Expected end block tag -- doing while parsing has a coalescence problem and should probably be implemented as an annotation
+    - [x] Mismatched end block tag
     - [ ] Declared child blocks not found in the parent template
     - [x] Unclosed comment inspection
     - [x] Anything other than a `block` in an `embed`/`extends`
+    - [x] Anything other than a `include` in a `sandbox`
+    - [x] Unexpected inverse tags
+- [x] Annotation fixes
+    - [x] Mismatched twig tag
 - [ ] Reference support - Find usages and name refactor for the following:
     - [x] Local variables
+    - [ ] Tags - rename matching tag
     - [ ] Block names
     - [ ] Macro names
     - [ ] Scoped variables in a `for` block
     - [ ] Scoped variables in a `macro`
-    - [ ] Add tests
     - [ ] Variables declared in a parent block, recursively
+    - [ ] Add tests
 - [x] More color scheme options 
 - [ ] Automatic matching tag rename on type a la HTML plugin
-- [ ] Add the special `loop` object when in `for` context
+- [x] Add the special `loop` object when in `for` context
 - [x] Auto-collapse Twig blocks as a folding option
 - [ ] String interpolation (`#{foo}, #{1 + 2}`)
 - [ ] Safe delete for parent templates
@@ -50,8 +58,8 @@ such as support for Find Usages and named element refactors.
 
 ### Milestone 3: Feature parity with community Symfony plugin Twig extensions
 
-- [ ] Goto parent block
-- [ ] Template include/extends/block resolution goto
+- [ ] Goto parent/use block
+- [ ] Template include/extends/use block resolution goto
 - [ ] Parent block implements/extends goto on line marker
 - [ ] Macro goto on line marker
 - [ ] PHPDoc annotation support ({# @var thing \Core\Thing #})
