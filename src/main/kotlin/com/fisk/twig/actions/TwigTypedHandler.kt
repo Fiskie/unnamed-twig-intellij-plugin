@@ -27,7 +27,7 @@ class TwigTypedHandler : TypedHandlerDelegate() {
      * typing by inserting the character that is about to be typed, add a
      * matching closing brace, then stop propagation of the typed handlers.
      */
-    private fun completeClosingBrace(c: Char, project: Project, editor: Editor, file: PsiFile, fileType: FileType): TypedHandlerDelegate.Result {
+    private fun completeClosingBrace(c: Char, editor: Editor): TypedHandlerDelegate.Result {
         val offset = editor.caretModel.offset
         var braceCompleter: String? = null
         var shouldPad = false
@@ -49,7 +49,7 @@ class TwigTypedHandler : TypedHandlerDelegate() {
                 }
             }
         } else if (c == '{') {
-
+            // todo: { needs to be closed when in expression context
         }
 
         if (braceCompleter != null) {
@@ -70,7 +70,7 @@ class TwigTypedHandler : TypedHandlerDelegate() {
         }
 
         if (file.language is TwigLanguage || file.viewProvider.baseLanguage is TwigLanguage) {
-            return completeClosingBrace(c, project, editor, file, fileType)
+            return completeClosingBrace(c, editor)
         }
 
         return TypedHandlerDelegate.Result.CONTINUE

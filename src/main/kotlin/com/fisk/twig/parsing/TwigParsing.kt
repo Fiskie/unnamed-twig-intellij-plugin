@@ -505,6 +505,7 @@ class TwigParsing(private val builder: PsiBuilder) {
                 builder.tokenType == LABEL && builder.lookAhead(1) == EQUALS -> {
                     // we are looking at a named argument. Skip past this for now.
                     // TODO add a highlighter for named arguments, make it nice and blue
+                    // (doesn't just work with a compound element...)
                     builder.advanceLexer()
                     builder.advanceLexer()
                     lastWasExpr = false

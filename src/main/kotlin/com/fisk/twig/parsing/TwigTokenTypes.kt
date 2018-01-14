@@ -87,6 +87,7 @@ object TwigTokenTypes {
     val FUNCTION = TwigCompositeElementType("FUNCTION")
     val METHOD = TwigCompositeElementType("METHOD")
     val ARRAY_ACCESS = TwigCompositeElementType("ARRAY_ACCESS")
+    val NAMED_ARGUMENT = TwigCompositeElementType("NAMED_ARGUMENT")
 
     val HASH = TwigCompositeElementType("HASH")
     val ARRAY = TwigCompositeElementType("ARRAY")
