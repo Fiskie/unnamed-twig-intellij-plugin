@@ -7,7 +7,5 @@ abstract class TwigFixtureTestBase : LightPlatformCodeInsightFixtureTestCase() {
     protected val fileName: String
         get() = getTestName(true) + ".twig"
 
-    override fun getTestDataPath(): String {
-        return TwigTestUtils.BASE_TEST_DATA_PATH
-    }
+    override fun getTestDataPath() = TwigTestUtils.BASE_TEST_DATA_PATH
 }

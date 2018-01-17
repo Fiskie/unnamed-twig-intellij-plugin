@@ -1,0 +1,10 @@
+{% custom foo %}
+    {% foo<caret> 'stuff' 900 %}
+        {% custom bbbb %}
+        {% endcustom %}
+    {% endfoo %}
+    {% custom bbbb %}
+    {% endcustom %}
+    {% custom zzzz  %}
+    {% endcustom %}
+{% endcustom %}

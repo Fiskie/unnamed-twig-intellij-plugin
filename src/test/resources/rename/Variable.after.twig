@@ -1,0 +1,10 @@
+{{ function(baz) }} {# capture function argument #}
+
+{% if baz<caret> %}
+    {{ baz }} {# capture expr #}
+    {{ foo() }} {# ignore function #}
+    {{ bar.foo }} {# ignore property #}
+
+    {% if baz %} {# capture this too
+    {% endif %}
+{% endif %}
