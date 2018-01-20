@@ -132,4 +132,12 @@ class TwigParserFreeFormTest : TwigParserTest() {
     fun testMacroDeclaration() {
         doTest(true)
     }
+
+    fun testEscapedSingleQuoteInString() {
+        doTest(true)
+    }
+
+    fun testEscapedDoubleQuoteInString() {
+        doTest(true)
+    }
 }

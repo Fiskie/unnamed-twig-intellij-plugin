@@ -1,0 +1,12 @@
+Twig: EscapedDoubleQuoteInString.twig
+  TwigBlockImpl(Twig:BLOCK)
+    TwigExpressionBlockImpl(Twig:EXPRESSION_BLOCK)
+      PsiElement(Twig:EXPRESSION_OPEN)('{{')
+      PsiWhiteSpace(' ')
+      TwigExpressionImpl(Twig:EXPRESSION)
+        TwigPsiElementImpl(Twig:DOUBLE_QUOTED_STRING)
+          PsiElement(Twig:DOUBLE_QUOTE)('"')
+          PsiElement(Twig:STRING)('f\"oo\"')
+          PsiElement(Twig:DOUBLE_QUOTE)('"')
+      PsiWhiteSpace(' ')
+      PsiElement(Twig:EXPRESSION_CLOSE)('}}')
