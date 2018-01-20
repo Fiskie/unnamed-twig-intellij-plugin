@@ -49,6 +49,9 @@ StatementClose = -?%\}
 CommentOpen = \{#-?
 CommentClose = -?#\}
 
+InterpolationOpen = #\{
+InterpolationClose = \}
+
 Label = [A-Za-z_]\w*
 
 %state statement
@@ -57,11 +60,14 @@ Label = [A-Za-z_]\w*
 %state comment
 %state expression
 %state hash
+%state string
+%state interpolated_string
+%state interpolated_string_expr
 %%
 
 <YYINITIAL> {
     ~"{" {
-        // backtrack over any stache characters at the end of this string
+        // backtrack over any control characters at the end of this string
         while (yylength() > 0 && yytext().subSequence(yylength() - 1, yylength()).toString().equals("{")) {
             yypushback(1);
         }
@@ -81,15 +87,21 @@ Label = [A-Za-z_]\w*
 
 <twig> {
     {CommentOpen} {
-        yypopState(); yypushState(comment); return TwigTokenTypes.COMMENT_OPEN;
+        yypopState();
+        yypushState(comment);
+        return TwigTokenTypes.COMMENT_OPEN;
     }
 
     {ExpressionOpen} {
-        yypopState(); yypushState(expression); return TwigTokenTypes.EXPRESSION_OPEN;
+        yypopState();
+        yypushState(expression); return
+        TwigTokenTypes.EXPRESSION_OPEN;
     }
 
     {StatementOpen} {
-        yypopState(); yypushState(statement_block_tag); return TwigTokenTypes.STATEMENT_OPEN;
+        yypopState();
+        yypushState(statement_block_tag);
+        return TwigTokenTypes.STATEMENT_OPEN;
     }
 
     // FIXME: fix content lexer to consume content properly
@@ -105,11 +117,7 @@ Label = [A-Za-z_]\w*
     "}" { yypopState(); return TwigTokenTypes.RBRACE; }
 }
 
-<expression, hash> {
-    // TODO: support dobule-quoted interpolated strings -- will need to be done in the lexer
-    // best way to do this is probably push a string state on seeing a double quote, and push the expr state again
-    // once #{ is seen
-
+<expression, hash, interpolated_string_expr> {
     "(" { return TwigTokenTypes.LPARENTH; }
     ")" { return TwigTokenTypes.RPARENTH; }
     "[" { return TwigTokenTypes.LBRACKET; }
@@ -123,8 +131,16 @@ Label = [A-Za-z_]\w*
     "|" { return TwigTokenTypes.FILTER_PIPE; }
     [\/.] { return TwigTokenTypes.DOT; }
     "=" { return TwigTokenTypes.EQUALS; }
-    \"([^\"\\]|\\.)*\" { return TwigTokenTypes.STRING; }
-    '([^'\\]|\\.)*' { return TwigTokenTypes.STRING; }
+
+    ' {
+        yypushState(string);
+        return TwigTokenTypes.SINGLE_QUOTE;
+    }
+
+    \" {
+        yypushState(interpolated_string);
+        return TwigTokenTypes.DOUBLE_QUOTE;
+    }
 
     "null" |
     "none" {
@@ -161,13 +177,48 @@ Label = [A-Za-z_]\w*
     {WhiteSpace} { return TwigTokenTypes.WHITE_SPACE; }
 }
 
+<string> {
+    ([^'\\]|\\.)* { return TwigTokenTypes.STRING; }
+    ' { yypopState(); return TwigTokenTypes.SINGLE_QUOTE; }
+}
+
+<interpolated_string_expr> {
+    {InterpolationOpen} {
+        return TwigTokenTypes.INTERPOLATION_OPEN;
+    }
+
+    {InterpolationClose} {
+        yypopState();
+        return TwigTokenTypes.INTERPOLATION_CLOSE;
+    }
+}
+
+<interpolated_string> {
+    ~{InterpolationOpen} {
+        yypushback(2);
+        yypushState(interpolated_string_expr);
+        return TwigTokenTypes.STRING;
+    }
+
+    \" {
+        yypopState();
+        return TwigTokenTypes.DOUBLE_QUOTE;
+    }
+
+    ([^\"\\]|\\.)* {
+        return TwigTokenTypes.STRING;
+    }
+}
+
 <expression> {
     {StatementClose} {
-        yypopState(); return TwigTokenTypes.STATEMENT_CLOSE;
+        yypopState();
+        return TwigTokenTypes.STATEMENT_CLOSE;
     }
 
     {ExpressionClose} {
-        yypopState(); return TwigTokenTypes.EXPRESSION_CLOSE;
+        yypopState();
+        return TwigTokenTypes.EXPRESSION_CLOSE;
     }
 }
 

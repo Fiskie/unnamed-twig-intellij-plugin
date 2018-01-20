@@ -28,6 +28,10 @@ object TwigTokenTypes {
     @JvmField
     val EXPRESSION_CLOSE = TwigElementType("EXPRESSION_CLOSE", "twig.parsing.element.expected.expression_close")
     @JvmField
+    val INTERPOLATION_OPEN = TwigElementType("INTERPOLATION_OPEN", "twig.parsing.element.expected.interpolation_open")
+    @JvmField
+    val INTERPOLATION_CLOSE = TwigElementType("INTERPOLATION_CLOSE", "twig.parsing.element.expected.interpolation_close")
+    @JvmField
     val LPARENTH = TwigElementType("LPARENTH", "twig.parsing.element.expected.open_sexpr")
     @JvmField
     val RPARENTH = TwigElementType("RPARENTH", "twig.parsing.element.expected.close_sexpr")
@@ -66,6 +70,10 @@ object TwigTokenTypes {
     @JvmField
     val COLON = TwigElementType("COLON", "twig.parsing.element.expected.colon")
     @JvmField
+    val SINGLE_QUOTE = TwigElementType("SINGLE_QUOTE", "twig.parsing.element.expected.single_quote")
+    @JvmField
+    val DOUBLE_QUOTE = TwigElementType("DOUBLE_QUOTE", "twig.parsing.element.expected.double_quote")
+    @JvmField
     val COMMENT = TwigElementType("COMMENT", "twig.parsing.element.expected.comment")
     @JvmField
     val NULL = TwigElementType("NULL", "twig.parsing.element.expected.null")
@@ -80,6 +88,7 @@ object TwigTokenTypes {
     val EXPRESSION = TwigCompositeElementType("EXPRESSION")
     val SUBEXPRESSION = TwigCompositeElementType("SUBEXPRESSION")
 
+    val SINGLE_QUOTED_STRING = TwigCompositeElementType("SINGLE_QUOTED_STRING")
     val DOUBLE_QUOTED_STRING = TwigCompositeElementType("DOUBLE_QUOTED_STRING")
 
     val VARIABLE = TwigCompositeElementType("VARIABLE")

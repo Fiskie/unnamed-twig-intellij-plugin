@@ -4,6 +4,7 @@ import com.fisk.twig.parsing.TwigTokenTypes.BOOLEAN
 import com.fisk.twig.parsing.TwigTokenTypes.EQUALS
 import com.fisk.twig.parsing.TwigTokenTypes.LABEL
 import com.fisk.twig.parsing.TwigTokenTypes.NUMBER
+import com.fisk.twig.parsing.TwigTokenTypes.SINGLE_QUOTE
 import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_CLOSE
 import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_OPEN
 import com.fisk.twig.parsing.TwigTokenTypes.STRING
@@ -49,8 +50,8 @@ class TwigStatementLexerTest : TwigLexerTest() {
 
     fun testPlainSetStringStatement() {
         val result = tokenize("{% set foo = '123' %}")
-        result.shouldMatchTokenTypes(STATEMENT_OPEN, WHITE_SPACE, TAG, WHITE_SPACE, LABEL, WHITE_SPACE, EQUALS, WHITE_SPACE, STRING, WHITE_SPACE, STATEMENT_CLOSE)
-        result.shouldMatchTokenContent("{%", " ", "set", " ", "foo", " ", "=", " ", "'123'", " ", "%}")
+        result.shouldMatchTokenTypes(STATEMENT_OPEN, WHITE_SPACE, TAG, WHITE_SPACE, LABEL, WHITE_SPACE, EQUALS, WHITE_SPACE, SINGLE_QUOTE, STRING, SINGLE_QUOTE, WHITE_SPACE, STATEMENT_CLOSE)
+        result.shouldMatchTokenContent("{%", " ", "set", " ", "foo", " ", "=", " ", "'", "123", "'", " ", "%}")
     }
 
     fun testPlainStatement() {

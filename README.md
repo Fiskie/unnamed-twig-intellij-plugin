@@ -63,6 +63,7 @@ such as support for Find Usages and named element refactors.
 - [ ] Parent block implements/extends goto on line marker
 - [ ] Macro goto on line marker
 - [ ] PHPDoc annotation support ({# @var thing \Core\Thing #})
+    - [ ] Improve this: propagate typings that have been declared in a parent template
 - [ ] Support for _self macro import
 
 ## Development

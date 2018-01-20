@@ -11,6 +11,7 @@ import com.fisk.twig.parsing.TwigTokenTypes.OPERATOR
 import com.fisk.twig.parsing.TwigTokenTypes.RBRACKET
 import com.fisk.twig.parsing.TwigTokenTypes.RPARENTH
 import com.fisk.twig.parsing.TwigTokenTypes.DOT
+import com.fisk.twig.parsing.TwigTokenTypes.SINGLE_QUOTE
 import com.fisk.twig.parsing.TwigTokenTypes.STRING
 import com.fisk.twig.parsing.TwigTokenTypes.WHITE_SPACE
 
@@ -41,8 +42,8 @@ class TwigExpressionLexerTest : TwigLexerTest() {
 
     fun testStringLiteralExpression() {
         val result = tokenize("{{ 'foo' }}")
-        result.shouldMatchTokenTypes(EXPRESSION_OPEN, WHITE_SPACE, STRING, WHITE_SPACE, EXPRESSION_CLOSE)
-        result.shouldMatchTokenContent("{{", " ", "'foo'", " ", "}}")
+        result.shouldMatchTokenTypes(EXPRESSION_OPEN, WHITE_SPACE, SINGLE_QUOTE, STRING, SINGLE_QUOTE, WHITE_SPACE, EXPRESSION_CLOSE)
+        result.shouldMatchTokenContent("{{", " ", "'", "foo", "'", " ", "}}")
     }
 
     fun testPropertyExpression() {
@@ -53,14 +54,14 @@ class TwigExpressionLexerTest : TwigLexerTest() {
 
     fun testArrayExpression() {
         val result = tokenize("{{ foo['bar'] }}")
-        result.shouldMatchTokenTypes(EXPRESSION_OPEN, WHITE_SPACE, LABEL, LBRACKET, STRING, RBRACKET, WHITE_SPACE, EXPRESSION_CLOSE)
-        result.shouldMatchTokenContent("{{", " ", "foo", "[", "'bar'", "]", " ", "}}")
+        result.shouldMatchTokenTypes(EXPRESSION_OPEN, WHITE_SPACE, LABEL, LBRACKET, SINGLE_QUOTE, STRING, SINGLE_QUOTE, RBRACKET, WHITE_SPACE, EXPRESSION_CLOSE)
+        result.shouldMatchTokenContent("{{", " ", "foo", "[", "'", "bar", "'", "]", " ", "}}")
     }
 
     fun testMixedPropertyArrayExpression() {
         val result = tokenize("{{ foo.bar['baz'] }}")
-        result.shouldMatchTokenTypes(EXPRESSION_OPEN, WHITE_SPACE, LABEL, DOT, LABEL, LBRACKET, STRING, RBRACKET, WHITE_SPACE, EXPRESSION_CLOSE)
-        result.shouldMatchTokenContent("{{", " ", "foo", ".", "bar", "[", "'baz'", "]", " ", "}}")
+        result.shouldMatchTokenTypes(EXPRESSION_OPEN, WHITE_SPACE, LABEL, DOT, LABEL, LBRACKET, SINGLE_QUOTE, STRING, SINGLE_QUOTE, RBRACKET, WHITE_SPACE, EXPRESSION_CLOSE)
+        result.shouldMatchTokenContent("{{", " ", "foo", ".", "bar", "[", "'", "baz", "'", "]", " ", "}}")
     }
 
     fun testNumberExpression() {

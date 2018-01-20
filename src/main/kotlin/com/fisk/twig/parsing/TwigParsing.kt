@@ -38,7 +38,11 @@ import com.fisk.twig.parsing.TwigTokenTypes.RBRACE
 import com.fisk.twig.parsing.TwigTokenTypes.RBRACKET
 import com.fisk.twig.parsing.TwigTokenTypes.RPARENTH
 import com.fisk.twig.parsing.TwigTokenTypes.DOT
+import com.fisk.twig.parsing.TwigTokenTypes.DOUBLE_QUOTE
+import com.fisk.twig.parsing.TwigTokenTypes.DOUBLE_QUOTED_STRING
 import com.fisk.twig.parsing.TwigTokenTypes.SIMPLE_STATEMENT
+import com.fisk.twig.parsing.TwigTokenTypes.SINGLE_QUOTE
+import com.fisk.twig.parsing.TwigTokenTypes.SINGLE_QUOTED_STRING
 import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_CLOSE
 import com.fisk.twig.parsing.TwigTokenTypes.STATEMENT_OPEN
 import com.fisk.twig.parsing.TwigTokenTypes.STRING
@@ -621,6 +625,51 @@ class TwigParsing(private val builder: PsiBuilder) {
         return true
     }
 
+    /**
+     * parse an interpolated string (DOUBLE_QUOTE, [STRING|EXPRESSION...], DOUBLE_QUOTE
+     */
+    private fun parseInterpolatedString(builder: PsiBuilder): Boolean {
+        if (builder.tokenType != DOUBLE_QUOTE) {
+            return false
+        }
+
+        val stringMarker = builder.mark()
+
+        builder.advanceLexer()
+        builder.advanceLexer()
+        builder.advanceLexer()
+
+        stringMarker.done(DOUBLE_QUOTED_STRING)
+
+        return true
+    }
+
+    /**
+     * parse a string (SINGLE_QUOTE, STRING, SINGLE_QUOTE)
+     *
+     * this will also accept possible interpolated strings, which are
+     * deferred to [parseInterpolatedString].
+     */
+    private fun parseString(builder: PsiBuilder): Boolean {
+        if (builder.tokenType == DOUBLE_QUOTE) {
+            return parseInterpolatedString(builder)
+        }
+
+        if (builder.tokenType != SINGLE_QUOTE) {
+            return false
+        }
+
+        val stringMarker = builder.mark()
+
+        builder.advanceLexer()
+        builder.advanceLexer()
+        builder.advanceLexer()
+
+        stringMarker.done(SINGLE_QUOTED_STRING)
+
+        return true
+    }
+
     private fun parseSubexpression(builder: PsiBuilder): Boolean {
         if (builder.tokenType != LPARENTH) {
             return false
@@ -651,8 +700,6 @@ class TwigParsing(private val builder: PsiBuilder) {
     /**
      * Parses an expression. An expression can be as simple as a single label (e.g. the foo in {{ foo }}),
      * or as complex as "foo" ~ func(bar) ~ baz.val['arr']|default("str")
-     *
-     * TODO: improve depth
      */
     private fun parseExpression(builder: PsiBuilder): Boolean {
         val expressionMarker = builder.mark()
@@ -666,6 +713,10 @@ class TwigParsing(private val builder: PsiBuilder) {
             val optionalExprMarker = builder.mark()
 
             when {
+                parseString(builder) -> {
+                    any = true
+                    optionalExprMarker.drop()
+                }
                 parseReference(builder) -> {
                     any = true
                     previousTokenWasValue = true

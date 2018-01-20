@@ -124,6 +124,8 @@ class TwigHighlighter : SyntaxHighlighterBase() {
             keys1.put(TwigTokenTypes.LPARENTH, PARENTHESES)
             keys1.put(TwigTokenTypes.RPARENTH, PARENTHESES)
             keys1.put(TwigTokenTypes.STRING, STRINGS)
+            keys1.put(TwigTokenTypes.SINGLE_QUOTE, STRINGS)
+            keys1.put(TwigTokenTypes.DOUBLE_QUOTE, STRINGS)
             keys1.put(TwigTokenTypes.TAG, TAGS)
             keys1.put(TwigTokenTypes.TEST, TESTS)
             keys1.put(TwigTokenTypes.BOOLEAN, VALUES)
