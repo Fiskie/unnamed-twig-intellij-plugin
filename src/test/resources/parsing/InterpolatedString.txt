@@ -10,4 +10,5 @@ Twig: InterpolatedString.twig
           PsiElement(Twig:DOUBLE_QUOTE)('"')
           PsiElement(Twig:STRING)('INTERPOLATED#{foo}STRING#{1 + 2}CONTENT')
           PsiElement(Twig:DOUBLE_QUOTE)('"')
+      PsiWhiteSpace(' ')
       PsiElement(Twig:EXPRESSION_CLOSE)('}}')

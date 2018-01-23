@@ -17,8 +17,9 @@ class TwigLanguageCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvider(
     override fun getDefaultCommonSettings(): CommonCodeStyleSettings? {
         return CommonCodeStyleSettings(language).apply {
             RIGHT_MARGIN = 120
-            SPACE_AROUND_LOGICAL_OPERATORS = true
+            SPACE_AROUND_ADDITIVE_OPERATORS = true
             SPACE_AFTER_COMMA = true
+            SPACE_BEFORE_COMMA = false
             initIndentOptions()
         }
     }
@@ -27,8 +28,9 @@ class TwigLanguageCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvider(
         when (settingsType) {
             SPACING_SETTINGS -> {
                 consumer.showStandardOptions(
-                        "SPACE_AROUND_LOGICAL_OPERATORS",
-                        "SPACE_AFTER_COMMA"
+                        "SPACE_AROUND_ADDITIVE_OPERATORS",
+                        "SPACE_AFTER_COMMA",
+                        "SPACE_BEFORE_COMMA"
                 )
 
                 consumer.showCustomOption(TwigCodeStyleSettings::class.java,

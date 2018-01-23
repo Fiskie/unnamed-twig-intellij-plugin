@@ -52,6 +52,10 @@ CommentClose = -?#\}
 InterpolationOpen = #\{
 InterpolationClose = \}
 
+// \\. will match a backslash and a succeeding escape character
+// for single and double quotes, this will make sure escaped \' and \" are correctly parsed into the string token
+SingleQuotedStringLiteralContent = ([^'\\]|\\.)*
+DoubleQuotedStringLiteralContent = ([^\"\\]|\\.)*
 Label = [A-Za-z_]\w*
 
 %state statement
@@ -152,7 +156,7 @@ Label = [A-Za-z_]\w*
         return TwigTokenTypes.TEST;
     }
 
-    // in the order of operator precedence (except for 'not', which is a negator)
+    // we lex math/equality operators differently because of highlighter rules
     "==" | "!=" | "<" | ">" | ">=" | "<=" |
     ".." |
     "+" | "-" | "~" | "*" | "/" | "//" | "%" | "**" |
@@ -178,7 +182,7 @@ Label = [A-Za-z_]\w*
 }
 
 <string> {
-    ([^'\\]|\\.)* { return TwigTokenTypes.STRING; }
+    {SingleQuotedStringLiteralContent} { return TwigTokenTypes.STRING; }
     ' { yypopState(); return TwigTokenTypes.SINGLE_QUOTE; }
 }
 
@@ -194,6 +198,9 @@ Label = [A-Za-z_]\w*
 }
 
 <interpolated_string> {
+    // todo: actually tokenize interpolated values
+    // right now this doesn't work at all because the last rule here is taking precedence
+
     ~{InterpolationOpen} {
         yypushback(2);
         yypushState(interpolated_string_expr);
@@ -205,7 +212,8 @@ Label = [A-Za-z_]\w*
         return TwigTokenTypes.DOUBLE_QUOTE;
     }
 
-    ([^\"\\]|\\.)* {
+    {DoubleQuotedStringLiteralContent} ~ \" {
+        yypushback(1);
         return TwigTokenTypes.STRING;
     }
 }

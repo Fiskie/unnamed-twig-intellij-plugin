@@ -12,27 +12,27 @@ class TwigVariableReferenceTest : TwigFixtureTestBase() {
         myFixture.configureByFiles("VariableReference1.twig")
         val element = myFixture.file.findElementAt(myFixture.caretOffset - 1)?.parent
         val refs = element?.references
-        assertEquals(3, refs?.size)
+        assertEquals(1, refs?.size)
     }
 
     fun testVariableReference2() {
         myFixture.configureByFiles("VariableReference2.twig")
         val element = myFixture.file.findElementAt(myFixture.caretOffset - 1)?.parent
         val refs = element?.references
-        assertEquals(3, refs?.size)
+        assertEquals(1, refs?.size)
     }
 
     fun testVariableReference3() {
         myFixture.configureByFiles("VariableReference3.twig")
         val element = myFixture.file.findElementAt(myFixture.caretOffset - 1)?.parent
         val refs = element?.references
-        assertEquals(3, refs?.size)
+        assertEquals(1, refs?.size)
     }
 
     fun testVariableReference4() {
         myFixture.configureByFiles("VariableReference4.twig")
         val element = myFixture.file.findElementAt(myFixture.caretOffset - 1)?.parent
         val refs = element?.references
-        assertEquals(3, refs?.size)
+        assertEquals(1, refs?.size)
     }
 }
